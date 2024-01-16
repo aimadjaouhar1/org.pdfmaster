@@ -11,5 +11,12 @@
     "BUTTONS": {
         "LOGIN": "Log In",
         "SIGNUP": "Sign Up"
+    },
+    "TITLES": {
+        "PAGE_EDIT": "Edit PDF",
+        "PAGE_SPLIT": "Split PDF",
+        "PAGE_EXTRACT": "Extract PDF",
+        "PAGE_ROTATE": "Rotate PDF",
+        "PAGE_PROTECT": "Protect PDF"
     }
 }
