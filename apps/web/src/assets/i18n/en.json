@@ -1,3 +1,11 @@
 {
-    
+    "LABELS": {
+        "HOME": "Home",
+        "MERGE": "Merge",
+        "SPLIT": "Split",
+        "EXTRACT": "Extract",
+        "EDIT": "Edit",
+        "ROTATE": "Rotate",
+        "PROTECT": "Protect"
+    }
 }

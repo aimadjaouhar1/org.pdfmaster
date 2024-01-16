@@ -1,0 +1,28 @@
+<div class="sidebar d-flex flex-column align-items-center">
+
+    <div class="brand border-bottom p-2 text-center">{{ appName }}</div>
+
+    <ul class="nav flex-column mb-auto">
+        @for (item of menuItems; track $index) {
+            <li class="nav-item text-center">
+                <a href="javascript:void(0)" [routerLink]="item.link" class="nav-link d-flex flex-column rounded-0">
+                    <i [classList]="[item.icon]"></i>
+                    {{ item.label | translate }}  
+                </a>
+            </li>
+        }    
+    </ul>
+
+    <div class="dropdown border-top">
+        <a href="#" class="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle">
+          <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
+        </a>
+        <ul class="dropdown-menu text-small shadow" style="">
+          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Sign out</a></li>
+        </ul>
+    </div>
+</div>
