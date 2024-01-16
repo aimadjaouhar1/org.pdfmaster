@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@web/app/*": ["apps/web/src/app/_core/*"],
+      "@web/shared/*": ["apps/web/src/app/_shared/*"],
+      "@web/features/*": ["apps/web/src/app/features/*"],
+      "@web/env": ["apps/web/src/environments/environment"],
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
