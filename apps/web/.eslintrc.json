@@ -9,6 +9,19 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": ["@web/**"],
+            "depConstraints": [
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
