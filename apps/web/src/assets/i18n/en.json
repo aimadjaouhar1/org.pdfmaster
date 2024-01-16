@@ -7,5 +7,9 @@
         "EDIT": "Edit",
         "ROTATE": "Rotate",
         "PROTECT": "Protect"
+    },
+    "BUTTONS": {
+        "LOGIN": "Log In",
+        "SIGNUP": "Sign Up"
     }
 }

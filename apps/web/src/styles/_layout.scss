@@ -63,6 +63,13 @@
   box-shadow: none;
 }
 
+div.main {
+  margin-left: $sidebar-width;
+  height: 100vh;
+  background-color: rgba(196, 196, 196, 0.576);
+}
+
+
 @media screen and (max-width: 700px) {
   .sidebar {
     width: 100%;
@@ -70,6 +77,7 @@
     position: relative;
   }
   .sidebar a {float: left;}
+  div.main {margin-left: 0;}
 }
 
 @media screen and (max-width: 400px) {
