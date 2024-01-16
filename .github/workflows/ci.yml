@@ -20,7 +20,9 @@ jobs:
       - name: Extract version number
         run: |
           # Extract the version number
-          version=$(echo ${{ github.ref }} | sed 's/prod\/v//')
+          commit_message=$(git log -1 --pretty=%B)
+
+          version=$(echo "$commit_message" | grep -oP 'prod/v\K[0-9]+\.[0-9]+\.[0-9]+')
 
           echo "build version number: $version"
         env:
@@ -46,8 +48,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
-        name: Build and push
+        name: Build and push web
       - uses: docker/build-push-action@v5
         with:
+          file: ./docker/web.Dockerfile
           push: true
           tags: aimadjaouhar/org.pdfmaster:web-${{ env.VERSION }}
