@@ -25,8 +25,8 @@ jobs:
           version=$(echo "$commit_message" | grep -oP 'prod/v\K[0-9]+\.[0-9]+\.[0-9]+')
 
           echo "build version number: $version"
-        env:
-          VERSION: ${{ steps.build-push.outputs.version }}
+          echo "VERSION=$version" >> $GITHUB_ENV
+
 
       - uses: pnpm/action-setup@v2
         with:
@@ -54,4 +54,4 @@ jobs:
           context: "."
           file: ./docker/web.Dockerfile
           push: true
-          tags: aimadjaouhar/org.pdfmaster:web-${{ env.VERSION }}
+          tags: aimadjaouhar/org.pdfmaster:web-$VERSION
