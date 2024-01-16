@@ -54,4 +54,4 @@ jobs:
           context: "."
           file: ./docker/web.Dockerfile
           push: true
-          tags: aimadjaouhar/org.pdfmaster:web-$VERSION
+          tags: aimadjaouhar/org.pdfmaster:web-${{ env.VERSION }}
