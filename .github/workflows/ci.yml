@@ -26,7 +26,7 @@ jobs:
 
           echo "build version number: $version"
         env:
-          VERSION: ${{ steps.extract-version.outputs.version }}
+          VERSION: ${{ steps.build-push.outputs.version }}
 
       - uses: pnpm/action-setup@v2
         with:
