@@ -1,7 +1,7 @@
 <ul class="pdf-navigator-list">
     @for (page of pages; track $index) {
         <li class="pdf-navigator-item mb-4" [ngClass]="{'active': selectedPage === page}" (click)="onSelectPage(page)">
-            <canvas [width]="150" [height]="200"></canvas>
+            <canvas appPdfViewer [page]="page" [viewportParameters]="viewportParams" [width]="150" [height]="200"></canvas>
         </li>
     }
 </ul>
