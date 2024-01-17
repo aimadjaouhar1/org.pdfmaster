@@ -16,7 +16,15 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/web/src/favicon.ico", "apps/web/src/assets"],
+        "assets": [
+          "apps/web/src/favicon.ico", 
+          "apps/web/src/assets",
+          {
+            "glob": "pdf.worker.*",
+            "input": "node_modules/pdfjs-dist/build/",
+            "output": ""
+          } 
+        ],
         "styles": ["apps/web/src/styles.scss"],
         "scripts": []
       },
