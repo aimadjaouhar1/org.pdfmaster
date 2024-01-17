@@ -1,0 +1,10 @@
+$pdf-navigator-width: 220px;
+
+.pdf-navigator {
+    position: fixed;
+    width: $pdf-navigator-width;
+    height: 100%;
+    margin-top: 20px;
+    padding: 0;
+    border-right: 1px rgba(128, 128, 128, 0.361) solid;
+}

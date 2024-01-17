@@ -1,0 +1,28 @@
+
+.pdf-navigator-list {
+    padding-top: 10px;
+    overflow-y: scroll;
+
+    li {
+        list-style-type: none; 
+    }   
+}
+
+.pdf-navigator-item {
+    width: fit-content;
+    height: fit-content;
+}
+
+.pdf-navigator-item:hover {
+        -webkit-box-shadow: 0px 0px 7px 5px #CEC7C2; 
+        box-shadow: 0px 0px 7px 5px #CEC7C2;
+}
+
+.pdf-navigator-item.active {
+    -webkit-box-shadow: 0px 0px 2px 3px #f65656; 
+    box-shadow: 0px 0px 2px 3px #f656568a;
+}
+
+canvas {
+    background-color: white;
+}
