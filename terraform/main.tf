@@ -10,6 +10,15 @@ variable WORK_DIR {}
 
 
 terraform {
+
+  backend "remote" {
+    organization = "org-pdfmaster"
+
+    workspaces {
+      name = "tf-github-actions"
+    }
+  }
+
   required_providers {
     aws = {
       source = "hashicorp/aws"
