@@ -11,50 +11,50 @@ on:
 
 jobs:
 
-  # build-push:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: Extract version number
-  #       run: |
-  #         # Extract the version number
-  #         commit_message=$(git log -1 --pretty=%B)
+      - name: Extract version number
+        run: |
+          # Extract the version number
+          commit_message=$(git log -1 --pretty=%B)
 
-  #         version=$(echo "$commit_message" | grep -oP 'prod/v\K[0-9]+\.[0-9]+\.[0-9]+')
+          version=$(echo "$commit_message" | grep -oP 'prod/v\K[0-9]+\.[0-9]+\.[0-9]+')
 
-  #         echo "build version number: $version"
-  #         echo "VERSION=$version" >> $GITHUB_ENV
+          echo "build version number: $version"
+          echo "VERSION=$version" >> $GITHUB_ENV
 
-  #     - uses: pnpm/action-setup@v2
-  #       with:
-  #         version: 8
-  #     - run: pnpm install
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - run: pnpm install
         
-  #       name: Build nx project web
-  #     - run: pnpm nx build web
+        name: Build nx project web
+      - run: pnpm nx build web
 
-  #       name: Set up QEMU
-  #     - uses: docker/setup-qemu-action@v3
+        name: Set up QEMU
+      - uses: docker/setup-qemu-action@v3
       
-  #       name: Set up Docker Buildx
-  #     - uses: docker/setup-buildx-action@v3
+        name: Set up Docker Buildx
+      - uses: docker/setup-buildx-action@v3
       
-  #       name: Login to Docker Hub
-  #     - uses: docker/login-action@v3
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        name: Login to Docker Hub
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
       
-  #       name: Build and push web
-  #     - uses: docker/build-push-action@v5
-  #       with:
-  #         context: "."
-  #         file: ./docker/web.Dockerfile
-  #         push: true
-  #         tags: aimadjaouhar/org.pdfmaster:web-${{ env.VERSION }}
+        name: Build and push web
+      - uses: docker/build-push-action@v5
+        with:
+          context: "."
+          file: ./docker/web.Dockerfile
+          push: true
+          tags: aimadjaouhar/org.pdfmaster:web-${{ env.VERSION }}
   
   deploy:
     name: Deploy to server
@@ -62,9 +62,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       
+      - uses: sturlabragason/terraform_state_artifact@v1
+        with:
+            encryptionkey: ${{ secrets.TF_STATE_ENCRYPTION_KEY }}
+
       - name: Terraform Init
         id: init
         run: terraform -chdir="./terraform" init
@@ -92,3 +94,6 @@ jobs:
         with:
           playbook: ./ansible/playbooks/deploy.yml
           inventory: ./ansible/playbooks/dynamic_inventory.ini
+      
+
+      
