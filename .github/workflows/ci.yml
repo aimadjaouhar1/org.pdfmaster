@@ -73,15 +73,27 @@ jobs:
       
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir="./terraform" plan -var="AWS_SECRET_ACCESS_KEY=${{ secrets.DOCKERHUB_USERNAME }}" -var="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" 
-            -var="AWS_REGION=${{ vars.AWS_REGION }}" -var="KEY_NAME=${{ vars.KEY_NAME }}" -var="DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" -var="ROUTE53_ZONE_ID=${{ vars.ROUTE53_ZONE_ID }}" -no-color
+        run: terraform -chdir="./terraform" plan -var="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" 
+            -var="AWS_REGION=${{ vars.AWS_REGION }}" -var="KEY_NAME=${{ vars.KEY_NAME }}" -var="DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" -var="ROUTE53_ZONE_ID=${{ vars.ROUTE53_ZONE_ID }}" -var="WORK_DIR=${{ github.workspace }}" -no-color
 
-      
-      - name: Run playbook
-        uses: dawidd6/action-ansible-playbook@v2
+      - name: Terraform destroy
+        run: terraform -chdir="./terraform" destroy -var="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" 
+            -var="AWS_REGION=${{ vars.AWS_REGION }}" -var="KEY_NAME=${{ vars.KEY_NAME }}" -var="DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" -var="ROUTE53_ZONE_ID=${{ vars.ROUTE53_ZONE_ID }}" -var="WORK_DIR=${{ github.workspace }}" -auto-approve
+
+
+      - name: Terraform Apply
+        run: terraform -chdir="./terraform" apply -var="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" 
+            -var="AWS_REGION=${{ vars.AWS_REGION }}" -var="KEY_NAME=${{ vars.KEY_NAME }}" -var="DOMAIN_NAME=${{ vars.DOMAIN_NAME }}" -var="ROUTE53_ZONE_ID=${{ vars.ROUTE53_ZONE_ID }}" -var="WORK_DIR=${{ github.workspace }}" -auto-approve
+
+      - name: TEST TEST
+        run: ls ${{ github.workspace }}/ansible/playbooks/
+
+      - name: TEST TEST
+        run: cat ${{ github.workspace }}/ansible/playbooks/dynamic_inventory.ini
+
+
+      - name: Play Ansible Playbook
+        uses: arillso/action.playbook@master
         with:
-          playbook: deploy.yml
-          directory: ./ansible/playbooks
-          options: |
-            --inventory ./terraform/dynamic_inventory.ini
-            --verbose
+          playbook: ./ansible/playbooks/deploy.yml
+          inventory: ./ansible/playbooks/dynamic_inventory.ini

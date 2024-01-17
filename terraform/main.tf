@@ -5,6 +5,7 @@ variable AWS_REGION {}
 variable KEY_NAME {}
 variable ROUTE53_ZONE_ID{}
 variable DOMAIN_NAME {}
+variable WORK_DIR {}
 
 
 
@@ -36,10 +37,10 @@ resource "aws_key_pair" "key_pair" {
 
 resource "local_file" "private_key" {
     content = tls_private_key.rsa4096.private_key_pem
-    filename = var.KEY_NAME
+    filename = "${var.WORK_DIR}/ansible/playbooks/${var.KEY_NAME}"
 
     provisioner "local-exec" {
-        command = "chmod 400 ${var.KEY_NAME}"
+        command = "chmod 400 ${var.WORK_DIR}/ansible/playbooks/${var.KEY_NAME}"
     }
 }
 
@@ -84,11 +85,10 @@ resource "aws_instance" "public_instance" {
     }
 
     provisioner "local-exec" {
-        command = "touch dynamic_inventory.ini"
+        command = "touch ${var.WORK_DIR}/ansible/playbooks/dynamic_inventory.ini"
     }
 }
 
-// Route 53 records
 resource "aws_route53_record" "record_1" {
   zone_id = var.ROUTE53_ZONE_ID
   name    = var.DOMAIN_NAME
@@ -108,14 +108,14 @@ resource "aws_route53_record" "record_2" {
 data "template_file" "inventory" {
   template = <<-EOT
     [ec2_instances]
-    ${aws_instance.public_instance.public_ip} ansible_user=ubuntu ansible_private_key_file=${path.module}/${var.KEY_NAME}
+    ${aws_instance.public_instance.public_ip} ansible_user=ubuntu ansible_private_key_file=${var.WORK_DIR}/ansible/playbooks/${var.KEY_NAME}
     EOT
 }
 
 resource "local_file" "dynamic_inventory" {
   depends_on = [aws_instance.public_instance]
 
-  filename = "dynamic_inventory.ini"
+  filename = "${var.WORK_DIR}/ansible/playbooks/dynamic_inventory.ini"
   content  = data.template_file.inventory.rendered
 
   provisioner "local-exec" {
