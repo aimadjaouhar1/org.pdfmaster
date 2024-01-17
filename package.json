@@ -42,6 +42,7 @@
     "typescript": "~5.2.2"
   },
   "dependencies": {
+    "@angular-builders/custom-webpack": "^17.0.0",
     "@angular/animations": "~17.0.0",
     "@angular/common": "~17.0.0",
     "@angular/compiler": "~17.0.0",

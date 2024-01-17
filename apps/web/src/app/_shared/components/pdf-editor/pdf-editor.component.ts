@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfEditorNavigatorComponent } from '@web/shared/components/pdf-editor/pdf-editor-navigator/pdf-editor-navigator.component';
 import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pdf-editor-toolbar.component';
 
@@ -9,4 +10,12 @@ import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf
   templateUrl: './pdf-editor.component.html',
   styleUrl: './pdf-editor.component.scss',
 })
-export class PdfEditorComponent {}
+export class PdfEditorComponent {
+  
+  @Input() pdfFile: string = 'http://localhost:4200/assets/sample.pdf';
+
+  pdfEditorService = inject(PdfEditorService);
+
+  
+
+}

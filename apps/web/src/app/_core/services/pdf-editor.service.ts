@@ -4,7 +4,6 @@ import { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import * as pdfjs from 'pdfjs-dist';
 
 
-
 @Injectable({ providedIn: 'root' })
 export class PdfEditorService {  
 
