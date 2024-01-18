@@ -8,3 +8,15 @@ $pdf-navigator-width: 220px;
     padding: 0;
     border-right: 1px rgba(128, 128, 128, 0.361) solid;
 }
+
+.pdf-editor-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: $pdf-navigator-width;
+    padding: 0px;
+    width: calc(100vw - 220px - 65px);
+    height: calc(100vh - 110px);
+    overflow: auto; 
+}

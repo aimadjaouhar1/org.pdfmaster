@@ -8,6 +8,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
 
 import * as pdfjs from 'pdfjs-dist';
+import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
+import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
 
@@ -17,7 +19,7 @@ type Pagination = {page: number, limit: number};
 @Component({
   selector: 'app-pdf-editor',
   standalone: true,
-  imports: [PdfEditorToolbarComponent, PdfEditorNavigatorComponent, AsyncPipe],
+  imports: [PdfEditorToolbarComponent, PdfEditorNavigatorComponent, AsyncPipe, PdfViewerDirective],
   templateUrl: './pdf-editor.component.html',
   styleUrl: './pdf-editor.component.scss',
 })
@@ -27,6 +29,8 @@ export class PdfEditorComponent {
 
   pdfEditorService = inject(PdfEditorService);
 
+  currentPage?: PDFPageProxy;  
+  viewportParams?: GetViewportParameters = { scale: 1 };
   
   pagination: Pagination = {page: 1, limit: 5};
 
@@ -40,5 +44,9 @@ export class PdfEditorComponent {
     });
   }
 
+
+  onSelectPage(page: PDFPageProxy) {
+    this.currentPage = page;
+  }
 
 }

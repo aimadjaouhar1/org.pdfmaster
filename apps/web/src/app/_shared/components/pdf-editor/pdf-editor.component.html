@@ -1,5 +1,11 @@
 <app-pdf-editor-toolbar></app-pdf-editor-toolbar>
 
 <div class="pdf-navigator">
-    <app-pdf-editor-navigator [pages]="loadedPdfPages$ | async"></app-pdf-editor-navigator>
+    <app-pdf-editor-navigator [pages]="loadedPdfPages$ | async" (selectPage)="onSelectPage($event)"></app-pdf-editor-navigator>
+</div>
+
+<div class="pdf-editor-wrapper">
+    <div class="pdf-editor">
+        <canvas id="pdf-display" appPdfViewer [page]="currentPage" [viewportParameters]="viewportParams"></canvas>
+    </div>
 </div>
