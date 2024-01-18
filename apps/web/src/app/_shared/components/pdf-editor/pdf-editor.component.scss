@@ -26,6 +26,19 @@ $pdf-navigator-width: 220px;
     justify-content: center;
     margin-left: $pdf-navigator-width;
     width: calc(100vw - $pdf-navigator-width - 65px);
-    height: calc(100vh - 110px);
+    height: calc(100vh - 115px);
     padding: 0px;
+    overflow: auto; 
+}
+
+@media screen and (max-width: 900px) {
+    .pdf-editor-wrapper {
+      width: 100%;
+      margin-left: 0px;
+      position: relative;
+    }
+
+    .pdf-navigator {
+        display: none;
+    }
 }
