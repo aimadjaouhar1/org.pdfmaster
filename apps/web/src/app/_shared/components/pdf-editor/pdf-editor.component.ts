@@ -6,10 +6,11 @@ import { PDFPageProxy, PageViewport } from 'pdfjs-dist';
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
-
-import * as pdfjs from 'pdfjs-dist';
+import { fabric } from 'fabric';
 import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
+
+import * as pdfjs from 'pdfjs-dist';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
 
@@ -29,6 +30,8 @@ export class PdfEditorComponent {
 
   @ViewChild('pdfEditor') pdfEditor!: ElementRef;
   @ViewChild('pdfEditCanvas') pdfEditCanvas!: ElementRef;
+
+  fabriCanvas!: fabric.Canvas;
 
 
   pdfEditorService = inject(PdfEditorService);
@@ -52,7 +55,11 @@ export class PdfEditorComponent {
 
   onSelectPage(page: PDFPageProxy) {
     this.currentPage = page;
-    this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, this.currentPage.getViewport(this.viewportParams))
+
+    const viewport = this.currentPage.getViewport(this.viewportParams);
+
+    this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, viewport);
+    this.initFabriCanvas(viewport);
   }
 
   private initPdfEditor(pdfEditor: HTMLCanvasElement, pdfEditCanvas: HTMLCanvasElement, viewport: PageViewport) {
@@ -61,6 +68,13 @@ export class PdfEditorComponent {
 
     pdfEditCanvas.width = viewport.width;
     pdfEditCanvas.height = viewport.height;
+  }
+
+  private initFabriCanvas(viewport: PageViewport) {
+    this.fabriCanvas = new fabric.Canvas('pdf-edit');
+
+    this.fabriCanvas.width = viewport.width;
+    this.fabriCanvas.height = viewport.height;
   }
 
 }
