@@ -1,8 +1,8 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfEditorNavigatorComponent } from '@web/shared/components/pdf-editor/pdf-editor-navigator/pdf-editor-navigator.component';
 import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pdf-editor-toolbar.component';
-import { PDFPageProxy } from 'pdfjs-dist';
+import { PDFPageProxy, PageViewport } from 'pdfjs-dist';
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
@@ -27,6 +27,10 @@ export class PdfEditorComponent {
   
   @Input() pdfFile: string = 'http://localhost:4200/assets/sample.pdf';
 
+  @ViewChild('pdfEditor') pdfEditor!: ElementRef;
+  @ViewChild('pdfEditCanvas') pdfEditCanvas!: ElementRef;
+
+
   pdfEditorService = inject(PdfEditorService);
 
   currentPage?: PDFPageProxy;  
@@ -37,7 +41,7 @@ export class PdfEditorComponent {
   loadedPdfDocument$ = this.pdfEditorService.loadPdfDocument(this.pdfFile);
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
-  
+
   constructor() {
     this.loadedPdfDocument$.pipe(takeUntilDestroyed())
       .subscribe(pdfDoc => {
@@ -48,6 +52,15 @@ export class PdfEditorComponent {
 
   onSelectPage(page: PDFPageProxy) {
     this.currentPage = page;
+    this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, this.currentPage.getViewport(this.viewportParams))
+  }
+
+  private initPdfEditor(pdfEditor: HTMLCanvasElement, pdfEditCanvas: HTMLCanvasElement, viewport: PageViewport) {
+    pdfEditor!.style.width = `${viewport.width}px`;
+    pdfEditor!.style.height = `${viewport.height}px`;
+
+    pdfEditCanvas.width = viewport.width;
+    pdfEditCanvas.height = viewport.height;
   }
 
 }
