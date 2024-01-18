@@ -37,6 +37,7 @@ export class PdfEditorComponent {
   loadedPdfDocument$ = this.pdfEditorService.loadPdfDocument(this.pdfFile);
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
+  
   constructor() {
     this.loadedPdfDocument$.pipe(takeUntilDestroyed())
       .subscribe(pdfDoc => {
