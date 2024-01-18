@@ -18,7 +18,7 @@ export class PdfEditorService {
     loadPdfPages(pdf: PDFDocumentProxy, pageNumFrom: number, pageNumTo: number): Observable<PDFPageProxy[]> {
         const observables: Observable<PDFPageProxy>[] = [];
 
-        for (let pageNum = pageNumFrom; pageNum <= pageNumTo; pageNum++) {
+        for (let pageNum = pageNumFrom; pageNum <= (pageNumTo >= pdf.numPages ? pdf.numPages : pageNumTo); pageNum++) {
             observables.push(from(pdf.getPage(pageNum)));
         }
         
