@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
 import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
 import { PDFPageProxy } from 'pdfjs-dist/types/src/pdf';
@@ -12,7 +12,7 @@ import { PDFPageProxy } from 'pdfjs-dist/types/src/pdf';
   templateUrl: './pdf-editor-navigator.component.html',
   styleUrl: './pdf-editor-navigator.component.scss',
 })
-export class PdfEditorNavigatorComponent {
+export class PdfEditorNavigatorComponent implements OnChanges {
 
   @Input() pages?: PDFPageProxy[] | null;  
 
@@ -22,6 +22,9 @@ export class PdfEditorNavigatorComponent {
 
   viewportParams?: GetViewportParameters = { scale: 0.3 };
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['pages'].currentValue) this.onSelectPage(changes['pages'].currentValue[0]);
+  }
   
   onSelectPage = (page: PDFPageProxy) => {  this.selectedPage = page;  this.selectPage.emit(this.selectedPage); }
 

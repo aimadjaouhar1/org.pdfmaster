@@ -6,15 +6,18 @@ import { PDFPageProxy, PageViewport } from 'pdfjs-dist';
 import { Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
-import { fabric } from 'fabric';
 import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
+import { fabric } from 'fabric';
+import { Canvas } from 'fabric/fabric-impl';
+
 
 import * as pdfjs from 'pdfjs-dist';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
 
 type Pagination = {page: number, limit: number};
+type ToolData = {cursor: string, type: string};
 
 
 @Component({
@@ -44,6 +47,8 @@ export class PdfEditorComponent {
   loadedPdfDocument$ = this.pdfEditorService.loadPdfDocument(this.pdfFile);
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
+  selectedTool?: ToolData;
+
 
   constructor() {
     this.loadedPdfDocument$.pipe(takeUntilDestroyed())
@@ -62,6 +67,13 @@ export class PdfEditorComponent {
     this.initFabriCanvas(viewport);
   }
 
+
+  onSelectTool(toolData: ToolData) {
+    this.selectedTool = toolData;
+    this.fabriCanvas.defaultCursor = this.selectedTool.cursor;
+  }
+
+
   private initPdfEditor(pdfEditor: HTMLCanvasElement, pdfEditCanvas: HTMLCanvasElement, viewport: PageViewport) {
     pdfEditor!.style.width = `${viewport.width}px`;
     pdfEditor!.style.height = `${viewport.height}px`;
@@ -75,6 +87,34 @@ export class PdfEditorComponent {
 
     this.fabriCanvas.width = viewport.width;
     this.fabriCanvas.height = viewport.height;
+
+    this.fabriCanvas.on('mouse:down', (evt: fabric.IEvent) => this.canvasMouseDownHandler(evt));
   }
+
+  private canvasMouseDownHandler(evt: fabric.IEvent) {
+    if(this.selectedTool) {
+
+      if(this.selectedTool.type == 'text') {
+        this.drawTextBox(this.fabriCanvas, evt.pointer?.x, evt.pointer?.y);
+      }
+
+      this.selectedTool = undefined;
+      this.fabriCanvas.defaultCursor = undefined;
+    }
+  }
+
+
+  private drawTextBox(canvas: Canvas, x?: number, y?: number) {
+    const text = new fabric.Textbox('Text', {
+      width: 100,
+      height: 50,
+      fontSize: 16,
+      cursorColor: 'red',
+      left: x ?? 0,
+      top: y ?? 0
+      });
+      canvas.add(text);
+  }
+
 
 }

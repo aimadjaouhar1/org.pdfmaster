@@ -1,0 +1,39 @@
+.dropdown-toggle::after {
+    display:none;
+}
+
+.form-control, .form-control:focus, button {
+    box-shadow: none;
+    border: none;
+}
+
+
+.text-box-options {
+    top: 90px;
+    display: flex;
+    border: none;
+    min-width: 260px;
+}
+
+.text-box-font {
+    border-right: 1px solid rgba(128, 128, 128, 0.351);
+    width: 55%;
+
+    button {
+        width: 100%;
+        border-radius: 0px;
+    }
+}
+
+.text-box-size {
+    width: 30%;
+}
+
+
+.text-box-color {
+    width: 15%;
+
+    button {
+        border-radius: 0px;
+    }
+}

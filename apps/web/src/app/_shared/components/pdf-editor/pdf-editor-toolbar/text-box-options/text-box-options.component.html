@@ -1,0 +1,18 @@
+<div class="text-box-options">
+    <div class="text-box-font" ngbDropdown>
+        <button type="button" class="btn btn-light" ngbDropdownToggle> Arial </button>
+        <div ngbDropdownMenu>
+            @for (item of fonts; track $index) {
+                <button ngbDropdownItem>{{ item }}</button>
+            }
+        </div>
+    </div>
+    
+    <div class="text-box-size">
+        <input class="form-control" type="number" [defaultValue]="14" step="1" min="8" max="32" />
+    </div>
+
+    <div class="text-box-color">
+        <button class="btn btn-light" type="button"><i class="bi bi-square-fill"></i></button>
+    </div>
+</div>
