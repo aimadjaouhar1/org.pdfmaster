@@ -41,7 +41,9 @@ export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
 
   }
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['defaultTextBoxOptions']) {
+    if(changes['defaultTextBoxOptions'].isFirstChange()) {
+
+
       this.font  = this.defaultTextBoxOptions!.font;
       this.size  = this.defaultTextBoxOptions!.size;
       this.color = this.defaultTextBoxOptions!.color;
