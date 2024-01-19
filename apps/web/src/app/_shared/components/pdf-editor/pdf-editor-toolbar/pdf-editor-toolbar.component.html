@@ -25,10 +25,10 @@
 
         <div class="d-grid gap-1 d-md-flex justify-content-md-end">
             <!-- undo button -->
-            <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-arrow-counterclockwise"></i></button>
+            <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-arrow-counterclockwise"></i></button>
 
             <!-- redo button -->
-            <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-arrow-clockwise"></i></button>
+            <button class="btn btn btn-light me-md-2" type="button" (click)="clickRedo()"><i class="bi bi-arrow-clockwise"></i></button>
           </div>
     </div>
   </nav>

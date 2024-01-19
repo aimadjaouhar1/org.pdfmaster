@@ -63,11 +63,21 @@ export class PdfEditorComponent {
 
   onSelectPage(page: PDFPageProxy) {
     this.currentPage = page;
+    this.renderAll();
+  }
 
-    const viewport = this.currentPage.getViewport(this.viewportParams);
+  onUndo() {
+    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
+    pageStateHistory?.pop();
 
-    this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, viewport);
-    this.initFabriCanvas(viewport);
+    this.renderAll();
+  }
+
+  onRedo() {
+    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
+    pageStateHistory?.restore();
+
+    this.renderAll();
   }
 
   onSelectTool(toolData: ToolData) {
@@ -92,6 +102,13 @@ export class PdfEditorComponent {
 
   }
 
+  private renderAll() {
+    const viewport = this.currentPage!.getViewport(this.viewportParams);
+
+    this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, viewport);
+    this.initFabriCanvas(viewport);
+
+  }
 
   private initPdfEditor(pdfEditor: HTMLCanvasElement, pdfEditCanvas: HTMLCanvasElement, viewport: PageViewport) {
     pdfEditor!.style.width = `${viewport.width}px`;
@@ -102,10 +119,18 @@ export class PdfEditorComponent {
   }
 
   private initFabriCanvas(viewport: PageViewport) {
+    
+    if(this.fabriCanvas) {
+      this.fabriCanvas.dispose();
+    }
+
     this.fabriCanvas = new fabric.Canvas('pdf-edit');
 
     this.fabriCanvas.width = viewport.width;
     this.fabriCanvas.height = viewport.height;
+
+    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
+    this.updateFabriCanvasState(this.fabriCanvas, pageStateHistory?.lastItem);
 
     this.fabriCanvas.on('mouse:down', (evt: fabric.IEvent) => this.canvasMouseDownHandler(evt));
     this.fabriCanvas.on('object:added', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
@@ -135,6 +160,17 @@ export class PdfEditorComponent {
     this.fabriCanvasStateHistory.set(index, pageStateHistory);
   }
 
+  private updateFabriCanvasState(fabriCanvas: fabric.Canvas, state?: FabriCanvasState) {
+    fabriCanvas.loadFromJSON(
+      state, 
+      () => {
+        fabriCanvas.renderAll();
+        fabriCanvas.calcOffset();
+      }, 
+      (o: unknown, object: fabric.Object) => {
+      fabriCanvas.setActiveObject(object);
+    });
+}
 
   private drawTextBox(canvas: Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
     const text = new fabric.Textbox('Text', {

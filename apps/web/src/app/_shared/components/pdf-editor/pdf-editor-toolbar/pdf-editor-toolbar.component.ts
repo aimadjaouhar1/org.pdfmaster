@@ -15,15 +15,24 @@ export class PdfEditorToolbarComponent {
 
   @Input({required: true}) defaultTextBoxOptions!: TextBoxOptions;
 
+  @Output() undo = new EventEmitter();
+
+  @Output() redo = new EventEmitter();
+
   @Output() selectedTool = new EventEmitter<ToolData>();
 
   @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
+  
 
   constructor(config: NgbDropdownConfig) {
     config.placement = 'bottom';
     config.container = null;
     config.autoClose = 'outside';
   }
+
+  clickUndo = () => this.undo.emit();
+
+  clickRedo = () => this.redo.emit();
 
   clickTextBox = () => this.selectedTool.emit({cursor: 'text', type: 'text'});
 

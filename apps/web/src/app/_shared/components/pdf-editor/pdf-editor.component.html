@@ -1,5 +1,7 @@
 <app-pdf-editor-toolbar 
     [defaultTextBoxOptions]="selectedTextBoxOptions"
+    (undo)="onUndo()"
+    (redo)="onRedo()"
     (selectedTool)="onSelectTool($event)" 
     (changeTextBoxOptions)="onChangeTextBoxOptions($event)"></app-pdf-editor-toolbar>
 
