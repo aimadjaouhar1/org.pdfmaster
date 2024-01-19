@@ -13,7 +13,8 @@ import { Canvas } from 'fabric/fabric-impl';
 
 
 import * as pdfjs from 'pdfjs-dist';
-import { Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { FabriCanvasState, Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { CircularArray } from '@web/shared/utils/circular-array.util';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
 
@@ -45,8 +46,11 @@ export class PdfEditorComponent {
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
   selectedTool?: ToolData;
-
   selectedTextBoxOptions: TextBoxOptions = {font: 'Arial', size: 16, color: 'black'};
+
+
+  maxUndoSteps = 5;
+  fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
 
 
   constructor() {
@@ -104,6 +108,10 @@ export class PdfEditorComponent {
     this.fabriCanvas.height = viewport.height;
 
     this.fabriCanvas.on('mouse:down', (evt: fabric.IEvent) => this.canvasMouseDownHandler(evt));
+    this.fabriCanvas.on('object:added', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
+    this.fabriCanvas.on('object:removed', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
+    this.fabriCanvas.on('object:modified', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
+
   }
 
   private canvasMouseDownHandler(evt: fabric.IEvent) {
@@ -116,6 +124,15 @@ export class PdfEditorComponent {
       this.selectedTool = undefined;
       this.fabriCanvas.defaultCursor = undefined;
     }
+  }
+
+  private canvasObjectUpdatedHandler(evt: fabric.IEvent) {
+    const index = this.currentPage!.pageNumber;
+    const pageStateHistory: CircularArray<FabriCanvasState> = this.fabriCanvasStateHistory.get(index) || new CircularArray<FabriCanvasState>(this.maxUndoSteps);
+    
+    pageStateHistory.push(this.fabriCanvas.toJSON());
+
+    this.fabriCanvasStateHistory.set(index, pageStateHistory);
   }
 
 
