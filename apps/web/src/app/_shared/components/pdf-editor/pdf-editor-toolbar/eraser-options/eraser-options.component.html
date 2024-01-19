@@ -1,0 +1,7 @@
+<form class="eraser-options" [formGroup]="eraserOptionsForm">
+    <div class="eraser-size d-flex align-items-center" ngbDropdown>
+        <i class="bi bi-circle"></i>
+        <input type="range" class="form-range" formControlName="size" (change)="onSizeChanged()">
+        <span>{{controls.size.value}}px</span>
+    </div>
+</form>

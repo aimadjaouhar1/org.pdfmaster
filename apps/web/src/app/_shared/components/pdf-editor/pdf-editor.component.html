@@ -1,10 +1,12 @@
 <app-pdf-editor-toolbar 
     [showTextBoxOptions$]="showTextBoxOptions$"
     [defaultTextBoxOptions]="selectedTextBoxOptions"
+    [defaultEraserOptions]="selectedEraserOptions"
     (undo)="onUndo()"
     (redo)="onRedo()"
     (selectedTool)="onSelectTool($event)" 
-    (changeTextBoxOptions)="onChangeTextBoxOptions($event)"></app-pdf-editor-toolbar>
+    (changeTextBoxOptions)="onChangeTextBoxOptions($event)"
+    (changeEraserOptions)="onChangeEraserOptions($event)"></app-pdf-editor-toolbar>
 
 <div class="pdf-navigator">
     <app-pdf-editor-navigator [pages]="loadedPdfPages$ | async" (selectPage)="onSelectPage($event)"></app-pdf-editor-navigator>

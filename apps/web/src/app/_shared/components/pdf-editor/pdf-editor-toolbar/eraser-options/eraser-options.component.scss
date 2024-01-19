@@ -1,0 +1,24 @@
+.eraser-options {
+    width: 220px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.eraser-size {
+    input{ 
+        height: 34px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    i {
+        font-size: 22px;
+        color: rgba(128, 128, 128, 0.358);
+    }
+
+    span {
+        font-size: 14px;
+        width: 48px;
+        text-align: right;
+    }
+}

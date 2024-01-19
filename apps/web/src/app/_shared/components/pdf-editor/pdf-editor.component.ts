@@ -13,7 +13,7 @@ import { Canvas } from 'fabric/fabric-impl';
 
 
 import * as pdfjs from 'pdfjs-dist';
-import { FabriCanvasState, Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { EraserOptions, FabriCanvasState, Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
 import { CircularArray } from '@web/shared/utils/circular-array.util';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
@@ -46,9 +46,9 @@ export class PdfEditorComponent {
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
   selectedTool?: ToolData;
+  selectedEraserOptions: EraserOptions = {size: 8};
   selectedTextBoxOptions: TextBoxOptions = {font: 'Arial', size: 16, color: 'black'};
   showTextBoxOptions$ = new Subject<TextBoxOptions>();
-
 
   maxUndoSteps = 5;
   fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
@@ -85,13 +85,19 @@ export class PdfEditorComponent {
 
   onSelectTool(toolData: ToolData) {
     if(this.selectedTool?.type == toolData.type) {
-
+      // unselect tool if already selected
       this.selectedTool = undefined;
       this.fabriCanvas.defaultCursor = undefined;
+      this.fabriCanvas.isDrawingMode = false;
 
     } else {
       this.selectedTool = toolData;
       this.fabriCanvas.defaultCursor = this.selectedTool.cursor;  
+
+      if(this.selectedTool.type == 'eraser') {
+        this.fabriCanvas.isDrawingMode = true;
+        this.setupEraserMode(this.fabriCanvas);
+      }
     }
   }
 
@@ -110,6 +116,11 @@ export class PdfEditorComponent {
       this.fabriCanvas.renderAll();
     }
 
+  }
+
+  onChangeEraserOptions(eraserOptions: EraserOptions) {
+    this.selectedEraserOptions = eraserOptions;
+    this.setupEraserMode(this.fabriCanvas);
   }
 
   private renderAll() {
@@ -152,27 +163,16 @@ export class PdfEditorComponent {
   private canvasMouseDownHandler(evt: fabric.IEvent) {
 
     if(evt.target instanceof fabric.Textbox) {
-      const object = evt.target;
-
-      this.selectedTextBoxOptions = {
-        font: object.fontFamily || '',
-        size: object.fontSize || 0,
-        color: object.fill?.toString() || ''
-      }
-
-      this.selectedTool = {'type': 'text', cursor: 'text'};
-      this.fabriCanvas.defaultCursor = this.selectedTool.type;
-
-      this.showTextBoxOptions$.next(this.selectedTextBoxOptions);
+      this.selectTextBoxHandler(evt.target);
     } 
-    else if(this.selectedTool) {
-      if(this.selectedTool.type == 'text') {
-        this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
+
+    if(this.selectedTool?.type == 'text' && !evt.target) {
+      this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
+
+    } else if(this.selectedTool?.type == 'eraser' && !evt.target) {
+      this.setupEraserMode(this.fabriCanvas);
     }
 
-      //this.selectedTool = undefined;
-      //this.fabriCanvas.defaultCursor = undefined;
-    }
   }
 
   private canvasObjectUpdatedHandler(evt: fabric.IEvent) {
@@ -194,9 +194,22 @@ export class PdfEditorComponent {
       (o: unknown, object: fabric.Object) => {
       fabriCanvas.setActiveObject(object);
     });
-}
+  }
 
-  private drawTextBox(canvas: Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
+  private selectTextBoxHandler(object: fabric.Textbox) {
+    this.selectedTool = {type: 'text', cursor: 'text'};
+    this.fabriCanvas.defaultCursor = this.selectedTool.type;
+
+    this.selectedTextBoxOptions = {
+      font: object.fontFamily || '',
+      size: object.fontSize || 0,
+      color: object.fill?.toString() || ''
+    }
+
+    this.showTextBoxOptions$.next(this.selectedTextBoxOptions);
+  }
+
+  private drawTextBox(canvas: fabric.Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
     const text = new fabric.Textbox('Text', {
       width: 100,
       height: 50,
@@ -210,5 +223,9 @@ export class PdfEditorComponent {
       canvas.add(text);
   }
 
+  private setupEraserMode(canvas: fabric.Canvas) {
+    canvas.freeDrawingBrush.color = '#fff';
+    canvas.freeDrawingBrush.width = this.selectedEraserOptions?.size;
+  }
 
 }
