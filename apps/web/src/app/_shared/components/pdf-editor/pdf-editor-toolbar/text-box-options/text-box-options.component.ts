@@ -5,7 +5,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextBoxOptions } from '@web/app/types/pdf-editor.type';
 import { ColorPickerModule } from 'ngx-color-picker';
-import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-text-box-options',
@@ -18,7 +18,7 @@ export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
   
   @Input({required: true}) defaultTextBoxOptions!: TextBoxOptions;
 
-  @Input() selectedTextBoxOptions$!: Subject<TextBoxOptions>;
+  @Input() selectedTextBoxOptions$!: Observable<TextBoxOptions>;
 
   @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
 

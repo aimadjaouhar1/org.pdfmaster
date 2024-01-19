@@ -1,16 +1,17 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbDropdown, NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { EraserOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { EraserOptions, PenOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
 import { EraserOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/eraser-options/eraser-options.component';
+import { PenOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pen-options/pen-options.component';
 import { TextBoxOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/text-box-options/text-box-options.component';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 
 @Component({
   selector: 'app-pdf-editor-toolbar',
   standalone: true,
-  imports: [NgbDropdownModule, TextBoxOptionsComponent, EraserOptionsComponent],
+  imports: [NgbDropdownModule, TextBoxOptionsComponent, EraserOptionsComponent, PenOptionsComponent],
   templateUrl: './pdf-editor-toolbar.component.html',
   styleUrl: './pdf-editor-toolbar.component.scss',
 })
@@ -20,7 +21,9 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   @Input({required: true}) defaultEraserOptions!: EraserOptions;
 
-  @Input() showTextBoxOptions$?: Subject<TextBoxOptions>;
+  @Input({required: true}) defaultPenOptions!: PenOptions;
+
+  @Input() showTextBoxOptions$?: Observable<TextBoxOptions>;
 
   @Output() undo = new EventEmitter();
 
@@ -32,9 +35,12 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   @Output() changeEraserOptions = new EventEmitter<EraserOptions>();
 
+  @Output() changePenOptions = new EventEmitter<PenOptions>();
+
 
   @ViewChild('textboxdp') public textboxdp!: NgbDropdown;
   @ViewChild('eraserdp') public eraserdp!: NgbDropdown;
+  @ViewChild('pendp') public pendp!: NgbDropdown;
 
 
   selectedTextBoxOptions$ = new Subject<TextBoxOptions>;
@@ -50,7 +56,7 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
     this.dropdownState$
       .pipe(takeUntilDestroyed())
       .subscribe(dropdown => {
-        [this.textboxdp, this.eraserdp].filter(dp => dp != dropdown).forEach(dp => dp.close());
+        [this.textboxdp, this.eraserdp, this.pendp].filter(dp => dp != dropdown).forEach(dp => dp.close());
         dropdown.toggle();
       })
   }
@@ -72,13 +78,19 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   };
 
   clickEraser() {
-    this.dropdownState$.next(this.eraserdp)
+    this.dropdownState$.next(this.eraserdp);
     this.selectedTool.emit({cursor: '', type: 'eraser'});
   };
+
+  clickPen() {
+    this.dropdownState$.next(this.pendp);
+    this.selectedTool.emit({cursor: '', type: 'pen'});
+  }
 
   onChangeTextBoxOptions = (textBoxOptions: TextBoxOptions) => this.changeTextBoxOptions.emit(textBoxOptions);
 
   onChangeEraserOptions = (eraserOptions: EraserOptions) => this.changeEraserOptions.emit(eraserOptions);
 
+  onChangePenOptions = (penOptions: PenOptions) => this.changePenOptions.emit(penOptions);
 
 }

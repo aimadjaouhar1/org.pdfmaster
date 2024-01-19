@@ -9,11 +9,10 @@ import { AsyncPipe } from '@angular/common';
 import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
 import { fabric } from 'fabric';
-import { Canvas } from 'fabric/fabric-impl';
 
 
 import * as pdfjs from 'pdfjs-dist';
-import { EraserOptions, FabriCanvasState, Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { EraserOptions, FabriCanvasState, Pagination, PenOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
 import { CircularArray } from '@web/shared/utils/circular-array.util';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 
@@ -46,9 +45,13 @@ export class PdfEditorComponent {
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
   selectedTool?: ToolData;
+  selectedPenOptions: PenOptions = {size: 8, color: 'black'};
   selectedEraserOptions: EraserOptions = {size: 8};
   selectedTextBoxOptions: TextBoxOptions = {font: 'Arial', size: 16, color: 'black'};
-  showTextBoxOptions$ = new Subject<TextBoxOptions>();
+
+  showTextBoxOptionsSubj$ = new Subject<TextBoxOptions>();
+  showTextBoxOptions$ = this.showTextBoxOptionsSubj$.asObservable().pipe(takeUntilDestroyed());
+
 
   maxUndoSteps = 5;
   fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
@@ -97,6 +100,10 @@ export class PdfEditorComponent {
       if(this.selectedTool.type == 'eraser') {
         this.fabriCanvas.isDrawingMode = true;
         this.setupEraserMode(this.fabriCanvas);
+
+      } else if(this.selectedTool.type == 'pen') {
+        this.fabriCanvas.isDrawingMode = true;
+        this.setupPenMode(this.fabriCanvas);
       }
     }
   }
@@ -121,6 +128,11 @@ export class PdfEditorComponent {
   onChangeEraserOptions(eraserOptions: EraserOptions) {
     this.selectedEraserOptions = eraserOptions;
     this.setupEraserMode(this.fabriCanvas);
+  }
+
+  onChangePenOptions(penOptions: PenOptions) {
+    this.selectedPenOptions = penOptions;
+    this.setupPenMode(this.fabriCanvas);
   }
 
   private renderAll() {
@@ -168,9 +180,6 @@ export class PdfEditorComponent {
 
     if(this.selectedTool?.type == 'text' && !evt.target) {
       this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
-
-    } else if(this.selectedTool?.type == 'eraser' && !evt.target) {
-      this.setupEraserMode(this.fabriCanvas);
     }
 
   }
@@ -206,7 +215,7 @@ export class PdfEditorComponent {
       color: object.fill?.toString() || ''
     }
 
-    this.showTextBoxOptions$.next(this.selectedTextBoxOptions);
+    this.showTextBoxOptionsSubj$.next(this.selectedTextBoxOptions);
   }
 
   private drawTextBox(canvas: fabric.Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
@@ -226,6 +235,11 @@ export class PdfEditorComponent {
   private setupEraserMode(canvas: fabric.Canvas) {
     canvas.freeDrawingBrush.color = '#fff';
     canvas.freeDrawingBrush.width = this.selectedEraserOptions?.size;
+  }
+
+  private setupPenMode(canvas: fabric.Canvas) {
+    canvas.freeDrawingBrush.color = this.selectedPenOptions?.color;
+    canvas.freeDrawingBrush.width = this.selectedPenOptions?.size;
   }
 
 }

@@ -4,8 +4,9 @@
 
         <div class="d-flex justify-content-center">
 
+            <!-- TextBox button -->
             <div class="text-box" ngbDropdown #textboxdp="ngbDropdown">
-                <button class="btn btn-light" (click)="clickTextBox()"><i class="bi bi-textarea-t"></i></button>
+                <button class="btn btn-light" type="button" (click)="clickTextBox()"><i class="bi bi-textarea-t"></i></button>
                 
                 <app-text-box-options class="tool-options-dropdown" 
                     [defaultTextBoxOptions]="defaultTextBoxOptions" 
@@ -13,8 +14,16 @@
                     (changeTextBoxOptions)="onChangeTextBoxOptions($event)" ngbDropdownMenu></app-text-box-options>
             </div>
             
-            <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-pen"></i></button>
+            <!-- Pen button -->
+            <div class="text-box" ngbDropdown #pendp="ngbDropdown">
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickPen()"><i class="bi bi-pen"></i></button>
 
+                <app-pen-options class="tool-options-dropdown"
+                    [defaultPenOptions]="defaultPenOptions"
+                    (changePenOptions)="onChangePenOptions($event)" ngbDropdownMenu></app-pen-options>
+            </div> 
+
+            <!-- Eraser button -->
             <div class="text-box" ngbDropdown #eraserdp="ngbDropdown">
                 <button class="btn btn btn-light me-md-2" type="button" (click)="clickEraser()"><i class="bi bi-eraser-fill"></i></button>
 

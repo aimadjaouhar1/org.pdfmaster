@@ -1,0 +1,9 @@
+<form class="pen-options" [formGroup]="penOptionsForm">
+    <div class="pen-size d-flex align-items-center" ngbDropdown>
+        <i class="bi bi-square-fill" [ngStyle]="{'color': color}" [(colorPicker)]="color" [cpPosition]="'bottom'" [cpDisableInput]="true"></i>
+        <input type="hidden" formControlName="color" [(ngModel)]="color" (change)="onOptionsChanged()">
+
+        <input type="range" class="form-range" formControlName="size" (change)="onOptionsChanged()">
+        <span>{{controls.size.value}}px</span>
+    </div>
+</form>

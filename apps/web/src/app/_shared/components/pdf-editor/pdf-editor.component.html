@@ -2,9 +2,11 @@
     [showTextBoxOptions$]="showTextBoxOptions$"
     [defaultTextBoxOptions]="selectedTextBoxOptions"
     [defaultEraserOptions]="selectedEraserOptions"
+    [defaultPenOptions]="selectedPenOptions"
     (undo)="onUndo()"
     (redo)="onRedo()"
     (selectedTool)="onSelectTool($event)" 
+    (changePenOptions)="onChangePenOptions($event)"
     (changeTextBoxOptions)="onChangeTextBoxOptions($event)"
     (changeEraserOptions)="onChangeEraserOptions($event)"></app-pdf-editor-toolbar>
 
