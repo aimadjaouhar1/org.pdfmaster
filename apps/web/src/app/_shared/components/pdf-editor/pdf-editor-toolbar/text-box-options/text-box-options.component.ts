@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextBoxOptions } from '@web/app/types/pdf-editor.type';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-text-box-options',
@@ -16,6 +17,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
 export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
   
   @Input({required: true}) defaultTextBoxOptions!: TextBoxOptions;
+
+  @Input() selectedTextBoxOptions$!: Subject<TextBoxOptions>;
 
   @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
 
@@ -42,22 +45,25 @@ export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['defaultTextBoxOptions'].isFirstChange()) {
-
-
-      this.font  = this.defaultTextBoxOptions!.font;
-      this.size  = this.defaultTextBoxOptions!.size;
-      this.color = this.defaultTextBoxOptions!.color;
-  
-      this.textBoxOptionForm.patchValue({
-        font: this.font,
-        size: this.size,
-        color: this.color
-      });
+      this.updateAll(this.defaultTextBoxOptions);
     }
   }
 
   ngAfterViewInit() {
     this.formValueChanges$.subscribe(() => this.changeTextBoxOptions.emit(this.textBoxOptionForm.getRawValue() as TextBoxOptions));
+    this.selectedTextBoxOptions$.subscribe((textBoxOptions: TextBoxOptions) => this.updateAll(textBoxOptions));
+  }
+
+  private updateAll(textBoxOption: TextBoxOptions) {
+    this.font  = textBoxOption!.font;
+    this.size  = textBoxOption!.size;
+    this.color = textBoxOption!.color;
+
+    this.textBoxOptionForm.patchValue({
+      font: this.font,
+      size: this.size,
+      color: this.color
+    });
   }
 
 }

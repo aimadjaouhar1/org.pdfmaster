@@ -1,4 +1,5 @@
 <app-pdf-editor-toolbar 
+    [showTextBoxOptions$]="showTextBoxOptions$"
     [defaultTextBoxOptions]="selectedTextBoxOptions"
     (undo)="onUndo()"
     (redo)="onRedo()"

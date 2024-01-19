@@ -28,6 +28,10 @@
 .text-box-size {
     width: 30%;
     border-right: 1px solid rgba(128, 128, 128, 0.161);
+
+    input {
+        border-radius: 0px;
+    }
 }
 
 

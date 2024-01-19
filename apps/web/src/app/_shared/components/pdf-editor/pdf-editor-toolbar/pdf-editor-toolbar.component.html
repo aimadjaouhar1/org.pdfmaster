@@ -4,9 +4,9 @@
 
         <div class="d-flex justify-content-center">
 
-            <div class="text-box" ngbDropdown>
-                <button class="btn btn-light" (click)="clickTextBox()" ngbDropdownToggle><i class="bi bi-textarea-t"></i></button>
-                <app-text-box-options class="tool-options-dropdown" [defaultTextBoxOptions]="defaultTextBoxOptions" 
+            <div class="text-box" #textboxdp ngbDropdown>
+                <button class="btn btn-light" (click)="clickTextBox()"><i class="bi bi-textarea-t"></i></button>
+                <app-text-box-options class="tool-options-dropdown" [defaultTextBoxOptions]="defaultTextBoxOptions" [selectedTextBoxOptions$]="selectedTextBoxOptions$"
                     (changeTextBoxOptions)="onChangeTextBoxOptions($event)" ngbDropdownMenu></app-text-box-options>
             </div>
 

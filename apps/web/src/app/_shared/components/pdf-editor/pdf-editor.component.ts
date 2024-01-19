@@ -3,7 +3,7 @@ import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfEditorNavigatorComponent } from '@web/shared/components/pdf-editor/pdf-editor-navigator/pdf-editor-navigator.component';
 import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pdf-editor-toolbar.component';
 import { PDFPageProxy, PageViewport } from 'pdfjs-dist';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
 import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
@@ -47,10 +47,13 @@ export class PdfEditorComponent {
 
   selectedTool?: ToolData;
   selectedTextBoxOptions: TextBoxOptions = {font: 'Arial', size: 16, color: 'black'};
+  showTextBoxOptions$ = new Subject<TextBoxOptions>();
 
 
   maxUndoSteps = 5;
   fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
+
+  
 
 
   constructor() {
@@ -81,8 +84,15 @@ export class PdfEditorComponent {
   }
 
   onSelectTool(toolData: ToolData) {
-    this.selectedTool = toolData;
-    this.fabriCanvas.defaultCursor = this.selectedTool.cursor;
+    if(this.selectedTool?.type == toolData.type) {
+
+      this.selectedTool = undefined;
+      this.fabriCanvas.defaultCursor = undefined;
+
+    } else {
+      this.selectedTool = toolData;
+      this.fabriCanvas.defaultCursor = this.selectedTool.cursor;  
+    }
   }
 
   onChangeTextBoxOptions(textBoxOptions: TextBoxOptions) {
@@ -141,15 +151,27 @@ export class PdfEditorComponent {
 
   private canvasMouseDownHandler(evt: fabric.IEvent) {
 
+    if(evt.target instanceof fabric.Textbox) {
+      const object = evt.target;
 
-    if(this.selectedTool) {
-
-      if(this.selectedTool.type == 'text') {
-        this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
+      this.selectedTextBoxOptions = {
+        font: object.fontFamily || '',
+        size: object.fontSize || 0,
+        color: object.fill?.toString() || ''
       }
 
-      this.selectedTool = undefined;
-      this.fabriCanvas.defaultCursor = undefined;
+      this.selectedTool = {'type': 'text', cursor: 'text'};
+      this.fabriCanvas.defaultCursor = this.selectedTool.type;
+
+      this.showTextBoxOptions$.next(this.selectedTextBoxOptions);
+    } 
+    else if(this.selectedTool) {
+      if(this.selectedTool.type == 'text') {
+        this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
+    }
+
+      //this.selectedTool = undefined;
+      //this.fabriCanvas.defaultCursor = undefined;
     }
   }
 
