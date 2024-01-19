@@ -1,18 +1,22 @@
-<div class="text-box-options">
+<form class="text-box-options" [formGroup]="textBoxOptionForm">
     <div class="text-box-font" ngbDropdown>
-        <button type="button" class="btn btn-light" ngbDropdownToggle> Arial </button>
+        <button type="button" class="btn btn-light" ngbDropdownToggle> {{font}} </button>
         <div ngbDropdownMenu>
             @for (item of fonts; track $index) {
-                <button ngbDropdownItem>{{ item }}</button>
+                <button (click)="font = item" ngbDropdownItem>{{ item }}</button>
             }
         </div>
+        <input type="hidden" formControlName="font" [(ngModel)]="font" />
     </div>
     
     <div class="text-box-size">
-        <input class="form-control" type="number" [defaultValue]="14" step="1" min="8" max="32" />
+        <input class="form-control" type="number" formControlName="size" step="1" min="8" max="32"/>
     </div>
 
     <div class="text-box-color">
-        <button class="btn btn-light" type="button"><i class="bi bi-square-fill"></i></button>
+        <button class="btn btn-light" type="button" [(colorPicker)]="color" [cpPosition]="'bottom'" [cpDisableInput]="true">
+            <i class="bi bi-square-fill" [ngStyle]="{'color': color}"></i></button>
+
+            <input type="hidden" formControlName="color" [(ngModel)]="color">
     </div>
-</div>
+</form>

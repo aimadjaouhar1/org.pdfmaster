@@ -13,11 +13,8 @@ import { Canvas } from 'fabric/fabric-impl';
 
 
 import * as pdfjs from 'pdfjs-dist';
+import { Pagination, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
-
-
-type Pagination = {page: number, limit: number};
-type ToolData = {cursor: string, type: string};
 
 
 @Component({
@@ -49,6 +46,8 @@ export class PdfEditorComponent {
 
   selectedTool?: ToolData;
 
+  selectedTextBoxOptions: TextBoxOptions = {font: 'Arial', size: 16, color: 'black'};
+
 
   constructor() {
     this.loadedPdfDocument$.pipe(takeUntilDestroyed())
@@ -67,10 +66,26 @@ export class PdfEditorComponent {
     this.initFabriCanvas(viewport);
   }
 
-
   onSelectTool(toolData: ToolData) {
     this.selectedTool = toolData;
     this.fabriCanvas.defaultCursor = this.selectedTool.cursor;
+  }
+
+  onChangeTextBoxOptions(textBoxOptions: TextBoxOptions) {
+    this.selectedTextBoxOptions = textBoxOptions;
+
+    const object = this.fabriCanvas.getActiveObject();
+
+    if(object instanceof fabric.Textbox) {
+      object.set({
+        fill: textBoxOptions.color,
+        fontSize: textBoxOptions.size,
+        fontFamily: textBoxOptions.font
+      });
+
+      this.fabriCanvas.renderAll();
+    }
+
   }
 
 
@@ -95,7 +110,7 @@ export class PdfEditorComponent {
     if(this.selectedTool) {
 
       if(this.selectedTool.type == 'text') {
-        this.drawTextBox(this.fabriCanvas, evt.pointer?.x, evt.pointer?.y);
+        this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
       }
 
       this.selectedTool = undefined;
@@ -104,11 +119,13 @@ export class PdfEditorComponent {
   }
 
 
-  private drawTextBox(canvas: Canvas, x?: number, y?: number) {
+  private drawTextBox(canvas: Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
     const text = new fabric.Textbox('Text', {
       width: 100,
       height: 50,
-      fontSize: 16,
+      fill: textBoxOptions.color,
+      fontSize: textBoxOptions.size,
+      fontFamily: textBoxOptions.font,
       cursorColor: 'red',
       left: x ?? 0,
       top: y ?? 0

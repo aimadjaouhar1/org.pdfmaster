@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
 import { TextBoxOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/text-box-options/text-box-options.component';
+
 
 @Component({
   selector: 'app-pdf-editor-toolbar',
@@ -11,15 +13,20 @@ import { TextBoxOptionsComponent } from '@web/shared/components/pdf-editor/pdf-e
 })
 export class PdfEditorToolbarComponent {
 
-  @Output() selectedTool = new EventEmitter();
+  @Input({required: true}) defaultTextBoxOptions!: TextBoxOptions;
+
+  @Output() selectedTool = new EventEmitter<ToolData>();
+
+  @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
 
   constructor(config: NgbDropdownConfig) {
     config.placement = 'bottom';
     config.container = null;
-    config.autoClose;
-
+    config.autoClose = 'outside';
   }
 
   clickTextBox = () => this.selectedTool.emit({cursor: 'text', type: 'text'});
+
+  onChangeTextBoxOptions = (textBoxOptions: TextBoxOptions) => this.changeTextBoxOptions.emit(textBoxOptions);
 
 }

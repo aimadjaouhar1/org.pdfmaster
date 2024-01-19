@@ -6,11 +6,13 @@
 
             <div class="text-box" ngbDropdown>
                 <button class="btn btn-light" (click)="clickTextBox()" ngbDropdownToggle><i class="bi bi-textarea-t"></i></button>
-                <app-text-box-options class="tool-options-dropdown" ngbDropdownMenu></app-text-box-options>
+                <app-text-box-options class="tool-options-dropdown" [defaultTextBoxOptions]="defaultTextBoxOptions" 
+                    (changeTextBoxOptions)="onChangeTextBoxOptions($event)" ngbDropdownMenu></app-text-box-options>
             </div>
 
             
             <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-pen"></i></button>
+
             <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-eraser-fill"></i></button>
             
             <div class="d-inline-block">

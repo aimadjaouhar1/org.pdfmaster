@@ -1,4 +1,7 @@
-<app-pdf-editor-toolbar (selectedTool)="onSelectTool($event)"></app-pdf-editor-toolbar>
+<app-pdf-editor-toolbar 
+    [defaultTextBoxOptions]="selectedTextBoxOptions"
+    (selectedTool)="onSelectTool($event)" 
+    (changeTextBoxOptions)="onChangeTextBoxOptions($event)"></app-pdf-editor-toolbar>
 
 <div class="pdf-navigator">
     <app-pdf-editor-navigator [pages]="loadedPdfPages$ | async" (selectPage)="onSelectPage($event)"></app-pdf-editor-navigator>
