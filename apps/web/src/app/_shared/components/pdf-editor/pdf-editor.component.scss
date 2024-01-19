@@ -27,7 +27,6 @@ $pdf-navigator-width: 220px;
     margin-left: $pdf-navigator-width;
     width: calc(100vw - $pdf-navigator-width - 65px);
     height: calc(100vh - 115px);
-    padding-top: 148px;
     overflow: auto; 
 }
 
