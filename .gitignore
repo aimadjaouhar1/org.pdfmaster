@@ -46,3 +46,7 @@ terraform/**
 terraform/.terraform/**
 !terraform/main.tf
 !terraform/secrets.example.tfvars
+
+# ansible Files
+ansible/playbooks/**
+!ansible/playbooks/deploy.yml

@@ -131,7 +131,7 @@ resource "null_resource" "run_ansible" {
   depends_on = [local_file.dynamic_inventory]
 
   provisioner "local-exec" {
-    command = "ansible-playbook -chdir='./ansible' -i dynamic_inventory.ini playbooks/deploy.yml --extra-vars 'docker_hub_username=${var.DOCKER_HUB_USERNAME} docker_hub_password=${var.DOCKER_HUB_PASSWORD}' "
-    working_dir = path.moduleyes
+    command = "ansible-playbook -i ${var.WORK_DIR}/ansible/playbooks/dynamic_inventory.ini ${var.WORK_DIR}/ansible/playbooks/deploy.yml --extra-vars 'docker_hub_username=${var.DOCKER_HUB_USERNAME} docker_hub_password=${var.DOCKER_HUB_PASSWORD}' "
+    working_dir = path.module
   }
 }
