@@ -6,7 +6,9 @@ variable KEY_NAME {}
 variable ROUTE53_ZONE_ID{}
 variable DOMAIN_NAME {}
 variable WORK_DIR {}
-
+variable DOCKER_HUB_USERNAME {}
+variable DOCKER_HUB_PASSWORD {}
+variable CI_ENV { default = false }
 
 
 terraform {
@@ -121,5 +123,15 @@ resource "local_file" "dynamic_inventory" {
 
   provisioner "local-exec" {
     command = "chmod 400 ${local_file.dynamic_inventory.filename}"
+  }
+}
+
+resource "null_resource" "run_ansible" {
+  count = var.CI_ENV ? 0 : 1
+  depends_on = [local_file.dynamic_inventory]
+
+  provisioner "local-exec" {
+    command = "ansible-playbook -chdir='./ansible' -i dynamic_inventory.ini playbooks/deploy.yml --extra-vars 'docker_hub_username=${var.DOCKER_HUB_USERNAME} docker_hub_password=${var.DOCKER_HUB_PASSWORD}' "
+    working_dir = path.moduleyes
   }
 }

@@ -40,3 +40,9 @@ Thumbs.db
 
 .nx/cache
 .angular
+
+# terraform Files
+terraform/**
+terraform/.terraform/**
+!terraform/main.tf
+!terraform/secrets.example.tfvars
