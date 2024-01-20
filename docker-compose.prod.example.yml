@@ -1,0 +1,9 @@
+version: '3'
+
+services:   
+  web:
+    container_name: web
+    image: aimadjaouhar/org.pdfmaster:web-${version}
+    restart: always
+    ports:
+      - "80:80"
