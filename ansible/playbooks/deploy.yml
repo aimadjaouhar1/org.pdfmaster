@@ -18,3 +18,15 @@
         name: docker-compose
         state: present
         executable: pip3
+
+    - name: Log into DockerHub
+      community.docker.docker_login:
+        username: '{{  docker_hub_username  }}'
+        password: '{{ docker_hub_password }}'
+    
+    - name: Run `docker-compose file`
+      community.docker.docker_compose:
+        project_src: "org.pdfmaster/"
+        files:
+          - docker-compose.prod.yml
+        state: present
