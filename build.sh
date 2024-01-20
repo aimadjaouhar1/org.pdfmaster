@@ -19,6 +19,6 @@ docker build -t "aimadjaouhar/org.pdfmaster:web-$version_number" -f docker/web.D
 echo "Pushing Docker image web..."
 docker push "aimadjaouhar/org.pdfmaster:web-$version_number"
 
-sed "s/\${version}/$version_number/g" docker-compose.example.yml > tmp && mv tmp docker-compose.prod.yml
+sed "s/\${version}/$version_number/g" docker-compose.prod.example.yml > tmp && mv tmp docker-compose.prod.yml
 
 
