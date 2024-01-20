@@ -1,0 +1,23 @@
+<form class="shape-options" [formGroup]="shapeOptionsForm">
+
+    <div class="stroke-width" placement="bottom" ngbTooltip="Stroke Width" triggers="hover">
+        <i class="bi bi-border-width"></i>
+        <input class="form-control" type="number" formControlName="strokeWidth" step="1" min="1" max="100" (change)="onOptionsChanged()" />
+    </div>
+
+    <div class="shape-stroke-color">
+        <button class="btn btn-light" placement="bottom" ngbTooltip="Stroke" type="button" [(colorPicker)]="stroke" [cpPosition]="'bottom'" [cpDisableInput]="true" (cpSliderDragEnd)="onOptionsChanged()">
+             <i class="bi bi-square-fill" [ngStyle]="{'color': stroke}"></i></button>
+            <input type="hidden" formControlName="stroke" [(ngModel)]="stroke">
+    </div>
+
+    @if(!['arrow', 'line'].includes(selectedShape!)) {
+        <div class="shape-color">
+            <button class="btn btn-light" placement="bottom" ngbTooltip="Background" type="button" [(colorPicker)]="color" [cpPosition]="'bottom'" [cpDisableInput]="true">
+                <i class="bi bi-paint-bucket"></i>
+            </button>
+    
+            <input type="hidden" formControlName="color" [(ngModel)]="color" (change)="onOptionsChanged()">
+        </div>    
+    }
+</form>

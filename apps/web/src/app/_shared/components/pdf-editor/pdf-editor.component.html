@@ -1,14 +1,18 @@
 <app-pdf-editor-toolbar 
+    [hideAllOptions$]="hideAllOptions$"
+    [showShapeOptions$]="showShapeOptions$"
     [showTextBoxOptions$]="showTextBoxOptions$"
     [defaultTextBoxOptions]="selectedTextBoxOptions"
     [defaultEraserOptions]="selectedEraserOptions"
     [defaultPenOptions]="selectedPenOptions"
+    [defaultShapeOptions]="selectedShapeOptions"
     (undo)="onUndo()"
     (redo)="onRedo()"
     (selectedTool)="onSelectTool($event)" 
     (changePenOptions)="onChangePenOptions($event)"
     (changeTextBoxOptions)="onChangeTextBoxOptions($event)"
-    (changeEraserOptions)="onChangeEraserOptions($event)"></app-pdf-editor-toolbar>
+    (changeEraserOptions)="onChangeEraserOptions($event)"
+    (chageShapeOptions)="onChageShapeOptions($event)"></app-pdf-editor-toolbar>
 
 <div class="pdf-navigator">
     <app-pdf-editor-navigator [pages]="loadedPdfPages$ | async" (selectPage)="onSelectPage($event)"></app-pdf-editor-navigator>

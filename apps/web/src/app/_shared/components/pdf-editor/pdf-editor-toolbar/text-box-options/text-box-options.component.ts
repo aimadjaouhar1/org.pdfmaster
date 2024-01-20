@@ -36,8 +36,6 @@ export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
     color: [this.color]
   });
 
-  formValueChanges$ = this.textBoxOptionForm.valueChanges.pipe(takeUntilDestroyed());
-
 
   constructor(config: NgbDropdownConfig) {
     config.autoClose = 'inside';
@@ -50,8 +48,17 @@ export class TextBoxOptionsComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    this.formValueChanges$.subscribe(() => this.changeTextBoxOptions.emit(this.textBoxOptionForm.getRawValue() as TextBoxOptions));
     this.selectedTextBoxOptions$.subscribe((textBoxOptions: TextBoxOptions) => this.updateAll(textBoxOptions));
+  }
+
+  onSelectedFont(font: string) {
+    this.font = font;
+    this.textBoxOptionForm.patchValue({font: this.font});
+    this.onOptionsChanged();
+  }
+
+  onOptionsChanged() {
+    this.changeTextBoxOptions.emit(this.textBoxOptionForm.getRawValue() as TextBoxOptions);
   }
 
   private updateAll(textBoxOption: TextBoxOptions) {

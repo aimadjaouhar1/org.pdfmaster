@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-center">
 
             <!-- TextBox button -->
-            <div class="text-box" ngbDropdown #textboxdp="ngbDropdown">
+            <div class="tool-btn" ngbDropdown #textboxdp="ngbDropdown">
                 <button class="btn btn-light" type="button" (click)="clickTextBox()"><i class="bi bi-textarea-t"></i></button>
                 
                 <app-text-box-options class="tool-options-dropdown" 
@@ -15,7 +15,7 @@
             </div>
             
             <!-- Pen button -->
-            <div class="text-box" ngbDropdown #pendp="ngbDropdown">
+            <div class="tool-btn" ngbDropdown #pendp="ngbDropdown">
                 <button class="btn btn btn-light me-md-2" type="button" (click)="clickPen()"><i class="bi bi-pen"></i></button>
 
                 <app-pen-options class="tool-options-dropdown"
@@ -24,7 +24,7 @@
             </div> 
 
             <!-- Eraser button -->
-            <div class="text-box" ngbDropdown #eraserdp="ngbDropdown">
+            <div class="tool-btn" ngbDropdown #eraserdp="ngbDropdown">
                 <button class="btn btn btn-light me-md-2" type="button" (click)="clickEraser()"><i class="bi bi-eraser-fill"></i></button>
 
                 <app-eraser-options class="tool-options-dropdown"
@@ -32,10 +32,26 @@
                     (changeEraserOptions)="onChangeEraserOptions($event)" ngbDropdownMenu></app-eraser-options>
             </div>
 
-            
-            <div class="d-inline-block">
-                <button class="btn btn-light" type="button"><i class="bi bi-square"></i></button>
+            <!-- Shape button -->
+            <div class="tool-btn" ngbDropdown #shapesdp="ngbDropdown">
+                <button class="btn btn-light" type="button" (click)="clickShapes()"><i class="bi bi-square"></i></button>
+
+                <div class="tool-shapes-dropdown" ngbDropdownMenu>
+                    <button (click)="selectShape('rectangle')" ngbDropdownItem><i class="bi bi-square"></i> Rectangle</button>
+                    <button (click)="selectShape('ellipse')" ngbDropdownItem><i class="bi bi-circle"></i> Ellipse</button>
+                    <button (click)="selectShape('line')" ngbDropdownItem><i class="bi bi-dash-lg"></i> Line</button>
+                    <button (click)="selectShape('arrow')" ngbDropdownItem><i class="bi bi-arrow-down-left"></i> Arrow</button>    
+                </div>
             </div>
+
+            <div ngbDropdown #shapesOptionsdp="ngbDropdown">
+                <app-shape-options class="tool-shapes-dropdown tool-options-dropdown"
+                    [defaultShapeOptions]="defaultShapeOptions"
+                    [selectedShape]="selectedShape"
+                    [selectedShapeOptions$]="selectedShapeOptions$"
+                    (changeShapeOptions)="onChangeShapesOptions($event)" ngbDropdownMenu></app-shape-options>
+            </div>
+
 
             <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-file-earmark-image"></i></button>
 
