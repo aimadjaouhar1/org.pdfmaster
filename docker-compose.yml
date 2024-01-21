@@ -7,3 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/web.Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/app.conf:/etc/nginx/conf.d/default.conf:ro

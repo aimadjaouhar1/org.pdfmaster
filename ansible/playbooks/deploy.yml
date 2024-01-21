@@ -23,6 +23,11 @@
       copy:
         src: ../../docker-compose.prod.yml
         dest: org.pdfmaster/
+    
+    - name: Copy nginx configuration
+      copy:
+        src: ../../nginx/
+        dest: org.pdfmaster/nginx/
 
     - name: Install Docker SDK for Python
       ansible.builtin.pip:

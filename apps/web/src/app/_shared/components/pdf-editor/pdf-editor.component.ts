@@ -26,7 +26,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 })
 export class PdfEditorComponent {
   
-  @Input() pdfFile: string = 'http://localhost:4200/assets/sample.pdf';
+  @Input() pdfFile: string = '/assets/sample.pdf';
 
   @ViewChild('pdfEditor') pdfEditor!: ElementRef;
   @ViewChild('pdfEditCanvas') pdfEditCanvas!: ElementRef;
