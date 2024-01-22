@@ -206,7 +206,7 @@ export class PdfEditorComponent {
       this.fabriCanvas.dispose();
     }
 
-    this.fabriCanvas = new fabric.Canvas('pdf-edit');
+    this.fabriCanvas = new fabric.Canvas('pdf-edit', {selection: false});
 
     this.fabriCanvas.width = viewport.width;
     this.fabriCanvas.height = viewport.height;
