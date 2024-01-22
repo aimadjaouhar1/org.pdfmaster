@@ -20,6 +20,11 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "src/styles"
+          ]
+        },
         "assets": [
           "apps/web/src/favicon.ico", 
           "apps/web/src/assets",

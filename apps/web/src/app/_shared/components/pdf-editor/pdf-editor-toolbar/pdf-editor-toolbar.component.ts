@@ -81,7 +81,6 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.showTextBoxOptions$?.subscribe((textBoxOptions: TextBoxOptions) => { 
       this.selectedTextBoxOptions$.next(textBoxOptions);
-      //this.textboxdp.open(); 
       this.dropdownState$.next({dp: this.textboxdp, action: 'open'});
 
     })
@@ -89,7 +88,6 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
     this.showShapeOptions$?.subscribe((shapeOptions: ShapeOptions) => {
       this.selectedShapeOptions$.next(shapeOptions);
       this.shapesOptionsdp.autoClose = false;
-      //this.shapesOptionsdp.open();
       this.dropdownState$.next({dp: this.shapesOptionsdp, action: 'open'});
     });
 

@@ -1,0 +1,92 @@
+@import '../../../../styles/variables';
+
+
+.sidebar-menu {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: white;
+    width: $sidebar-width;
+    background-color: $primary;
+    .nav {
+      flex-direction: column;
+    }
+  }
+
+.sidebar-menu a {
+    display: block;
+    color: rgb(255, 255, 255);
+    padding: 16px;
+    text-decoration: none;
+    font-size: 0.6rem;
+
+}
+  
+.sidebar-menu a.active {
+  color: white;
+}
+
+.sidebar-menu a:hover:not(.active) {
+  background-color: rgb(211, 127, 127);
+  color: white;
+}
+
+.sidebar-menu i {
+  font-size: 1.3rem;
+}
+
+.sidebar-menu .brand {
+  font-size: 0.8rem;
+}
+
+.sub-nav-item {
+  background-color: rgba(222, 68, 68, 0.964);
+
+  a {
+      color: white;
+  }
+}
+
+.sidebar-menu .nav-item .dropdown-toggle::after {
+  display: none;
+}  
+
+.sidebar-menu .nav-item {
+  border: none;
+  outline: none;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.sidebar-menu .active, .nav-item:hover {
+  border: none;
+}
+
+.sidebar-menu .nav-link:hover, .nav-link:focus {
+  color: white;
+  box-shadow: none;
+}
+
+
+@media screen and (max-width: 900px) {
+    .sidebar-menu {
+      width: 100%;
+      height: auto;
+      position: relative;
+  
+      .brand {
+        display: none;
+      }
+  
+      .nav {
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 10px;
+        padding-right: 10px;
+  
+      }
+    }
+}

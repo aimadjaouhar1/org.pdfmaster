@@ -1,67 +1,4 @@
-.sidebar {
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-    background-color: $primary;
-    color: white;
-    width: $sidebar-width;
-  }
-
-.sidebar a {
-    display: block;
-    color: rgb(255, 255, 255);
-    padding: 16px;
-    text-decoration: none;
-    font-size: 0.6rem;
-
-}
-  
-.sidebar a.active {
-  color: white;
-}
-
-.sidebar a:hover:not(.active) {
-  background-color: rgb(211, 127, 127);
-  color: white;
-}
-
-.sidebar i {
-  font-size: 1.3rem;
-}
-
-.sidebar .brand {
-  font-size: 0.8rem;
-}
-
-.sub-nav-item {
-  background-color: rgba(222, 68, 68, 0.964);
-
-  a {
-      color: white;
-  }
-}
-
-.nav-item .dropdown-toggle::after {
-  display: none;
-}  
-
-.nav-item {
-  border: none;
-  outline: none;
-  padding: 0px;
-  cursor: pointer;
-}
-
-.active, .nav-item:hover {
-  border: none;
-}
-
-.nav-link:hover, .nav-link:focus {
-  color: white;
-  box-shadow: none;
-}
+@import 'variables';
 
 div.main {
   margin-left: $sidebar-width;
@@ -70,19 +7,11 @@ div.main {
 }
 
 
-@media screen and (max-width: 700px) {
+
+@media screen and (max-width: 900px) {
   .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
+    display: none !important;
   }
-  .sidebar a {float: left;}
   div.main {margin-left: 0;}
 }
 
-@media screen and (max-width: 400px) {
-  .sidebar a {
-    text-align: center;
-    float: none;
-  }
-}

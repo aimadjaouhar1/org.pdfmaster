@@ -1,0 +1,51 @@
+.navbar-toggler {
+    border: none;
+    box-shadow: none;
+}
+
+.navbar-toggler {
+    display: none !important;
+  }
+  
+.mobile-menu {
+    display: none !important;
+}
+
+
+.mobile-menu {
+
+    .sidebar-menu .brand {
+        display: none !important;
+    }
+    
+    .nav {
+        flex-direction: row;
+        justify-content: space-between;
+        padding-left: 8px;
+        padding-right: 8px;
+  
+    }
+}
+
+
+@media screen and (max-width: 900px) {
+    .mobile-menu {
+        display: block !important;
+    }
+
+    .navbar-toggler {
+        display: block !important;
+      }
+  
+}
+
+
+@keyframes slidein {
+    0%   {margin-left:1500px;}
+    100% {margin-left:0px;}
+}
+.note {
+    animation-name: slidein;
+    animation-duration: .9s;
+    display: block;
+}
