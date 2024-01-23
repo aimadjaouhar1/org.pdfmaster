@@ -4,6 +4,7 @@ div.main {
   margin-left: $sidebar-width;
   height: 100vh;
   background-color: rgba(196, 196, 196, 0.576);
+  overflow: hidden;
 }
 
 
@@ -12,6 +13,9 @@ div.main {
   .sidebar {
     display: none !important;
   }
-  div.main {margin-left: 0;}
+  div.main {
+    margin-left: 0;
+    width: 100vw;
+  }
 }
 

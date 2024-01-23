@@ -10,31 +10,36 @@ $pdf-navigator-width: 220px;
 }
 
 .pdf-editor {
-    position: relative;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 }
 
 #pdf-display, #pdf-edit{
     position: absolute;
-    left: 0px;
-    top: 0px; 
+    width: 100%;
+    left: 0;
+    top: 0; 
 }
 
 .pdf-editor-wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+    position: relative;
     margin-left: $pdf-navigator-width;
-    width: calc(100vw - $pdf-navigator-width - 65px);
-    height: calc(100vh - 115px);
-    overflow: auto; 
+    
+    padding-top: 20px;
+    height: calc(100vh - 125px);
+
+    overflow-y: auto;
+    width: calc(100vw - $pdf-navigator-width);
 }
+
 
 @media screen and (max-width: 900px) {
     .pdf-editor-wrapper {
-      width: 100%;
-      margin-left: 0px;
+      margin-left: 0; 
       position: relative;
+      width: 100vw;
     }
 
     .pdf-navigator {
