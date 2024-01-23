@@ -1,3 +1,4 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -11,7 +12,30 @@ import { map } from 'rxjs';
   standalone: true,
   imports: [RouterLink, TranslateModule, AsyncPipe, SidebarComponent],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
+  animations: [
+    trigger(
+      'inOutAnimation', 
+      [
+        transition(
+          ':enter', 
+          [
+            style({ height: 50 }),
+            animate('0.3s ease-out', 
+                    style({ }))
+          ]
+        ),
+        transition(
+          ':leave', 
+          [
+            style({  }),
+            animate('0.2s ease-in', 
+                    style({ height: 0, opacity: 0 }))
+          ]
+        )
+      ]
+    )
+  ]
 })
 export class NavbarComponent {
 
