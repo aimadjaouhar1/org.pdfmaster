@@ -1,4 +1,4 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbDropdown, NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { Observable, Subject } from 'rxjs';
 @Component({
   selector: 'app-pdf-editor-toolbar',
   standalone: true,
-  imports: [NgbDropdownModule, NgTemplateOutlet, TextBoxOptionsComponent, EraserOptionsComponent, PenOptionsComponent, ShapeOptionsComponent],
+  imports: [NgbDropdownModule, NgTemplateOutlet, NgClass, TextBoxOptionsComponent, EraserOptionsComponent, PenOptionsComponent, ShapeOptionsComponent],
   templateUrl: './pdf-editor-toolbar.component.html',
   styleUrl: './pdf-editor-toolbar.component.scss',
 })
@@ -45,6 +45,8 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   @Output() zoomOut = new EventEmitter();
 
+  @Output() activatePan = new EventEmitter();
+
   @Output() selectedTool = new EventEmitter<ToolData | undefined>();
 
   @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
@@ -69,6 +71,7 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   selectedShape?: string;
 
+  isPanActive = false;
 
   constructor(config: NgbDropdownConfig) {
     config.placement = 'bottom';
@@ -111,25 +114,34 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   clickZoomOut = () => this.zoomOut.emit();
 
+  clickPan() { 
+    this.isPanActive = !this.isPanActive;
+    this.activatePan.emit(this.isPanActive);
+  }
+
   clickTextBox() {
     this.dropdownState$.next({dp: this.textboxdp, action: 'toggle'})
     this.selectedTool.emit({cursor: 'text', type: 'text'});
+    this.deactivatePan();
   };
 
   clickEraser() {
     this.dropdownState$.next({dp: this.eraserdp, action: 'toggle'});
     this.selectedTool.emit({cursor: '', type: 'eraser'});
+    this.deactivatePan();
   };
 
   clickPen() {
     this.dropdownState$.next({dp: this.pendp, action: 'toggle'});
     this.selectedTool.emit({cursor: '', type: 'pen'});
+    this.deactivatePan();
   }
 
   clickShapes() {
     this.shapesdp.autoClose = 'outside';
     this.dropdownState$.next({dp: this.shapesdp, action: 'toggle'}); 
     this.selectedTool.emit(undefined);
+    this.deactivatePan();
   }
 
   selectShape(shape: string) {
@@ -140,6 +152,7 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
     this.shapesOptionsdp.open();
 
     this.selectedTool.emit({cursor: '', type: this.selectedShape});
+    this.deactivatePan();
   }
 
   onChangeTextBoxOptions = (textBoxOptions: TextBoxOptions) => this.changeTextBoxOptions.emit(textBoxOptions);
@@ -150,5 +163,8 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   onChangeShapesOptions = (shapeOptions: ShapeOptions) => this.chageShapeOptions.emit(shapeOptions);
 
-
+  private deactivatePan() {
+    this.isPanActive = false;
+    this.activatePan.emit(this.isPanActive);
+  }
 }

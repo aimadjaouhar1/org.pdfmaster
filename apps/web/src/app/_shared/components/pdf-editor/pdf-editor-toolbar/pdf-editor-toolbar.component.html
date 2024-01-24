@@ -1,3 +1,26 @@
+
+<nav class="mobile-toolbar navbar navbar-expand-lg bg-body-tertiary border-top">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center pagination-controls">
+            <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-chevron-left"></i></button>
+         
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-text"></i></span>
+                <input type="text" class="form-control" [value]="'Page: ' + numPage + '/' + countPages" disabled>
+            </div>
+              
+            <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-chevron-right"></i></button>
+
+            <div class="d-flex justify-content-end align-items-center">
+                <button class="btn btn btn-light me-md-2" [ngClass]="{'btn-pan-active': isPanActive}" type="button" (click)="clickPan()"><i class="bi bi-arrows-move"></i></button>
+    
+                <ng-container *ngTemplateOutlet="zoomControls"></ng-container>
+            </div>
+        </div>
+    </div>
+  </nav>
+
+  
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
     <div class="container-fluid">
         <button class="btn btn-light"><i class="bi bi-layout-sidebar"></i></button>
@@ -73,26 +96,6 @@
     </div>
   </nav>
 
-  <nav class="mobile-toolbar navbar navbar-expand-lg bg-body-tertiary border-top">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-center pagination-controls">
-            <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-chevron-left"></i></button>
-         
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-text"></i></span>
-                <input type="text" class="form-control" [value]="'Page: ' + numPage + '/' + countPages" disabled>
-            </div>
-              
-            <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-chevron-right"></i></button>
-
-            <div class="d-flex justify-content-end align-items-center">
-                <button class="btn btn btn-light me-md-2" type="button" (click)="clickUndo()"><i class="bi bi-arrows-move"></i></button>
-    
-                <ng-container *ngTemplateOutlet="zoomControls"></ng-container>
-            </div>
-        </div>
-    </div>
-  </nav>
 
   <ng-template #zoomControls>
     <button class="btn btn btn-light me-md-2" type="button" (click)="clickZoomIn()"><i class="bi bi-plus-circle"></i></button>

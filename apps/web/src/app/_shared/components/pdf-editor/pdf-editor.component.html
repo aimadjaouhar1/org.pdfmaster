@@ -12,6 +12,7 @@
     (redo)="onRedo()"
     (zoomIn)="onZoomIn()"
     (zoomOut)="onZoomOut()"
+    (activatePan)="onActivatePan($event)"
     (selectedTool)="onSelectTool($event)" 
     (changePenOptions)="onChangePenOptions($event)"
     (changeTextBoxOptions)="onChangeTextBoxOptions($event)"
@@ -26,5 +27,9 @@
     <div class="pdf-editor" #pdfEditor>
         <canvas id="pdf-display" appPdfViewer [page]="currentPage" [viewportParameters]="viewportParams"></canvas>
         <canvas id="pdf-edit" #pdfEditCanvas></canvas>
+
+        @if(isPanActive) {
+            <div class="mobile-scroll-space"></div>
+        }
     </div>
 </div>

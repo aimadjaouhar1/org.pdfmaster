@@ -42,6 +42,10 @@
     display: none;
 }
 
+.btn-pan-active {
+    background-color: rgba(78, 78, 78, 0.199);
+}
+
 
 @media screen and (max-width: 900px) {
     .mobile-toolbar {

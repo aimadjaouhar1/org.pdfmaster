@@ -66,7 +66,7 @@ export class PdfEditorComponent {
   maxUndoSteps = 40;
   fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
 
-  
+  isPanActive = false;
 
 
   constructor() {
@@ -95,6 +95,10 @@ export class PdfEditorComponent {
       this.viewportParams!.scale -= 0.1;
       this.renderAll();
     }
+  }
+
+  onActivatePan(isPanActive: boolean) {
+    this.isPanActive = isPanActive;
   }
 
   onUndo() {
