@@ -1,4 +1,6 @@
 <app-pdf-editor-toolbar 
+    [numPage]="pagination.page"
+    [countPages]="countPages"
     [hideAllOptions$]="hideAllOptions$"
     [showShapeOptions$]="showShapeOptions$"
     [showTextBoxOptions$]="showTextBoxOptions$"
@@ -8,6 +10,8 @@
     [defaultShapeOptions]="selectedShapeOptions"
     (undo)="onUndo()"
     (redo)="onRedo()"
+    (zoomIn)="onZoomIn()"
+    (zoomOut)="onZoomOut()"
     (selectedTool)="onSelectTool($event)" 
     (changePenOptions)="onChangePenOptions($event)"
     (changeTextBoxOptions)="onChangeTextBoxOptions($event)"

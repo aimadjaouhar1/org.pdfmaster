@@ -26,3 +26,30 @@
 .tool-shapes-dropdown.tool-options-dropdown {
     left: -30px;
 }
+
+.zoom-controls {
+    margin-right: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: rgba(128, 128, 128, 0.117) 1px solid;
+}
+
+.pagination-controls {
+    width: 100%;    
+}
+
+.mobile-toolbar {
+    display: none;
+}
+
+
+@media screen and (max-width: 900px) {
+    .mobile-toolbar {
+        display: block;
+    }
+
+    .zoom-controls {
+        display: none;
+    }
+
+}

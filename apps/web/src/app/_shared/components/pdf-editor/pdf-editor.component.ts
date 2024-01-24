@@ -38,8 +38,11 @@ export class PdfEditorComponent {
 
   currentPage?: PDFPageProxy;  
   viewportParams?: GetViewportParameters = { scale: 1 };
+  maxScale = 2.6;
+  minScale = 0.6;
   
   pagination: Pagination = {page: 1, limit: 5};
+  countPages?: number;
 
   loadedPdfDocument$ = this.pdfEditorService.loadPdfDocument(this.pdfFile);
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
@@ -69,6 +72,7 @@ export class PdfEditorComponent {
   constructor() {
     this.loadedPdfDocument$.pipe(takeUntilDestroyed())
       .subscribe(pdfDoc => {
+        this.countPages = pdfDoc.numPages;
         this.loadedPdfPages$ = this.pdfEditorService.loadPdfPages(pdfDoc, this.pagination.page, this.pagination.limit);
     });
   }
@@ -77,6 +81,20 @@ export class PdfEditorComponent {
   onSelectPage(page: PDFPageProxy) {
     this.currentPage = page;
     this.renderAll();
+  }
+
+  onZoomIn() {
+    if(this.viewportParams!.scale < this.maxScale) {
+      this.viewportParams!.scale += 0.1;
+      this.renderAll();
+    }
+  }
+
+  onZoomOut() {
+    if(this.viewportParams!.scale > this.minScale) {
+      this.viewportParams!.scale -= 0.1;
+      this.renderAll();
+    }
   }
 
   onUndo() {

@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbDropdown, NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,7 +13,7 @@ import { Observable, Subject } from 'rxjs';
 @Component({
   selector: 'app-pdf-editor-toolbar',
   standalone: true,
-  imports: [NgbDropdownModule, TextBoxOptionsComponent, EraserOptionsComponent, PenOptionsComponent, ShapeOptionsComponent],
+  imports: [NgbDropdownModule, NgTemplateOutlet, TextBoxOptionsComponent, EraserOptionsComponent, PenOptionsComponent, ShapeOptionsComponent],
   templateUrl: './pdf-editor-toolbar.component.html',
   styleUrl: './pdf-editor-toolbar.component.scss',
 })
@@ -25,6 +26,10 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   @Input({required: true}) defaultPenOptions!: PenOptions;
 
   @Input({required: true}) defaultShapeOptions!: ShapeOptions;
+
+  @Input() numPage?: number;
+
+  @Input() countPages?: number;
   
   @Input() showTextBoxOptions$?: Observable<TextBoxOptions>;
 
@@ -35,6 +40,10 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   @Output() undo = new EventEmitter();
 
   @Output() redo = new EventEmitter();
+
+  @Output() zoomIn = new EventEmitter();
+
+  @Output() zoomOut = new EventEmitter();
 
   @Output() selectedTool = new EventEmitter<ToolData | undefined>();
 
@@ -97,6 +106,10 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   clickUndo = () => this.undo.emit();
 
   clickRedo = () => this.redo.emit();
+
+  clickZoomIn = () => this.zoomIn.emit();
+
+  clickZoomOut = () => this.zoomOut.emit();
 
   clickTextBox() {
     this.dropdownState$.next({dp: this.textboxdp, action: 'toggle'})
