@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class CustomTitleResolver {
+
+    
     constructor(
         private _translateService: TranslateService,
     ) {}

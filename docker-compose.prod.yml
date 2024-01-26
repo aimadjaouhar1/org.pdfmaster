@@ -3,7 +3,7 @@ version: '3'
 services:   
   web:
     container_name: web
-    image: aimadjaouhar/org.pdfmaster:web-0.1.5
+    image: aimadjaouhar/org.pdfmaster:web-0.1.0
     restart: always
     ports:
       - "80:80"
