@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfEditorNavigatorComponent } from '@web/shared/components/pdf-editor/pdf-editor-navigator/pdf-editor-navigator.component';
 import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pdf-editor-toolbar.component';
@@ -24,16 +24,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
   templateUrl: './pdf-editor.component.html',
   styleUrl: './pdf-editor.component.scss',
 })
-export class PdfEditorComponent {
+export class PdfEditorComponent implements OnChanges {
   
-  @Input() pdfFile: string = '/assets/sample.pdf';
+  @Input() pdfFile!: File;
 
   @ViewChild('pdfEditor') pdfEditor!: ElementRef;
   @ViewChild('pdfEditCanvas') pdfEditCanvas!: ElementRef;
 
   fabriCanvas!: fabric.Canvas;
 
-
+  destroyRef = inject(DestroyRef);
   pdfEditorService = inject(PdfEditorService);
 
   currentPage?: PDFPageProxy;  
@@ -44,7 +44,6 @@ export class PdfEditorComponent {
   pagination: Pagination = {page: 1, limit: 5};
   countPages?: number;
 
-  loadedPdfDocument$ = this.pdfEditorService.loadPdfDocument(this.pdfFile);
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
   selectedTool?: ToolData;
@@ -69,12 +68,17 @@ export class PdfEditorComponent {
   isPanActive = false;
 
 
-  constructor() {
-    this.loadedPdfDocument$.pipe(takeUntilDestroyed())
-      .subscribe(pdfDoc => {
-        this.countPages = pdfDoc.numPages;
-        this.loadedPdfPages$ = this.pdfEditorService.loadPdfPages(pdfDoc, this.pagination.page, this.pagination.limit);
+  constructor() {}
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if(changes['pdfFile']) {
+      this.pdfEditorService.loadPdfDocument(await this.pdfFile.arrayBuffer())
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(pdfDoc => {
+          this.countPages = pdfDoc.numPages;
+          this.loadedPdfPages$ = this.pdfEditorService.loadPdfPages(pdfDoc, this.pagination.page, this.pagination.limit);
     });
+    }
   }
 
 

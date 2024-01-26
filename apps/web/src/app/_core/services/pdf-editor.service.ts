@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { Observable, forkJoin, from } from "rxjs";
 import { PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
 import * as pdfjs from 'pdfjs-dist';
+import { DocumentInitParameters, TypedArray } from "pdfjs-dist/types/src/display/api";
 
 
 @Injectable({ providedIn: 'root' })
 export class PdfEditorService {  
 
-    loadPdfDocument(pdfFile: string): Observable<PDFDocumentProxy> {
+    loadPdfDocument(pdfFile: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): Observable<PDFDocumentProxy> {
         return from(pdfjs.getDocument(pdfFile).promise);
     }
 
