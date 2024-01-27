@@ -3,6 +3,9 @@
 # environement variables file
 .env
 
+# logs
+logs/**
+
 # compiled output
 dist
 tmp
