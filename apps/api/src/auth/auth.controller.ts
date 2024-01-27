@@ -1,6 +1,6 @@
 import { AuthService } from "@api/auth/auth.service";
-import { LoginCredentialsPayload } from "@api/auth/payloads/login-credentials.payload";
 import { Body, Controller, Post } from "@nestjs/common";
+import { LoginCredentialsPayload } from "@shared-lib/models";
 
 
 @Controller('auth')

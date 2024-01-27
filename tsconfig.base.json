@@ -15,11 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@api/*": ["apps/api/src/*"],
+      "@org.pdfmaster/shared-lib": ["libs/shared-lib/src/index.ts"],
       "@web/app/*": ["apps/web/src/app/_core/*"],
       "@web/env": ["apps/web/src/environments/environment"],
       "@web/features/*": ["apps/web/src/app/features/*"],
       "@web/shared/*": ["apps/web/src/app/_shared/*"],
-      "@api/*": ["apps/api/src/*"]
+      "@shared-lib/*": ["libs/shared-lib/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
