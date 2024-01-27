@@ -1,4 +1,4 @@
 export interface LoginCredentialsPayload {
-    username: string;
+    email: string;
     password: string;
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { LoginResponsePayload } from '@shared-lib/models';
 
 @Injectable()
 export class AuthService {
@@ -8,8 +9,23 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async signIn(username: string, password: string): Promise<string> {
-        return this.jwtService.sign({ username, password }, {secret: process.env.API_JWT_SECRET, expiresIn: `${process.env.API_JWT_EXPIRATION}s`});
+    async signIn(email: string, password: string): Promise<LoginResponsePayload> {
+        const isGranted = true;
+
+        if(isGranted) {
+            const payload = { username: email, sub: password };
+
+            const token: string = this.jwtService.sign(
+                payload, 
+                {
+                    secret: process.env.API_JWT_SECRET, 
+                    expiresIn: `${process.env.API_JWT_EXPIRATION}s`
+                }
+            );
+
+            return {} as LoginResponsePayload;
+        }
+
     }
 
 }

@@ -1,14 +1,26 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
+import { AuthModule } from '@api/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '@api/entities';
 
+const entities = [
+  User
+];
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.API_JWT_SECRET,
-      signOptions: { expiresIn: `${process.env.API_JWT_EXPIRATION}s` },
+    AuthModule,
+    TypeOrmModule.forFeature([...entities]),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [...entities],
+      synchronize: Boolean(process.env.DB_SYNC || false), 
+      logging: Boolean(process.env.DB_LOGGING || false)
     }),
   ],
   controllers: [],

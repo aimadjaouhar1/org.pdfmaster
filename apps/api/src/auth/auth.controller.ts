@@ -11,7 +11,7 @@ export class AuthController {
     ) {}
 
     @Post('/login')
-    signIn(@Body() credentials: LoginCredentialsPayload) {
-        return this.authService.signIn(credentials.username, credentials.password);
+    signIn(@Body() credentials: LoginCredentialsPayload): Promise<LoginSuccessPayload> {
+        return this.authService.signIn(credentials.email, credentials.password);
     }
 }

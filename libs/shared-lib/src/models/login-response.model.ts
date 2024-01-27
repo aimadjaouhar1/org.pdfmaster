@@ -1,4 +1,4 @@
 export interface LoginResponsePayload {
-    username: string;
-    password: string;
+    access_token: string;
+    expiry_date: Date;
 }
