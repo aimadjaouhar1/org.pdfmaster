@@ -2,7 +2,7 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgbDropdown, NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { EraserOptions, PenOptions, ShapeOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { EraserOptions, PenOptions, ShapeOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.types';
 import { EraserOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/eraser-options/eraser-options.component';
 import { PenOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pen-options/pen-options.component';
 import { ShapeOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/shape-options/shape-options.component';

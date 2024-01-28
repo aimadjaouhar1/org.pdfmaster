@@ -3,7 +3,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, Simpl
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownConfig, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { TextBoxOptions } from '@web/app/types/pdf-editor.type';
+import { TextBoxOptions } from '@web/app/types/pdf-editor.types';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { Observable } from 'rxjs';
 

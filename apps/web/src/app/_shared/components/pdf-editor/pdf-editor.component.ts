@@ -12,7 +12,7 @@ import { fabric } from 'fabric';
 
 
 import * as pdfjs from 'pdfjs-dist';
-import { EraserOptions, FabriCanvasState, Pagination, PenOptions, ShapeOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.type';
+import { EraserOptions, FabriCanvasState, Pagination, PenOptions, ShapeOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.types';
 import { CircularArray } from '@web/shared/utils/circular-array.util';
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
 

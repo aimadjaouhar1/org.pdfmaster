@@ -3,12 +3,17 @@ import { Component, DestroyRef, EventEmitter, OnInit, Output, inject } from '@an
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ILoginResponsePayload } from '@shared-lib/interfaces';
 import { AuthHttp } from '@web/app/http/auth.http';
+import { Alert } from '@web/app/types/alert.types';
+import { ErrorResponse } from '@web/app/exception/error-response.interface';
+import { AlertComponent } from '@web/shared/components/alert/alert.component';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslateModule, AsyncPipe, NgClass],
+  imports: [ReactiveFormsModule, TranslateModule, AsyncPipe, NgClass, AlertComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -32,6 +37,8 @@ export class LoginComponent implements OnInit {
 
   isSubmitted = false;
 
+  loginFailedAlert: Alert = {isVisible: false, message: '', type: 'danger'};
+
 
   ngOnInit(): void {
     this.loginForm.valueChanges
@@ -49,8 +56,24 @@ export class LoginComponent implements OnInit {
 
       this.authHttp.login({email: email!, password: password!})
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe();
-      //this.loginSuccess.emit();
+        .pipe(map((res) => {
+          if((res as ErrorResponse).err) this.loginFailedHandler(res as ErrorResponse);
+          else this.loginSuccessHnadler(res as ILoginResponsePayload);
+        }))
+        .subscribe();        
     }
+  }
+
+  private loginSuccessHnadler(loginResponsePayload: ILoginResponsePayload) {
+      //this.loginSuccess.emit();
+  }
+
+  private loginFailedHandler(error: ErrorResponse) {
+      this.loginFailedAlert.isVisible = true;
+      this.loginFailedAlert.message = error.message;
+
+      this.isSubmitted = false;
+      this.controls.password.reset();
+      this.loginForm.enable();
   }
 }

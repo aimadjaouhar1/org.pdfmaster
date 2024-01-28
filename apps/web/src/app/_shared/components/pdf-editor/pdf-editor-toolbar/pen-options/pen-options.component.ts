@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
-import { PenOptions } from '@web/app/types/pdf-editor.type';
+import { PenOptions } from '@web/app/types/pdf-editor.types';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgStyle } from '@angular/common';

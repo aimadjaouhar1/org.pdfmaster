@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
-import { EraserOptions } from '@web/app/types/pdf-editor.type';
+import { EraserOptions } from '@web/app/types/pdf-editor.types';
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
