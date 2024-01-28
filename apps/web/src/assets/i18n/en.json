@@ -6,7 +6,11 @@
         "EXTRACT": "Extract",
         "EDIT": "Edit",
         "ROTATE": "Rotate",
-        "PROTECT": "Protect"
+        "PROTECT": "Protect",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "REMEMBER": "Remember me",
+        "LOADING": "Loading"
     },
     "BUTTONS": {
         "LOGIN": "Log In",
@@ -18,5 +22,9 @@
         "PAGE_EXTRACT": "Extract PDF",
         "PAGE_ROTATE": "Rotate PDF",
         "PAGE_PROTECT": "Protect PDF"
+    },
+    "VALIDATION": {
+        "EMAIL_REQUIRED": "Email required!",
+        "EMAIL_FORMAT_INVALID": "Invalid email format!"
     }
 }

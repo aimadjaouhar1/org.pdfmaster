@@ -7,14 +7,23 @@
       <div class="navbar-brand">{{  title$ | async | translate }}</div>
 
       <div class="d-flex gap-2">
-        <button class="btn btn-sm" type="button">{{ 'BUTTONS.LOGIN' | translate }}</button>
+        <button class="btn btn-sm" type="button" (click)="onClickLogin(loginModal)">{{ 'BUTTONS.LOGIN' | translate }}</button>
         <button class="btn btn-primary me-2" type="button">{{ 'BUTTONS.SIGNUP' | translate }}</button>
       </div>
 
     </div>
-  </nav>
+</nav>
 
-  @if(toogle) {
-    <app-sidebar class="mobile-menu" [@inOutAnimation]></app-sidebar>
-  }
+@if(toogle) {
+  <app-sidebar class="mobile-menu" [@inOutAnimation]></app-sidebar>
+}
 
+<ng-template #loginModal let-modal>
+  <div class="modal-header">
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <app-login (loginSuccess)="onLoginSuccess(modal)"></app-login>
+  </div>
+</ng-template>

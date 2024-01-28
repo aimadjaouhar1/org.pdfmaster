@@ -1,16 +1,18 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, TemplateRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NgbModal, NgbModalModule, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { SidebarComponent } from '@web/app/components/sidebar/sidebar.component';
 import { NavigationService } from '@web/app/services/navigation.service';
+import { LoginComponent } from '@web/features/login/login.component';
 import { map } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, TranslateModule, AsyncPipe, SidebarComponent],
+  imports: [RouterLink, TranslateModule, NgbModalModule, AsyncPipe, SidebarComponent, LoginComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   animations: [
@@ -39,9 +41,19 @@ import { map } from 'rxjs';
 })
 export class NavbarComponent {
 
-  navigationService = inject(NavigationService);
+  private readonly navigationService = inject(NavigationService);
+  private readonly modalService = inject(NgbModal);
+
 
   title$ = this.navigationService.getRouteChange$().pipe(map((route => route?.data!['title'])));
 
   toogle = false;
+
+  onClickLogin(content: TemplateRef<ElementRef>) {
+		this.modalService.open(content, { fullscreen: true });
+  }
+
+  onLoginSuccess(modal: NgbModalRef) {
+    modal.dismiss();
+  }
 }
