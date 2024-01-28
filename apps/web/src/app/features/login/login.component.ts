@@ -3,6 +3,7 @@ import { Component, DestroyRef, EventEmitter, OnInit, Output, inject } from '@an
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthHttp } from '@web/app/http/auth.http';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +18,11 @@ export class LoginComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly authHttp = inject(AuthHttp);
   
   loginForm = this.formBuilder.group({
-    email: [],
-    password: [],
+    email: [''],
+    password: [''],
     remember: [false]
   });
 
@@ -43,6 +45,11 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid) {
       this.loginForm.disable({emitEvent: false});
 
+      const {email, password} = this.loginForm.getRawValue();
+
+      this.authHttp.login({email: email!, password: password!})
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe();
       //this.loginSuccess.emit();
     }
   }
