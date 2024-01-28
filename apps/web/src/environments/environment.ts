@@ -1,4 +1,5 @@
 export const environment = {
     appName: 'PDF Master',
-    defaultLanguage: 'en'
+    defaultLanguage: 'en',
+    baseApi: '/api'
 };
