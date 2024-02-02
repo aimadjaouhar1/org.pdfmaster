@@ -1,5 +1,6 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from "cookie-parser";
 
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from '@api/common/exceptions/global-exceptions.filter';
@@ -13,6 +14,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new GlobalExceptionFilter());
 
+  app.use(cookieParser());
+  app.enableCors({
+    origin: 'http://localhost:4200',
+    credentials: true
+  });
 
   await app.listen(port);
   Logger.log(
