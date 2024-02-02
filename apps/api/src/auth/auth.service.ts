@@ -1,4 +1,3 @@
-import { LoginResponsePayload } from '@api/auth/models/login-response.model';
 import { HashUtil } from '@api/common/utils/hash.util';
 import { User } from '@api/entities';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -6,6 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IUser } from '@shared-lib/interfaces';
 import { Repository } from 'typeorm';
+import { Response } from 'express';
+
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async login(email: string, password: string): Promise<LoginResponsePayload> {
+    async login(email: string, password: string, response: Response): Promise<Response> {
+
         const userCredentials: IUser = await this.getUserCredentials(email);
         const isGranted = await HashUtil.compare(password, userCredentials.password);     
 
@@ -26,23 +28,23 @@ export class AuthService {
             );
         }
 
-        const payload = { username: email, sub: password };
+        const payload = { username: userCredentials.email, sub: userCredentials.id };
 
-        const token: string = this.jwtService.sign(
+        const token: string = await this.jwtService.signAsync(
             payload, 
             {
                 secret: process.env.API_JWT_SECRET, 
-                expiresIn: `${process.env.API_JWT_EXPIRATION}s`
+                expiresIn: `${process.env.API_JWT_EXPIRATION}`
             }
         );
 
         const _expiryDate = new Date();
         _expiryDate.setSeconds(_expiryDate.getSeconds() + parseInt(process.env.API_JWT_EXPIRATION));
 
-        return {
-            access_token: token,
-            expiry_date: _expiryDate
-        } as LoginResponsePayload;
+        return response
+            .cookie('token', token, {httpOnly: true, sameSite: 'strict'})
+            .status(HttpStatus.OK)
+            .send({message: 'Login success!'});
     }
 
     private async getUserCredentials(email: string): Promise<IUser> {
@@ -50,7 +52,7 @@ export class AuthService {
             where: {
                 email: email
             },
-            select: ['email', 'password', 'role']
+            select: ['id', 'email', 'password', 'role']
         });
 
         if(!user) {

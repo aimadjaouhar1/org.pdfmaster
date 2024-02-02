@@ -1,8 +1,7 @@
 import { AuthService } from "@api/auth/auth.service";
 import { LoginCredentialsPayload } from "@api/auth/models/login-credentials.model";
-import { LoginResponsePayload } from "@api/auth/models/login-response.model";
-import { Body, Controller, Post } from "@nestjs/common";
-
+import { Body, Controller, Post, Res } from "@nestjs/common";
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +11,8 @@ export class AuthController {
     ) {}
 
     @Post('/login')
-    async login(@Body() credentials: LoginCredentialsPayload): Promise<LoginResponsePayload> {
-        return this.authService.login(credentials.email, credentials.password);
+    async login(@Body() credentials: LoginCredentialsPayload, @Res({passthrough: true}) response: Response) {
+        await this.authService.login(credentials.email, credentials.password, response);
     }
+
 }
