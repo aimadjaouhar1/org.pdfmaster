@@ -3,12 +3,13 @@ import { Component, DestroyRef, EventEmitter, OnInit, Output, inject } from '@an
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { ILoginResponsePayload } from '@shared-lib/interfaces';
 import { AuthHttp } from '@web/app/http/auth.http';
 import { Alert } from '@web/app/types/alert.types';
 import { ErrorResponse } from '@web/app/exception/error-response.interface';
 import { AlertComponent } from '@web/shared/components/alert/alert.component';
 import { map } from 'rxjs';
+import { ConnectedUser } from '@shared-lib/types';
+import { AuthService } from '@web/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   @Output() loginSuccess = new EventEmitter<void>();
 
   private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly authHttp = inject(AuthHttp);
   
@@ -58,14 +60,15 @@ export class LoginComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .pipe(map((res) => {
           if((res as ErrorResponse).err) this.loginFailedHandler(res as ErrorResponse);
-          else this.loginSuccessHnadler(res as ILoginResponsePayload);
+          else this.loginSuccessHnadler(res as ConnectedUser);
         }))
         .subscribe();        
     }
   }
 
-  private loginSuccessHnadler(loginResponsePayload: ILoginResponsePayload) {
-      //this.loginSuccess.emit();
+  private loginSuccessHnadler(connectedUser: ConnectedUser) {
+    this.authService.login(connectedUser);
+    this.loginSuccess.emit();
   }
 
   private loginFailedHandler(error: ErrorResponse) {
