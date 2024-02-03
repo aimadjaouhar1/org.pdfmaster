@@ -19,7 +19,6 @@ export class AuthService {
     ) {}
 
     async login(email: string, password: string, response: Response): Promise<ConnectedUser> {
-
         const userCredentials: IUser = await this.getUserCredentials(email);
         const isGranted = await HashUtil.compare(password, userCredentials.password);     
 
