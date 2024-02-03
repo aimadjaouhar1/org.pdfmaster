@@ -49,6 +49,11 @@ export class AuthService {
         return connectedUser;
     }
 
+    async logout(response: Response) {
+        response.clearCookie('token')
+            .json({ message: 'Logout Success!' })
+    }
+
     private async getUserCredentials(email: string): Promise<IUser> {
         const user = await this.userRepository.findOne({
             where: {
