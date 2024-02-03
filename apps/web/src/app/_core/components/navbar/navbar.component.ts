@@ -1,10 +1,13 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, ElementRef, TemplateRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { NgbModal, NgbModalModule, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownConfig, NgbDropdownModule, NgbModal, NgbModalModule, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { ConnectedUser } from '@shared-lib/types';
 import { SidebarComponent } from '@web/app/components/sidebar/sidebar.component';
+import { AuthService } from '@web/app/services/auth.service';
 import { NavigationService } from '@web/app/services/navigation.service';
 import { LoginComponent } from '@web/features/login/login.component';
 import { map } from 'rxjs';
@@ -12,7 +15,7 @@ import { map } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, TranslateModule, NgbModalModule, AsyncPipe, SidebarComponent, LoginComponent],
+  imports: [RouterLink, TranslateModule, NgbModalModule, NgbDropdownModule, AsyncPipe, NgTemplateOutlet, SidebarComponent, LoginComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   animations: [
@@ -41,19 +44,36 @@ import { map } from 'rxjs';
 })
 export class NavbarComponent {
 
+  private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
   private readonly modalService = inject(NgbModal);
 
 
   title$ = this.navigationService.getRouteChange$().pipe(map((route => route?.data!['title'])));
-
   toogle = false;
+
+  connectedUser$ = this.authService.connectedUser.pipe(
+          takeUntilDestroyed(),
+          map(_connectedUser => this.connectedUser = _connectedUser))
+        .subscribe();
+
+  connectedUser?: ConnectedUser;
+
+
+  constructor(config: NgbDropdownConfig) {
+		config.placement = 'bottom-right';
+  }
 
   onClickLogin(content: TemplateRef<ElementRef>) {
 		this.modalService.open(content, { fullscreen: true });
   }
 
+  onClickLogout() {
+    this.authService.logout();
+  }
+
   onLoginSuccess(modal: NgbModalRef) {
     modal.dismiss();
   }
+
 }

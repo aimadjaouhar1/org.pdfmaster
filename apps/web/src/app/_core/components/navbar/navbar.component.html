@@ -6,17 +6,42 @@
 
       <div class="navbar-brand">{{  title$ | async | translate }}</div>
 
-      <div class="d-flex gap-2">
-        <button class="btn btn-sm" type="button" (click)="onClickLogin(loginModal)">{{ 'BUTTONS.LOGIN' | translate }}</button>
-        <button class="btn btn-primary me-2" type="button">{{ 'BUTTONS.SIGNUP' | translate }}</button>
-      </div>
-
+      @if(!connectedUser) {
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm" type="button" (click)="onClickLogin(loginModal)">{{ 'BUTTONS.LOGIN' | translate }}</button>
+          <button class="btn btn-primary me-2" type="button">{{ 'BUTTONS.SIGNUP' | translate }}</button>
+        </div>
+      } @else {
+        <ng-container [ngTemplateOutlet]="connectedUserDropdown" [ngTemplateOutletContext]="{connectedUser: connectedUser}"></ng-container>
+      }
     </div>
 </nav>
 
 @if(toogle) {
   <app-sidebar class="mobile-menu" [@inOutAnimation]></app-sidebar>
 }
+
+<ng-template #connectedUserDropdown let-connectedUser="connectedUser">
+  <div class="flex-shrink-0" ngbDropdown>
+    <a href="javascript:void(0)" class="d-block link-dark text-decoration-none" ngbDropdownToggle>
+      <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+    </a>
+    <ul class="dropdown-menu text-small shadow" ngbDropdownMenu>
+      <li>
+        <div class="d-flex flex-column">
+          <span class="name">{{ connectedUser.firstname }} {{ connectedUser.lastname }}</span>
+          <span class="email">{{ connectedUser.email }}</span>
+        </div>    
+      </li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+      <li><a class="dropdown-item" href="#"><i class="bi bi-lock"></i>  Account</a></li>
+      <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="javascript:void(0)" (click)="onClickLogout()"><i class="bi bi-box-arrow-right"></i> Log out</a></li>
+    </ul>
+  </div>
+</ng-template>
 
 <ng-template #loginModal let-modal>
   <div class="modal-header">
@@ -27,3 +52,4 @@
     <app-login (loginSuccess)="onLoginSuccess(modal)"></app-login>
   </div>
 </ng-template>
+
