@@ -20,4 +20,10 @@ export class AuthHttp extends BaseHttp {
         .post<ConnectedUser>(`${this.url}/login`, loginCredentials)
         .pipe(catchError(this.handleError<ErrorResponse>('login')));
      }
+
+     logout(): Observable<void | ErrorResponse> {
+        return this.http
+        .post<void>(`${this.url}/logout`, undefined)
+        .pipe(catchError(this.handleError('logout')));
+     }
 }

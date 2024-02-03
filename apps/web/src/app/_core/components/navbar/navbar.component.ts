@@ -7,6 +7,7 @@ import { NgbDropdownConfig, NgbDropdownModule, NgbModal, NgbModalModule, NgbModa
 import { TranslateModule } from '@ngx-translate/core';
 import { ConnectedUser } from '@shared-lib/types';
 import { SidebarComponent } from '@web/app/components/sidebar/sidebar.component';
+import { AuthHttp } from '@web/app/http/auth.http';
 import { AuthService } from '@web/app/services/auth.service';
 import { NavigationService } from '@web/app/services/navigation.service';
 import { LoginComponent } from '@web/features/login/login.component';
@@ -15,7 +16,16 @@ import { map } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, TranslateModule, NgbModalModule, NgbDropdownModule, AsyncPipe, NgTemplateOutlet, SidebarComponent, LoginComponent],
+  imports: [
+    RouterLink, 
+    TranslateModule, 
+    NgbModalModule, 
+    NgbDropdownModule, 
+    AsyncPipe, 
+    NgTemplateOutlet, 
+    SidebarComponent, 
+    LoginComponent
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   animations: [
@@ -47,6 +57,7 @@ export class NavbarComponent {
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
   private readonly modalService = inject(NgbModal);
+  private readonly authHttp = inject(AuthHttp);
 
 
   title$ = this.navigationService.getRouteChange$().pipe(map((route => route?.data!['title'])));
@@ -69,7 +80,9 @@ export class NavbarComponent {
   }
 
   onClickLogout() {
-    this.authService.logout();
+    this.authHttp.logout()
+      .pipe(map(() => this.authService.logout()))
+      .subscribe();
   }
 
   onLoginSuccess(modal: NgbModalRef) {

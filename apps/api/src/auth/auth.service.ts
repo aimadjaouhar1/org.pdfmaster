@@ -59,7 +59,7 @@ export class AuthService {
             where: {
                 email: email
             },
-            select: ['id', 'email', 'password', 'role']
+            select: ['id', 'email', 'password', 'firstname', 'lastname', 'role']
         });
 
         if(!user) {
