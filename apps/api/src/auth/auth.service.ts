@@ -3,9 +3,11 @@ import { User } from '@api/entities';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IUser } from '@shared-lib/interfaces';
 import { Repository } from 'typeorm';
 import { Response } from 'express';
+import { IUser } from '@shared-lib/interfaces';
+import { ConnectedUser } from '@shared-lib/types';
+
 
 
 @Injectable()
@@ -16,7 +18,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async login(email: string, password: string, response: Response): Promise<Response> {
+    async login(email: string, password: string, response: Response): Promise<ConnectedUser> {
 
         const userCredentials: IUser = await this.getUserCredentials(email);
         const isGranted = await HashUtil.compare(password, userCredentials.password);     
@@ -41,10 +43,11 @@ export class AuthService {
         const _expiryDate = new Date();
         _expiryDate.setSeconds(_expiryDate.getSeconds() + parseInt(process.env.API_JWT_EXPIRATION));
 
-        return response
-            .cookie('token', token, {httpOnly: true, sameSite: 'strict'})
-            .status(HttpStatus.OK)
-            .send({message: 'Login success!'});
+        const connectedUser: ConnectedUser = { email: userCredentials.email, firstname: userCredentials.firstname, lastname: userCredentials.lastname };
+
+        response.cookie('token', token, {httpOnly: true, sameSite: 'strict'});
+        
+        return connectedUser;
     }
 
     private async getUserCredentials(email: string): Promise<IUser> {

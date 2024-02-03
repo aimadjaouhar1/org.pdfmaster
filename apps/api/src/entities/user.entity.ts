@@ -18,6 +18,14 @@ export class User implements IUser {
     @IsString()
     password: string;
 
+    @Column({ nullable: false })
+    @IsString()
+    firstname: string;
+
+    @Column({ nullable: false })
+    @IsString()
+    lastname: string;
+
     @Column({type: 'enum', enum: Role, default: Role.USER, select: false})
     @IsEnum(Role)
     role: Role;
