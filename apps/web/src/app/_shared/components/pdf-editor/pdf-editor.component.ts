@@ -144,6 +144,25 @@ export class PdfEditorComponent implements OnChanges {
     }
   }
 
+  onDrawImage(imageFile: File) {
+    const  url = URL.createObjectURL(imageFile);    
+
+    fabric.Image.fromURL(url, (img) => {
+
+      const scale = 0.5;
+
+      img.set({
+        scaleX : scale,
+        scaleY : scale,
+      });
+
+      this.fabriCanvas.centerObject(img);
+      this.fabriCanvas.add(img).renderAll().setActiveObject(img);
+
+      this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber)?.push(this.fabriCanvas.toJSON());
+    });
+  }
+
   onChangeTextBoxOptions(textBoxOptions: TextBoxOptions) {
     this.selectedTextBoxOptions = textBoxOptions;
 

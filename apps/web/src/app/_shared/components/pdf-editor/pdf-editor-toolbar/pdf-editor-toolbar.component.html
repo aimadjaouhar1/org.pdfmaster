@@ -75,8 +75,11 @@
                     (changeShapeOptions)="onChangeShapesOptions($event)" ngbDropdownMenu></app-shape-options>
             </div>
 
-
-            <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-file-earmark-image"></i></button>
+            <!-- Image button -->
+            <div class="tool-btn">
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickImage(imageUpload)"><i class="bi bi-file-earmark-image"></i></button>
+                <input #imageUpload type="file" multiple="false" accept="image/*" (change)="selectImageHandler(imageUpload.files)" style="display:none"/>     
+            </div>
 
         </div>
 

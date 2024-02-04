@@ -57,6 +57,9 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   @Output() chageShapeOptions = new EventEmitter<ShapeOptions>();
 
+  @Output() drawImage = new EventEmitter<File>();
+
+
 
   @ViewChild('textboxdp') public textboxdp!: NgbDropdown;
   @ViewChild('eraserdp') public eraserdp!: NgbDropdown;
@@ -144,6 +147,11 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
     this.deactivatePan();
   }
 
+  clickImage(imageUploadEl: HTMLInputElement) {
+    imageUploadEl.click();
+    this.deactivatePan();
+  }
+
   selectShape(shape: string) {
     this.selectedShape = shape;
     this.shapesdp.close();
@@ -153,6 +161,13 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
     this.selectedTool.emit({cursor: '', type: this.selectedShape});
     this.deactivatePan();
+  }
+
+  selectImageHandler(files: FileList | null) {
+    const file = files?.item(0);
+    if(file) {
+      this.drawImage.emit(file);
+    }
   }
 
   onChangeTextBoxOptions = (textBoxOptions: TextBoxOptions) => this.changeTextBoxOptions.emit(textBoxOptions);
