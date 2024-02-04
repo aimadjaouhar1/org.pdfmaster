@@ -14,7 +14,8 @@
     },
     "BUTTONS": {
         "LOGIN": "Log In",
-        "SIGNUP": "Sign Up"
+        "SIGNUP": "Sign Up",
+        "GO_HOME": "Go Home"
     },
     "TITLES": {
         "PAGE_EDIT": "Edit PDF",
@@ -26,5 +27,9 @@
     "VALIDATION": {
         "EMAIL_REQUIRED": "Email required!",
         "EMAIL_FORMAT_INVALID": "Invalid email format!"
+    },
+    "CONTENT": {
+        "PAGE_NOT_FOUND_TITLE": "Page not found.",
+        "PAGE_NOT_FOUND_DESCRIPTION": " The page you’re looking for doesn’t exist. "
     }
 }
