@@ -1,5 +1,5 @@
 <div class="file-upload-dropzone" appFileUploadDropzone (fileDropped)="dropFileHandler($event)">
-    <input id="file-upload" #fileUploadRef type="file" multiple (change)="openFileHandler($event.target)" />
+    <input id="file-upload" #fileUploadRef type="file" [accept]="accept" multiple (change)="openFileHandler($event.target)" />
     <i class="bi bi-cloud-arrow-up"></i>
-    <h3>Drag and drop files here</h3>
+    <h3>{{ 'CONTENT.FILE_UPLOAD_DROP_ZONE_DRAG_HERE' | translate }}</h3>
 </div>

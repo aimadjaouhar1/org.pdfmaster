@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FileMimeType } from '@shared-lib/enums';
 import { FileUploadDropzoneComponent } from '@web/shared/components/file-upload-dropzone/file-upload-dropzone.component';
 import { PdfEditorComponent } from '@web/shared/components/pdf-editor/pdf-editor.component';
 
@@ -10,6 +11,8 @@ import { PdfEditorComponent } from '@web/shared/components/pdf-editor/pdf-editor
   styleUrl: './pdf-edit.component.scss'
 })
 export class PdfEditComponent {
+
+  readonly accept = [FileMimeType.PDF];
 
   pdfFile?: File;
   
