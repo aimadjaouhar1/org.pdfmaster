@@ -1,8 +1,9 @@
-<div class="h-100 d-flex align-items-center justify-content-center"> 
-    <form class="form-login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <h1 class="h3 mb-3 font-weight-normal"></h1>
+<div class="h-100 pt-5 d-flex flex-column align-items-center"> 
 
-    
+    <div class="brand"><img src="/assets/logo_red.png" /></div>
+
+
+    <form class="form-login mt-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="mb-4">
             <label for="inputEmail" class="sr-only mb-2">{{ 'LABELS.EMAIL' | translate }}</label>
             <input type="email" class="form-control" formControlName="email" placeholder="Email address" 
