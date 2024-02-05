@@ -29,6 +29,11 @@
         src: ../../nginx/
         dest: org.pdfmaster/nginx/
 
+    - name: Copy .env file
+      copy:
+        src: ../../.env
+        dest: org.pdfmaster/
+
     - name: Install Docker SDK for Python
       ansible.builtin.pip:
         name: 
