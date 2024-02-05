@@ -10,6 +10,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('@web/features/pdf-edit/pdf-edit.component').then(m => m.PdfEditComponent),
     },
     { 
+        path: '', 
+        redirectTo: 'edit', 
+        pathMatch: 'full' },
+    { 
         path: '**', 
         title: CustomTitleResolver,
         pathMatch: 'full',  
