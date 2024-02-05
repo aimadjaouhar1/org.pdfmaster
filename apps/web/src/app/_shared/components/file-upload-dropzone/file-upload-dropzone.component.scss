@@ -3,7 +3,6 @@
     display: flex;
     height: calc(100% - 56px);
     padding: 40px;
-
 }
 
 .file-upload-dropzone {
@@ -30,6 +29,15 @@
 
     i {
         font-size: 52px;
-    }
-    
+    }   
 }
+
+@media screen and (max-width: 900px) {
+    :host {
+        display: flex;
+        height: calc(100% - 56px);
+        padding: 15px;
+    }
+}
+  
+  
