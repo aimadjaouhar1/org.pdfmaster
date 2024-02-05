@@ -56,3 +56,6 @@ terraform/.terraform/**
 # ansible Files
 ansible/playbooks/**
 !ansible/playbooks/deploy.yml
+
+# Docker
+docker-compose.prod.yml
