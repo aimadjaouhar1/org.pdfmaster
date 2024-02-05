@@ -8,6 +8,11 @@ import { DocumentInitParameters, TypedArray } from "pdfjs-dist/types/src/display
 @Injectable({ providedIn: 'root' })
 export class PdfEditorService {  
 
+        
+    constructor() {
+        pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.mjs";
+    }
+
     loadPdfDocument(pdfFile: string | URL | TypedArray | ArrayBuffer | DocumentInitParameters): Observable<PDFDocumentProxy> {
         return from(pdfjs.getDocument(pdfFile).promise);
     }
