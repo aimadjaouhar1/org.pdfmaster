@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { PdfSplitParamsComponent } from '@web/features/pdf-split/pdf-split-params/pdf-split-params.component';
 
 @Component({
   selector: 'app-pdf-split',
   standalone: true,
-  imports: [CommonModule],
+  imports: [PdfSplitParamsComponent],
   templateUrl: './pdf-split.component.html',
   styleUrl: './pdf-split.component.scss',
 })

@@ -10,12 +10,15 @@
         "EMAIL": "Email",
         "PASSWORD": "Password",
         "REMEMBER": "Remember me",
-        "LOADING": "Loading"
+        "LOADING": "Loading",
+        "INTERVAL": "Interval",
+        "RESULT": "Result"
     },
     "BUTTONS": {
         "LOGIN": "Log In",
         "SIGNUP": "Sign Up",
-        "GO_HOME": "Go Home"
+        "GO_HOME": "Go Home",
+        "SPLIT": "Split"
     },
     "TITLES": {
         "PAGE_EDIT": "Edit PDF",
@@ -31,6 +34,6 @@
     "CONTENT": {
         "PAGE_NOT_FOUND_TITLE": "Page not found.",
         "PAGE_NOT_FOUND_DESCRIPTION": " The page you’re looking for doesn’t exist. ",
-        "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here"
+        "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here"        
     }
 }

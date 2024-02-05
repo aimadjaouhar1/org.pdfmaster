@@ -1,0 +1,28 @@
+
+.split-param {
+    margin-right: 10px;
+
+    button {
+        width: 100px;
+    }
+}
+
+.input-group-text {
+    i {
+        margin-right: 4px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .split-param {
+        margin: 0px;
+        margin-top: 12px;
+        width: 100%;
+
+        button {
+            width: 100%;
+        }
+    }
+    
+}
+
