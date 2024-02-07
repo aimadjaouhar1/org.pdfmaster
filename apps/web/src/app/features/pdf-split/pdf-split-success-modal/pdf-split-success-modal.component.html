@@ -1,0 +1,30 @@
+<div class="modal-content rounded-4 shadow">
+    <div class="modal-body  p-5">
+
+      <div class="text-center">
+        <i class="bi bi-check-circle" style="font-size: 48px; color: rgb(17, 163, 17);"></i>
+      <h2 class="fw-bold mb-0">PDF Split Successful</h2>
+      </div>
+
+      <ul class="d-grid gap-4 mt-4 list-unstyled small align-items-start text-center">
+            Thank you for using our PDF Split tool. If you have any questions or encounter issues, feel free to contact our support team. 
+      </ul>
+
+      <div class="list-group">
+        @for (item of zipFileInfos; track $index) {
+            <label class="list-group-item d-flex gap-3">
+                <i class="bi bi-filetype-pdf"></i>
+                <span class="pt-1 form-checked-content">
+                  <strong>{{ item.name }}</strong>
+                  <small class="d-block text-body-secondary">
+                    {{ item.pages }} pages | {{ item.size | fileSize }}
+                  </small>
+                </span>
+              </label>
+        }
+    </div>
+      
+
+      <a id="download" href="javascript:void(0)" class="btn btn-lg btn-primary mt-5 w-100" #downloadBtnEl>Download <i class="bi bi-box-arrow-in-down ml-4"></i></a>
+    </div>
+  </div>

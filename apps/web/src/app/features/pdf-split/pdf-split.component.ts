@@ -6,6 +6,7 @@ import { FileMimeType } from '@shared-lib/enums';
 import { PdfHttp } from '@web/app/http/pdf.http';
 import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfSplitParamsComponent } from '@web/features/pdf-split/pdf-split-params/pdf-split-params.component';
+import { PdfSplitSuccessModalComponent } from '@web/features/pdf-split/pdf-split-success-modal/pdf-split-success-modal.component';
 import { FileUploadDropzoneComponent } from '@web/shared/components/file-upload-dropzone/file-upload-dropzone.component';
 import { PdfPageListComponent } from '@web/shared/components/pdf-page-list/pdf-page-list.component';
 import { PDFPageProxy } from 'pdfjs-dist';
@@ -14,7 +15,7 @@ import { Observable, map, switchMap, take } from 'rxjs';
 @Component({
   selector: 'app-pdf-split',
   standalone: true,
-  imports: [NgbModalModule, AsyncPipe, PdfSplitParamsComponent, PdfPageListComponent, FileUploadDropzoneComponent],
+  imports: [NgbModalModule, AsyncPipe, PdfSplitParamsComponent, PdfPageListComponent, FileUploadDropzoneComponent, PdfSplitSuccessModalComponent],
   templateUrl: './pdf-split.component.html',
   styleUrl: './pdf-split.component.scss',
 })
@@ -30,6 +31,8 @@ export class PdfSplitComponent {
   countPages: number = 0;
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
+  zipFileInfos: {name: string, pages: number, size: number}[] = [];
+  download?: {url: string, filename: string}
 
   async onSelectFiles(files: File[]) {
     this.pdfFile = files[0];
@@ -48,22 +51,23 @@ export class PdfSplitComponent {
   onSplit(interval: number, modal: TemplateRef<ElementRef>) {
     this.pdfHttp.split(this.pdfFile!, interval)
       .pipe(take(1))
-      .pipe(map(response => this.prepareDownloadUrl(response)))
+      .pipe(map(response => this.prepareDownload(response)))
       .subscribe();
 
-      this.modalService.open(modal, {keyboard: false, backdrop: 'static', centered: true});
+    this.modalService.open(modal, {keyboard: false, backdrop: 'static', centered: true});
   }
 
-  private prepareDownloadUrl(response: HttpResponse<Blob>) {
+  private prepareDownload(response: HttpResponse<Blob>) {
     const url = URL.createObjectURL(response.body as Blob);
 
     const contentDisposition = response.headers.get('Content-Disposition');
     const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+?)"/);
     const originalFilename = filenameMatch ? filenameMatch[1] : 'download';
 
-    const downloadEl = (document.getElementById('download') as HTMLAnchorElement);
-    downloadEl.href = url;
-    downloadEl.download = originalFilename;
+    this.download = {url: url, filename: originalFilename};
+
+    const xZipFileInfos = response.headers.get('x-zip-file-infos');
+    this.zipFileInfos = xZipFileInfos ? JSON.parse(xZipFileInfos) : undefined;
   }
 
 }
