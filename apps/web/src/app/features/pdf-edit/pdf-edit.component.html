@@ -1,5 +1,5 @@
 @if(pdfFile) {
     <app-pdf-editor [pdfFile]="pdfFile"></app-pdf-editor>    
 } @else {
-    <app-file-upload-dropzone [accept]="this.accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
+    <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }
