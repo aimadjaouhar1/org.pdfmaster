@@ -13,21 +13,29 @@ export class PdfService {
         const pdfDoc = await PDFDocument.load(buffer);
         const pageIndices = pdfDoc.getPageIndices();
         const filename = file.originalname.replace('.pdf', '');
+        const zipFileInfos = [];
 
         const pdfPartsBytes = pageIndices.reduce(
             (pdfParts, _, index) => (index % _interval == 0) ? [...pdfParts, pageIndices.slice(index, index + _interval)] : pdfParts,
             [])
-            .map(async (pdfPartPageIndices) => {
+            .map(async (pdfPartPageIndices, index) => {
                 const doc = await PDFDocument.create();
                 (await doc.copyPages(pdfDoc, await pdfPartPageIndices)).forEach(page => doc.addPage(page));
-
+                zipFileInfos.push({name: `${filename}_${index + 1}.pdf`, pages: 1, size: undefined });
+                
                 return await doc.save();
             })
 
-        const zipFile = await this.zipPdfFiles(filename, await Promise.all(pdfPartsBytes));
+        const files = await Promise.all(pdfPartsBytes);
+        const zipFile = await this.zipPdfFiles(filename, files);
+
+
+        files.forEach((file, index) => zipFileInfos[index].size = file.length);
+
 
         response.contentType('application/zip');
-        response.attachment(`${filename}.zip`);    
+        response.attachment(`${filename}.zip`);
+        response.setHeader('X-zip-file-infos', JSON.stringify(zipFileInfos));
         response.send(zipFile);
     }
 
