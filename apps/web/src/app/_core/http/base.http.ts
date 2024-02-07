@@ -12,6 +12,8 @@ export abstract class BaseHttp {
         return (error: unknown): Observable<T> => {
 
           if(error instanceof HttpErrorResponse) {
+            console.log(error);
+            
             const httpExceptionResponse = error.error as HttpExceptionResponse;
             result = {err: true, message: httpExceptionResponse.message || httpExceptionResponse.error, ...result} as T
           }
