@@ -18,7 +18,9 @@
         "LOGIN": "Log In",
         "SIGNUP": "Sign Up",
         "GO_HOME": "Go Home",
-        "SPLIT": "Split"
+        "SPLIT": "Split",
+        "LOGIN_WITH_GOOGLE": "Login with Google",
+        "LOGIN_WITH_FACEBOOK": "Login with Facebook"
     },
     "TITLES": {
         "PAGE_EDIT": "Edit PDF",
@@ -34,6 +36,8 @@
     "CONTENT": {
         "PAGE_NOT_FOUND_TITLE": "Page not found.",
         "PAGE_NOT_FOUND_DESCRIPTION": " The page you’re looking for doesn’t exist. ",
-        "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here"        
+        "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here",
+        "MODAL_LOGIN_TITLE": "Log in to PDF Master",
+        "MODAL_USE_THIRD_PARTY": "Or use a third-party"  
     }
 }

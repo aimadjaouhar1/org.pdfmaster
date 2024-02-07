@@ -76,7 +76,7 @@ export class NavbarComponent {
   }
 
   onClickLogin(content: TemplateRef<ElementRef>) {
-		this.modalService.open(content, { fullscreen: true });
+		this.modalService.open(content, { centered: true });
   }
 
   onClickLogout() {

@@ -4,7 +4,15 @@
 
 .brand {
     img {
-      width: 150px;
+      width: 50px;
     }
     
+}
+
+.btn-close:focus {
+  outline: none;
+}
+
+.btn-close:active, .btn-close:focus { 
+  box-shadow: none;
 }

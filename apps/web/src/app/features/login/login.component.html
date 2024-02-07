@@ -1,51 +1,61 @@
-<div class="h-100 pt-5 d-flex flex-column align-items-center"> 
+<div class="modal-content rounded-4 shadow">
+    <div class="modal-header p-5 pb-4 border-bottom-0">
+      <h1 class="fw-bold mb-0 fs-2">{{ 'CONTENT.MODAL_LOGIN_TITLE' | translate }}</h1>
+      <button type="button" class="btn-close" (click)="dismissModal.emit()"></button>
+    </div>
 
-    <div class="brand"><img src="/assets/logo_red.png" /></div>
+    <div class="modal-body p-5 pt-0">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control rounded-3" id="floatingInput" formControlName="email" placeholder="Email address" 
+            [ngClass]="{ 'is-invalid': isSubmitted && controls['email'].errors }" autofocus="" email required>
 
-    <form class="form-login mt-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="mb-4">
-            <label for="inputEmail" class="sr-only mb-2">{{ 'LABELS.EMAIL' | translate }}</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="Email address" 
-                [ngClass]="{ 'is-invalid': isSubmitted && controls['email'].errors }" autofocus="" email required>
-        
-            @if(isSubmitted && controls['email'].errors) {
-                <small class="form-text">
-                    @if(controls['email'].errors['required']) {
-                        {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
-                    }
-                    @if(controls['email'].errors['email']) {
-                        {{ 'VALIDATION.EMAIL_FORMAT_INVALID' | translate }}
-                    }
-                </small>
-            }
-        </div>
-    
-        <div class="mb-4">
-            <label for="inputPassword" class="sr-only mb-2">{{ 'LABELS.PASSWORD' | translate }}</label>
-            <input type="password" id="inputPassword" class="form-control" formControlName="password" placeholder="Password" [ngClass]="{ 'is-invalid': isSubmitted && controls['password'].errors }" autofocus="" required>
-        
-        </div>
-    
-        <div class="checkbox mb-4">
-          <label>
-            <input type="checkbox" formControlName="remember"> {{ 'LABELS.REMEMBER' | translate }}
-          </label>
-        </div>
+          <label for="floatingInput">{{ 'LABELS.EMAIL' | translate }}</label>
 
-        <div class="d-grid gap-2">
-            <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="isSubmitted"> 
-                {{ 'BUTTONS.LOGIN' | translate }} 
-                @if(isSubmitted && !controls['email'].errors && !controls['password'].errors) {
-                    <span class="spinner-border spinner-border-sm"></span>
-                    <span class="visually-hidden">{{ 'LABELS.LOADING' | translate }}...</span>    
+          @if(isSubmitted && controls['email'].errors) {
+            <small class="form-text">
+                @if(controls['email'].errors['required']) {
+                    {{ 'VALIDATION.EMAIL_REQUIRED' | translate }}
                 }
-            </button>  
+                @if(controls['email'].errors['email']) {
+                    {{ 'VALIDATION.EMAIL_FORMAT_INVALID' | translate }}
+                }
+            </small>
+        }
         </div>
 
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control rounded-3" id="floatingPassword" class="form-control" formControlName="password" placeholder="Password" [ngClass]="{ 'is-invalid': isSubmitted && controls['password'].errors }" autofocus="" required>
+          <label for="floatingPassword">{{ 'LABELS.PASSWORD' | translate }}</label>
+        </div>
+
+        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" [disabled]="isSubmitted">
+            {{ 'BUTTONS.LOGIN' | translate }}
+
+            @if(isSubmitted && !controls['email'].errors && !controls['password'].errors) {
+                <span class="spinner-border spinner-border-sm"></span>
+                <span class="visually-hidden">{{ 'LABELS.LOADING' | translate }}...</span>    
+            }
+        </button>
+
+        <small class="text-body-secondary"></small>
+        
         <div class="mt-4">
-           <app-alert [alert]="loginFailedAlert"></app-alert>
-        </div>
+            <app-alert [alert]="loginFailedAlert"></app-alert>
+         </div>
+         
+        <hr class="my-4">
 
-    </form>
+        <h2 class="fs-5 fw-bold mb-3">{{ 'CONTENT.MODAL_USE_THIRD_PARTY' | translate }}</h2>
+        <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="button">
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"></use></svg>
+          {{ 'BUTTONS.LOGIN_WITH_GOOGLE' | translate }}
+        </button>
+        <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="button">
+          <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"></use></svg>
+          {{ 'BUTTONS.LOGIN_WITH_FACEBOOK' | translate }}
+        </button>
+      </form>
+    </div>
 </div>

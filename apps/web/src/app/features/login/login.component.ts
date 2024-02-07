@@ -21,6 +21,8 @@ import { AuthService } from '@web/app/services/auth.service';
 export class LoginComponent implements OnInit {
 
   @Output() loginSuccess = new EventEmitter<void>();
+  @Output() dismissModal = new EventEmitter<void>();
+
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
