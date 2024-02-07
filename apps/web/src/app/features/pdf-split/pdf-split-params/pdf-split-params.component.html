@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
-    <div class="container">
+    <div class="container mb-2">
         <div class="input-group split-param">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-text"></i> {{ 'LABELS.INTERVAL' | translate }}</span>
             <input type="number" class="form-control" [(ngModel)]="interval" [value]="interval" step="1" min="1" [max]="pdfPages" (ngModelChange)="updateValues()">
@@ -11,7 +11,7 @@
         </div>
 
         <div class="d-grid split-param">
-            <button class="btn btn-primary" type="button"><i class="bi bi-scissors"></i> {{ 'BUTTONS.SPLIT' | translate }}</button>
+            <button class="btn btn-primary" type="button" (click)="onClickSplit()"><i class="bi bi-scissors"></i> {{ 'BUTTONS.SPLIT' | translate }}</button>
           </div>
     </div>
 </nav>
