@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from '@api/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '@api/entities';
+import { PdfController } from '@api/controllers/pdf.controller';
+import { PdfService } from '@api/services/pdf.service';
+import { MulterModule } from '@nestjs/platform-express';
 
 const entities = [
   User
@@ -10,6 +13,10 @@ const entities = [
 @Module({
   imports: [
     AuthModule,
+    MulterModule,
+    MulterModule.register({
+      dest: './storage',
+    }),
     TypeOrmModule.forFeature([...entities]),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -23,7 +30,7 @@ const entities = [
       logging: Boolean(process.env.DB_LOGGING || false)
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [PdfController],
+  providers: [PdfService],
 })
 export class AppModule {}

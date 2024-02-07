@@ -59,7 +59,6 @@ ansible/playbooks/**
 
 # Docker
 docker-compose.prod.yml
-clear
 
 # Folders
 storage/**
