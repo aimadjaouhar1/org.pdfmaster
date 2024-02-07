@@ -1,0 +1,5 @@
+<ul class="list-unstyled d-flex flex-wrap">
+    @for (page of pages; track $index) {
+        <li><canvas appPdfViewer [page]="page" [width]="150" [height]="200"></canvas></li>
+    }
+</ul>
