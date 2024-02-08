@@ -1,10 +1,50 @@
 li {
+    position: relative;
     margin-top: 15px;
     margin-right: 35px;
-    background-color: white;
+    padding: 25px 15px 8px 15px;
+    border: 2px transparent solid;
 }
 
 ul {
     margin-top: 15px;
     margin-left: 28px;
+}
+
+li:hover {
+    background-color: #c5c5c5a4;
+    border-radius: 5px;
+}
+
+li.active {
+    border: 2px rgba(189, 31, 31, 0.593) dashed;
+    border-radius: 5px;
+}
+
+.page-action-buttons {
+    position: absolute;
+    display: none;
+    top: 0;
+    right: 0;
+    background-color: white;
+    width: fit-content;
+    height: 30px;
+
+    button {
+        padding: 2px 8px 2px 8px;
+
+        i {
+            font-size: small;
+        }
+    }
+}
+
+li:hover .page-action-buttons {
+    display: block;
+}
+
+.page-select-check {
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
 }

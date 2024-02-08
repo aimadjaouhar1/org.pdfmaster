@@ -1,7 +1,7 @@
 
 @if(pdfFile) {
     <app-pdf-split-params [pdfPages]="countPages" (split)="onSplit($event, splitResultModal)"></app-pdf-split-params>
-    <app-pdf-page-list [pages]="loadedPdfPages$ | async"></app-pdf-page-list>
+    <app-pdf-page-list [pages]="loadedPdfPages$ | async" [pageActionButtons]="['delete', 'preview', 'duplicate']" [selection]="true"></app-pdf-page-list>
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }

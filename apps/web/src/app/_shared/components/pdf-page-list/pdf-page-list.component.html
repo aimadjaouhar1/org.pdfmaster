@@ -1,5 +1,19 @@
 <ul class="list-unstyled d-flex flex-wrap">
     @for (page of pages; track $index) {
-        <li><canvas appPdfViewer [page]="page" [width]="150" [height]="200"></canvas></li>
+        <li class="text-center" [ngClass]="{'active': pagesSelection![$index]}">
+            
+            @if(showActionBtns) {
+                <div class="page-action-buttons">
+                    @if(showPreview) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Preview" (click)="onClickPreview(page)"><i class="bi bi-arrows-fullscreen"></i></button> } 
+                    @if(showDuplicate) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Duplicate" (click)="onClickDuplicate(page)"><i class="bi bi-front"></i></button> }
+                    @if(showDelete) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Delete" (click)="onClickDelete($index)"><i class="bi bi-trash"></i></button> }
+                </div>
+            }
+
+            <canvas appPdfViewer [page]="page" [width]="150" [height]="200"></canvas>
+            <div>{{ 'LABELS.PAGE' | translate }}: {{ $index + 1 }}</div>
+
+            @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![$index]"> }
+        </li>
     }
 </ul>
