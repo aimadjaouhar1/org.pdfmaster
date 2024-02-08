@@ -1,10 +1,11 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { FileSizePipe } from '@web/shared/pipes/file-size.pip';
 
 @Component({
   selector: 'app-pdf-split-success',
   standalone: true,
-  imports: [FileSizePipe],
+  imports: [FileSizePipe, TranslateModule],
   templateUrl: './pdf-split-success-modal.component.html',
   styleUrl: './pdf-split-success-modal.component.scss'
 })

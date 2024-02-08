@@ -12,7 +12,9 @@
         "REMEMBER": "Remember me",
         "LOADING": "Loading",
         "INTERVAL": "Interval",
-        "RESULT": "Result"
+        "RESULT": "Result",
+        "PAGE": "Page",
+        "PAGES": "Pages"
     },
     "BUTTONS": {
         "LOGIN": "Log In",
@@ -20,7 +22,9 @@
         "GO_HOME": "Go Home",
         "SPLIT": "Split",
         "LOGIN_WITH_GOOGLE": "Login with Google",
-        "LOGIN_WITH_FACEBOOK": "Login with Facebook"
+        "LOGIN_WITH_FACEBOOK": "Login with Facebook",
+        "DOWNLOAD": "Download",
+        "BACK_HOME": "Back Home"
     },
     "TITLES": {
         "PAGE_EDIT": "Edit PDF",
@@ -38,6 +42,8 @@
         "PAGE_NOT_FOUND_DESCRIPTION": " The page you’re looking for doesn’t exist. ",
         "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here",
         "MODAL_LOGIN_TITLE": "Log in to PDF Master",
-        "MODAL_USE_THIRD_PARTY": "Or use a third-party"  
+        "MODAL_USE_THIRD_PARTY": "Or use a third-party",
+        "MODAL_PSD_SPLIT_SUCCESS_TITLE": "PDF Split Successful",
+        "MODAL_PSD_SPLIT_SUCCESS_P_1": "Thank you for using our PDF Split tool. If you have any questions or encounter issues, feel free to contact our support team."
     }
 }
