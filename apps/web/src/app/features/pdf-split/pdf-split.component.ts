@@ -29,6 +29,7 @@ import { Observable, map, switchMap, take } from 'rxjs';
   styleUrl: './pdf-split.component.scss',
 })
 export class PdfSplitComponent {
+  
   private readonly modalService = inject(NgbModal);
   private readonly pdfEditorService = inject(PdfEditorService);
   private readonly pdfHttp = inject(PdfHttp);

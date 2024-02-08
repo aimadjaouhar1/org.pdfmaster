@@ -40,7 +40,7 @@ export class SidebarComponent {
     {
       label: 'LABELS.PROTECT',
       icon: 'bi bi-file-earmark-lock',
-      link: ''
+      link: 'protect'
     }
   ];
   

@@ -15,6 +15,12 @@ export const appRoutes: Route[] = [
         data: { title: 'TITLES.PAGE_SPLIT'},
         loadComponent: () => import('@web/features/pdf-split/pdf-split.component').then(m => m.PdfSplitComponent),
     },
+    {
+        path: 'extract',
+        title: CustomTitleResolver,
+        data: { title: 'TITLES.PAGE_EXTRACT'},
+        loadComponent: () => import('@web/features/pdf-extract/pdf-extract.component').then(m => m.PdfExtractComponent),
+    },
     { 
         path: '', 
         redirectTo: 'edit', 
