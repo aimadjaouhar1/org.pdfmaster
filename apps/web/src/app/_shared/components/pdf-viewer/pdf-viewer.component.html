@@ -26,14 +26,14 @@
 
 
 <ng-template #pageNavigation>
-    <button class="btn btn btn-light  me-md-2" type="button"><i class="bi bi-chevron-left"></i></button>
+    <button class="btn btn btn-light  me-md-2" type="button" (click)="clickPrevPage()"><i class="bi bi-chevron-left"></i></button>
                  
     <div class="input-group">
         <span class="input-group-text"><i class="bi bi-file-text"></i><div class="ml-4"> {{ 'LABELS.PAGE' | translate }}:</div></span>
         <input type="text" class="form-control text-center" [value]="numPage + '/' + countPages" disabled>
     </div>
       
-    <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-chevron-right"></i></button>
+    <button class="btn btn btn-light me-md-2" type="button" (click)="clickNextPage()"><i class="bi bi-chevron-right"></i></button>
 </ng-template>
 
 <ng-template #zoomControls>

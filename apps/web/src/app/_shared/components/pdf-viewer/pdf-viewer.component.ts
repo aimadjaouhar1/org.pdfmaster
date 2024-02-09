@@ -29,24 +29,17 @@ export class PdfViewerComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['pages'].currentValue) this.countPages = this.pages.length > 0 ? this.pages.length : 1;
-    if(changes['pages'].currentValue && changes['currentPage'].currentValue) this.numPage = this.pages.length > 0 ? this.pages.indexOf(this.currentPage!) : 1;
+    if(changes['pages'].currentValue && changes['currentPage'].currentValue) this.numPage = this.pages.length > 0 ? this.pages.indexOf(this.currentPage!) + 1 : 1;
   }
 
-  clickZoomIn() {
-    this.viewportParams = { scale: this.viewportParams!.scale + 0.1 };
-  }
+  clickZoomIn = () => this.viewportParams!.scale < this.maxScale ? this.viewportParams = { scale: this.viewportParams!.scale + 0.1 } : undefined;
 
-  clickZoomOut() {
-    this.viewportParams = { scale: this.viewportParams!.scale - 0.2};
-  }
-
+  clickZoomOut = () => this.viewportParams!.scale > this.minScale ? this.viewportParams = { scale: this.viewportParams!.scale - 0.1} : undefined;
+  
   clickDismiss = () => this.dismiss.emit();
 
-  clickNextPage() {
+  clickNextPage = () => this.currentPage = this.pages[(() => { if((this.numPage! < this.countPages!)) this.numPage!++; return this.numPage! - 1})()];
 
-  }
+  clickPrevPage = () => this.currentPage = this.pages[(() => { if(this.numPage! > 1) this.numPage!--; return this.numPage! - 1})()];
 
-  clickPrevPage() {
-    
-  }
 }
