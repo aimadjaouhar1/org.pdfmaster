@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
+    <form class="container mb-2" [formGroup]="extractParamsForm" (ngSubmit)="onClickExtract()">
+        <!-- <div class="input-group split-param">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-text"></i> {{ 'LABELS.INTERVAL' | translate }}</span>
+            <input type="number" class="form-control" formControlName="interval" [ngClass]="{ 'is-invalid': controls['interval'].errors }" autofocus="" step="1" min="1" required (change)="updateValues()">
+        </div>
+
+        <div class="input-group split-param">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-filetype-pdf"></i> {{ 'LABELS.RESULT' | translate }}</span>
+            <input type="text" class="form-control" [value]="controls['interval'].errors ? '-' : pdfCount + ' PDF'" disabled>
+        </div> -->
+
+        <!-- <div class="d-grid split-param">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-scissors"></i> {{ 'BUTTONS.EXTRACT' | translate }}</button>
+          </div> -->
+    </form>
+</nav>

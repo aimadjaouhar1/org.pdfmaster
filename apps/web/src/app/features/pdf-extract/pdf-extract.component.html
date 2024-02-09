@@ -1,6 +1,12 @@
 
 @if(pdfFile) {
-    <app-pdf-page-list [pages]="loadedPdfPages$ | async"></app-pdf-page-list>
+    <app-pdf-extract-params></app-pdf-extract-params>
+    
+    <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
+        [pageActionButtons]="['delete', 'duplicate', 'preview']"
+        [selection]="true"
+        [dragAndDropReorder]="true">
+    </app-pdf-page-list>
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }

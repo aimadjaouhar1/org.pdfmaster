@@ -24,7 +24,8 @@
         "LOGIN_WITH_GOOGLE": "Login with Google",
         "LOGIN_WITH_FACEBOOK": "Login with Facebook",
         "DOWNLOAD": "Download",
-        "BACK_HOME": "Back Home"
+        "BACK_HOME": "Back Home",
+        "EXTRACT": "Extract"
     },
     "TITLES": {
         "PAGE_EDIT": "Edit PDF",
