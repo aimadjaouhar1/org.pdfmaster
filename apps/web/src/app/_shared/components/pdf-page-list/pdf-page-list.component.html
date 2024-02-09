@@ -1,6 +1,6 @@
 <ul class="list-unstyled d-flex flex-wrap">
     @for (page of pages; track $index) {
-        <li class="text-center" [ngClass]="{'active': pagesSelection![$index]}">
+        <li class="text-center" [ngClass]="{'active': pagesSelection![$index]}" appDragAndDropReorder [items]="pages || []" [dragItemIndex]="$index">
             
             @if(showActionBtns) {
                 <div class="page-action-buttons">

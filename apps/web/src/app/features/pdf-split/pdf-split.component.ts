@@ -15,7 +15,14 @@ import { Observable, map, switchMap, take } from 'rxjs';
 @Component({
   selector: 'app-pdf-split',
   standalone: true,
-  imports: [NgbModalModule, AsyncPipe, PdfSplitParamsComponent, PdfPageListComponent, FileUploadDropzoneComponent, PdfSplitSuccessModalComponent],
+  imports: [
+    NgbModalModule, 
+    AsyncPipe, 
+    PdfSplitParamsComponent, 
+    PdfPageListComponent, 
+    FileUploadDropzoneComponent, 
+    PdfSplitSuccessModalComponent
+  ],
   templateUrl: './pdf-split.component.html',
   styleUrl: './pdf-split.component.scss',
 })

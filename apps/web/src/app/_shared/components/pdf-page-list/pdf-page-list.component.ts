@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
+import { DragAndDropReorderDirective } from '@web/shared/directives/drag-and-drop-reorder.directive';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
 import { PDFPageProxy } from 'pdfjs-dist';
 
@@ -15,12 +16,12 @@ enum PageActionButton {
 @Component({
   selector: 'app-pdf-page-list',
   standalone: true,
-  imports: [NgClass, FormsModule, PdfViewerDirective, NgbTooltip, TranslateModule],
+  imports: [NgClass, FormsModule, PdfViewerDirective, NgbTooltip, TranslateModule, DragAndDropReorderDirective],
   templateUrl: './pdf-page-list.component.html',
   styleUrl: './pdf-page-list.component.scss',
 })
 export class PdfPageListComponent implements OnChanges {
-  @Input({ required: true }) pages?: PDFPageProxy[] | Array<PDFPageProxy & {selected: boolean}> | null;
+  @Input({ required: true }) pages?: PDFPageProxy[] | null;
 
   @Input() pageActionButtons?: PageActionButton[] | ('delete' | 'preview' | 'duplicate')[];
   @Input() selection: boolean = false;
