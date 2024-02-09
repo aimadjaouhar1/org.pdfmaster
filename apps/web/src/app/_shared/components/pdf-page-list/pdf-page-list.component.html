@@ -1,7 +1,7 @@
 <ul class="list-unstyled d-flex flex-wrap">
     @for (page of pages; track $index) {
         @if(dragAndDropReorder) {
-            <div class="list-item" appDragAndDropReorder [items]="pages || []" [dragItemIndex]="$index">
+            <div class="list-item" appDragAndDropReorder [items]="pages || []" [dragItemIndex]="$index" (orderChange)="onSelectPageChange()">
                 <ng-container *ngTemplateOutlet="listItem; context: {$implicit: {index: $index, page: page}}"></ng-container>
             </div>
         } 

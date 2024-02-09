@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
   selector: '[appDragAndDropReorder]',
@@ -7,8 +7,9 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class DragAndDropReorderDirective {
 
   @Input({required: true }) dragItemIndex!: number;
-
   @Input({required: true}) items!: any[];
+
+  @Output() orderChange = new EventEmitter();
 
   constructor(private el: ElementRef) { this.el.nativeElement.draggable = true; }
 
@@ -38,7 +39,8 @@ export class DragAndDropReorderDirective {
   private handleDrop(from: number, to: number) {
     if(from != to) {
       const draggedItem = this.items.splice(from, 1)[0];
-      this.items.splice(to, 0, draggedItem);  
+      this.items.splice(to, 0, draggedItem); 
+      this.orderChange.emit();
     }
   }
 

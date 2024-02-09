@@ -28,6 +28,13 @@ export class PdfExtractComponent {
   pdfFile?: File;
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
+  selectedPages: PDFPageProxy[] = [];
+  
+  onSelectedPagesChange(selectedPages: PDFPageProxy[]) {
+    this.selectedPages = selectedPages;
+    console.log(selectedPages);
+  }
+
 
   async onSelectFiles(files: File[]) {
     this.pdfFile = files[0];
