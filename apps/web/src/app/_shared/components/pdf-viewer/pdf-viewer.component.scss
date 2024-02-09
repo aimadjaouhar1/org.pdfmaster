@@ -4,6 +4,7 @@
 }
 
 .pdf-container {
+    position: relative;
     width: 100%;
     height: calc(100vh - 120px);
     background-color: rgba(34, 34, 34, 0.312);
@@ -12,8 +13,15 @@
     padding-left: 20px;
     padding-right: 20px;
     overflow: auto;
-    display: flex;
-    justify-content: center;
+    // display: flex;
+    // justify-content: center;
+}
+
+canvas {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 }
 
 .nav-normal {

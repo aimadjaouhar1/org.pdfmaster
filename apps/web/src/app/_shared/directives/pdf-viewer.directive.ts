@@ -17,25 +17,26 @@ export class PdfViewerDirective implements OnChanges {
 
   constructor(private el: ElementRef) {}
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes['page'] && changes['page'].currentValue){
-      const page = changes['page'].currentValue;
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['page'] && changes['page'].currentValue) this.renderPdf(changes['page'].currentValue);
+    else if(this.page && changes['viewportParameters'] && changes['viewportParameters'].currentValue) this.renderPdf(this.page);
+  }
 
-      const canvas: HTMLCanvasElement = this.el.nativeElement as HTMLCanvasElement;
-      const context = canvas.getContext('2d');
+  private renderPdf(page: PDFPageProxy) {
+    const canvas: HTMLCanvasElement = this.el.nativeElement as HTMLCanvasElement;
+    const context = canvas.getContext('2d');
 
-      const _scale = this.width! / this.page!.getViewport({scale: 1}).width;
+    if(!this.viewportParameters) {
+      const _scale = this.width! / page.getViewport({scale: 1}).width;
+      this.viewportParameters = { scale: _scale };
+    } 
+    
+    const viewport = page.getViewport(this.viewportParameters);
 
-      if(!this.viewportParameters) {
-       this.viewportParameters = { scale: _scale };
-      } 
-      
-      const viewport = page.getViewport(this.viewportParameters);
+    canvas.width = this.width || viewport.width;
+    canvas.height = this.height || viewport.height;
+    
+    page.render({canvasContext: context!, viewport: viewport});
 
-      canvas.width = this.width || viewport.width;
-      canvas.height = this.height || viewport.height;
-      
-      page.render({canvasContext: context, viewport: viewport});
-    }
   }
 }

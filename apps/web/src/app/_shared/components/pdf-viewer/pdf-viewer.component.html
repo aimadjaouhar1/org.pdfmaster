@@ -6,14 +6,14 @@
                 <div class="d-flex"><ng-container [ngTemplateOutlet]="pageNavigation"></ng-container></div>
                 <div class="d-flex"><ng-container [ngTemplateOutlet]="zoomControls"></ng-container></div>
             </div>
-            <div class="d-flex"><button type="button" class="btn-close modal-close-btn"></button></div>
+            <div class="d-flex"><ng-container [ngTemplateOutlet]="dismissBtn"></ng-container></div>
         </div>
 
         <div class="nav-mobile container-fluid flex-column">
             <div class="d-flex justify-content-between w-100">
                 <div class="d-flex"><ng-container [ngTemplateOutlet]="zoomControls"></ng-container></div>
                 <div class="d-flex"></div>
-                <div class="d-flex align-items-center"><button type="button" class="btn-close modal-close-btn"></button></div>
+                <div class="d-flex align-items-center"><ng-container [ngTemplateOutlet]="dismissBtn"></ng-container></div>
             </div>
             <div class="d-flex pt-2 border-top w-100"><ng-container [ngTemplateOutlet]="pageNavigation"></ng-container></div>
         </div>
@@ -37,6 +37,10 @@
 </ng-template>
 
 <ng-template #zoomControls>
-        <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-plus-circle"></i></button>
-        <button class="btn btn btn-light me-md-2" type="button"><i class="bi bi-dash-circle"></i></button>        
+        <button class="btn btn btn-light me-md-2" type="button" (click)="clickZoomIn()"><i class="bi bi-plus-circle"></i></button>
+        <button class="btn btn btn-light me-md-2" type="button" (click)="clickZoomOut()"><i class="bi bi-dash-circle"></i></button>        
+</ng-template>
+
+<ng-template #dismissBtn>
+    <button type="button" class="btn-close modal-close-btn" (click)="clickDismiss()"></button>
 </ng-template>

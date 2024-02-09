@@ -6,8 +6,13 @@
         [pageActionButtons]="['delete', 'duplicate', 'preview']"
         [selection]="true"
         [dragAndDropReorder]="true"
+        (preview)="onPreview($event, previewModal)"
         (selectedPagesChange)="onSelectedPagesChange($event)">
     </app-pdf-page-list>
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }
+
+<ng-template #previewModal let-modal>
+    <app-pdf-viewer [pages]="selectedPages" [currentPage]="previewPage" (dismiss)="modal.dismiss()"></app-pdf-viewer>
+</ng-template>
