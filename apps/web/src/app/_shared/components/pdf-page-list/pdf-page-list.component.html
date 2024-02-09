@@ -13,7 +13,7 @@
             <canvas appPdfViewer [page]="page" [width]="150" [height]="200"></canvas>
             <div>{{ 'LABELS.PAGE' | translate }}: {{ $index + 1 }}</div>
 
-            @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![$index]"> }
+            @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![$index]" (ngModelChange)="onSelectPageChange()"> }
         </li>
     }
 </ul>

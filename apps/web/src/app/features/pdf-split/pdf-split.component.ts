@@ -9,6 +9,7 @@ import { PdfSplitParamsComponent } from '@web/features/pdf-split/pdf-split-param
 import { PdfSplitSuccessModalComponent } from '@web/features/pdf-split/pdf-split-success-modal/pdf-split-success-modal.component';
 import { FileUploadDropzoneComponent } from '@web/shared/components/file-upload-dropzone/file-upload-dropzone.component';
 import { PdfPageListComponent } from '@web/shared/components/pdf-page-list/pdf-page-list.component';
+import { PdfViewerComponent } from '@web/shared/components/pdf-viewer/pdf-viewer.component';
 import { PDFPageProxy } from 'pdfjs-dist';
 import { Observable, map, switchMap, take } from 'rxjs';
 
@@ -21,7 +22,8 @@ import { Observable, map, switchMap, take } from 'rxjs';
     PdfSplitParamsComponent, 
     PdfPageListComponent, 
     FileUploadDropzoneComponent, 
-    PdfSplitSuccessModalComponent
+    PdfSplitSuccessModalComponent,
+    PdfViewerComponent
   ],
   templateUrl: './pdf-split.component.html',
   styleUrl: './pdf-split.component.scss',
@@ -31,7 +33,6 @@ export class PdfSplitComponent {
   private readonly pdfEditorService = inject(PdfEditorService);
   private readonly pdfHttp = inject(PdfHttp);
 
-
   readonly accept = [FileMimeType.PDF];
 
   pdfFile?: File;
@@ -39,20 +40,16 @@ export class PdfSplitComponent {
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
   zipFileInfos: {name: string, pages: number, size: number}[] = [];
-  download?: {url: string, filename: string}
+  download?: {url: string, filename: string};
 
-  async onSelectFiles(files: File[]) {
-    this.pdfFile = files[0];
+  previewPage?: PDFPageProxy;
+  selectedPages: PDFPageProxy[] = [];
 
-    this.loadedPdfPages$ = this.pdfEditorService.loadPdfDocument(await this.pdfFile.arrayBuffer())
-      .pipe(
-        map(pdfDoc => {
-            this.countPages = pdfDoc.numPages;
-            return pdfDoc;
-        }),
-          switchMap(pdfDoc => this.pdfEditorService.loadPdfPages(pdfDoc, 1, this.countPages)
-        )
-      );
+  onSelectedPagesChange = (selectedPages: PDFPageProxy[]) => {this.selectedPages = selectedPages; console.log(selectedPages)};
+
+  onPreview(page: PDFPageProxy, modal: TemplateRef<ElementRef>) {
+    this.previewPage = page;
+    this.modalService.open(modal, {backdrop: true, centered: true, size: 'lg'});
   }
 
   onSplit(interval: number, modal: TemplateRef<ElementRef>) {
@@ -75,6 +72,20 @@ export class PdfSplitComponent {
 
     const xZipFileInfos = response.headers.get('x-zip-file-infos');
     this.zipFileInfos = xZipFileInfos ? JSON.parse(xZipFileInfos) : undefined;
+  }
+
+  async onSelectFiles(files: File[]) {
+    this.pdfFile = files[0];
+
+    this.loadedPdfPages$ = this.pdfEditorService.loadPdfDocument(await this.pdfFile.arrayBuffer())
+      .pipe(
+        map(pdfDoc => {
+            this.countPages = pdfDoc.numPages;
+            return pdfDoc;
+        }),
+          switchMap(pdfDoc => this.pdfEditorService.loadPdfPages(pdfDoc, 1, this.countPages)
+        )
+      );
   }
 
 }

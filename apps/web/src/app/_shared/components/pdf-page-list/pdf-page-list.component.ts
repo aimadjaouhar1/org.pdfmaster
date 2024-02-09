@@ -29,7 +29,7 @@ export class PdfPageListComponent implements OnChanges {
   @Output() preview = new EventEmitter<PDFPageProxy>();
   @Output() duplicate = new EventEmitter<PDFPageProxy>();
   @Output() delete = new EventEmitter<number>();
-  @Output() selectedPagesChange = new EventEmitter<number[]>();
+  @Output() selectedPagesChange = new EventEmitter<PDFPageProxy[]>();
 
   showDelete = false;
   showDuplicate = false;
@@ -57,5 +57,7 @@ export class PdfPageListComponent implements OnChanges {
 
   onClickDelete = (index: number) => this.delete.emit(index);
 
-  onSelectPageChange = () =>  this.selectedPagesChange.emit(this.pagesSelection!.filter(selected => selected).map((_, index) => index));
+  onSelectPageChange = () =>  this.selectedPagesChange.emit(this.pagesSelection!.map((selected, index) => { return selected ? this.pages![index] : undefined }).filter(page => page) as PDFPageProxy[]);
 }
+
+

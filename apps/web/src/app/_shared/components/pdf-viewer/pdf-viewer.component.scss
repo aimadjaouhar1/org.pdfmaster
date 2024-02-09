@@ -1,0 +1,39 @@
+.modal-body {
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.pdf-container {
+    width: 100%;
+    height: calc(100vh - 120px);
+    background-color: rgba(34, 34, 34, 0.312);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-normal {
+    display: flex;
+}
+
+.nav-mobile {
+    display: none;
+}
+
+@media screen and (max-width: 900px) {
+    .pdf-container {
+        display: block;
+    }
+
+    .nav-mobile {
+        display: flex;
+    }
+
+    .nav-normal {
+        display: none;
+    }
+}
