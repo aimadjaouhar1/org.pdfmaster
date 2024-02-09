@@ -1,19 +1,32 @@
 <ul class="list-unstyled d-flex flex-wrap">
     @for (page of pages; track $index) {
-        <li class="text-center" [ngClass]="{'active': pagesSelection![$index]}" appDragAndDropReorder [items]="pages || []" [dragItemIndex]="$index">
-            
-            @if(showActionBtns) {
-                <div class="page-action-buttons">
-                    @if(showPreview) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Preview" (click)="onClickPreview(page)"><i class="bi bi-arrows-fullscreen"></i></button> } 
-                    @if(showDuplicate) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Duplicate" (click)="onClickDuplicate(page)"><i class="bi bi-front"></i></button> }
-                    @if(showDelete) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Delete" (click)="onClickDelete($index)"><i class="bi bi-trash"></i></button> }
-                </div>
-            }
-
-            <canvas appPdfViewer [page]="page" [width]="150" [height]="200"></canvas>
-            <div>{{ 'LABELS.PAGE' | translate }}: {{ $index + 1 }}</div>
-
-            @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![$index]" (ngModelChange)="onSelectPageChange()"> }
-        </li>
+        @if(dragAndDropReorder) {
+            <div class="list-item" appDragAndDropReorder [items]="pages || []" [dragItemIndex]="$index">
+                <ng-container *ngTemplateOutlet="listItem; context: {$implicit: {index: $index, page: page}}"></ng-container>
+            </div>
+        } 
+        
+        @else {
+            <div class="list-item">
+                <ng-container *ngTemplateOutlet="listItem; context: {$implicit: {index: $index, page: page}}"></ng-container>
+            </div>
+        }
     }
 </ul>
+
+<ng-template #listItem let-args>
+    <li class="text-center" [ngClass]="{'active': pagesSelection![args.index]}">
+        @if(showActionBtns) {
+            <div class="page-action-buttons">
+                @if(showPreview) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Preview" (click)="onClickPreview(args.page)"><i class="bi bi-arrows-fullscreen"></i></button> } 
+                @if(showDuplicate) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Duplicate" (click)="onClickDuplicate(args.page)"><i class="bi bi-front"></i></button> }
+                @if(showDelete) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Delete" (click)="onClickDelete(args.index)"><i class="bi bi-trash"></i></button> }
+            </div>
+        }
+
+        <canvas appPdfViewer [page]="args.page" [width]="150" [height]="200"></canvas>
+        <div>{{ 'LABELS.PAGE' | translate }}: {{ args.page.pageNumber }}</div>
+
+        @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![args.index]" (ngModelChange)="onSelectPageChange()"> }
+    </li>
+</ng-template>

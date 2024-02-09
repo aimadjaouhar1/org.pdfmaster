@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ enum PageActionButton {
 @Component({
   selector: 'app-pdf-page-list',
   standalone: true,
-  imports: [NgClass, FormsModule, PdfViewerDirective, NgbTooltip, TranslateModule, DragAndDropReorderDirective],
+  imports: [NgClass, NgTemplateOutlet, FormsModule, PdfViewerDirective, NgbTooltip, TranslateModule, DragAndDropReorderDirective],
   templateUrl: './pdf-page-list.component.html',
   styleUrl: './pdf-page-list.component.scss',
 })
@@ -25,6 +25,7 @@ export class PdfPageListComponent implements OnChanges {
 
   @Input() pageActionButtons?: PageActionButton[] | ('delete' | 'preview' | 'duplicate')[];
   @Input() selection: boolean = false;
+  @Input() dragAndDropReorder = false;
 
   @Output() preview = new EventEmitter<PDFPageProxy>();
   @Output() duplicate = new EventEmitter<PDFPageProxy>();
