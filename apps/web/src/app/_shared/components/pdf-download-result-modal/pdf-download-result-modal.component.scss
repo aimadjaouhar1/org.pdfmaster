@@ -1,0 +1,16 @@
+.list-group-item {
+    i {
+        font-size: 28px;
+    }
+}
+
+.list-group {
+    overflow-y: auto;
+    max-height: 250px;
+    padding-right: 8px;
+}
+
+.bi-check-circle {
+    font-size: 48px; 
+    color: rgb(17, 163, 17);
+}
