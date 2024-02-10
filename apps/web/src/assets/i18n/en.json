@@ -14,7 +14,9 @@
         "INTERVAL": "Interval",
         "RESULT": "Result",
         "PAGE": "Page",
-        "PAGES": "Pages"
+        "PAGES": "Pages",
+        "SELECT_ALL": "Select all",
+        "SEPARATE_PDF": "Separate PDFs"
     },
     "BUTTONS": {
         "LOGIN": "Log In",

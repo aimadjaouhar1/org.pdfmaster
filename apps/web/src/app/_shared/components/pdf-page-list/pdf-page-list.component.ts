@@ -26,6 +26,7 @@ export class PdfPageListComponent implements OnChanges {
   @Input() pageActionButtons?: PageActionButton[] | ('delete' | 'preview' | 'duplicate')[];
   @Input() selection: boolean = false;
   @Input() dragAndDropReorder = false;
+  @Input() selectAll = false;
 
   @Output() preview = new EventEmitter<PDFPageProxy>();
   @Output() duplicate = new EventEmitter<PDFPageProxy>();
@@ -50,6 +51,11 @@ export class PdfPageListComponent implements OnChanges {
     if(this.selection && changes['pages']?.currentValue) {
       this.pagesSelection = Array(this.pages?.length).fill(false);
     }
+
+    if(changes['selectAll']) {
+      this.pagesSelection = Array(this.pages?.length).fill(this.selectAll);
+      this.onSelectPageChange();
+    }
   }
 
   onClickPreview = (page: PDFPageProxy) => this.preview.emit(page);
@@ -58,7 +64,10 @@ export class PdfPageListComponent implements OnChanges {
 
   onClickDelete = (index: number) => this.delete.emit(index);
 
-  onSelectPageChange = () =>  this.selectedPagesChange.emit(this.pagesSelection!.map((selected, index) => { return selected ? this.pages![index] : undefined }).filter(page => page) as PDFPageProxy[]);
+  onSelectPageChange = () =>  {
+    const selectedPages = this.pagesSelection!.map((selected, index) => { return selected ? this.pages![index] : undefined }).filter(page => page) as PDFPageProxy[];
+    this.selectedPagesChange.emit(selectedPages);
+  }
 }
 
 

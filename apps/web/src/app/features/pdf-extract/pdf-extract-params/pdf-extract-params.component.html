@@ -1,17 +1,25 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
-    <form class="container mb-2" [formGroup]="extractParamsForm" (ngSubmit)="onClickExtract()">
-        <!-- <div class="input-group split-param">
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-file-text"></i> {{ 'LABELS.INTERVAL' | translate }}</span>
-            <input type="number" class="form-control" formControlName="interval" [ngClass]="{ 'is-invalid': controls['interval'].errors }" autofocus="" step="1" min="1" required (change)="updateValues()">
+    <div class="container-fluid mb-2 d-flex">
+
+
+        <div class="d-flex extract-params">
+            <div class="form-check select-all">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault" [(ngModel)]="selectAll" (ngModelChange)="onSelectAllChange()">
+                <label class="form-check-label" for="flexCheckDefault"> {{ 'LABELS.SELECT_ALL' | translate }} </label>
+            </div> 
+
+            <div class="form-check form-switch separate-pdf">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="separate" [disabled]="!selectAll">
+                <label class="form-check-label" for="flexSwitchCheckChecked"> {{ 'LABELS.SEPARATE_PDF' | translate }} </label>
+            </div>
+              
         </div>
 
-        <div class="input-group split-param">
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-filetype-pdf"></i> {{ 'LABELS.RESULT' | translate }}</span>
-            <input type="text" class="form-control" [value]="controls['interval'].errors ? '-' : pdfCount + ' PDF'" disabled>
-        </div> -->
+        <div class="d-flex"></div>
 
-        <!-- <div class="d-grid split-param">
-            <button class="btn btn-primary" type="submit"><i class="bi bi-scissors"></i> {{ 'BUTTONS.EXTRACT' | translate }}</button>
-          </div> -->
-    </form>
+        <div class="d-grid extract-btn">
+            <button class="btn btn-outline-dark btn-extract" type="button" (click)="onClickExtract()" [disabled]="!(separate && selectedPagesCount > 0) "><i class="bi bi-stack"></i> {{ 'BUTTONS.EXTRACT' | translate }}</button>
+        </div>
+
+    </div>
 </nav>

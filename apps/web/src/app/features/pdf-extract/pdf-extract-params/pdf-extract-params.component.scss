@@ -1,0 +1,24 @@
+.form-check {
+    margin-right: 40px;
+}
+
+.btn-extract {
+    margin-right: 8px;
+}
+
+.extract-params {
+    margin-left: 8px;
+}
+
+
+@media screen and (max-width: 900px) {
+    .extract-btn {
+        margin-top: 14px;
+        width: 100%;
+    }
+
+    .extract-params {
+        width: 100%;
+        justify-content: center;
+    }
+}

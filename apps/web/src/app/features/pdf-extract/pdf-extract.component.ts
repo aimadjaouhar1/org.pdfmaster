@@ -1,4 +1,5 @@
 import { AsyncPipe } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import { Component, ElementRef, TemplateRef, inject } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FileMimeType } from '@shared-lib/enums';
@@ -9,7 +10,7 @@ import { FileUploadDropzoneComponent } from '@web/shared/components/file-upload-
 import { PdfPageListComponent } from '@web/shared/components/pdf-page-list/pdf-page-list.component';
 import { PdfViewerComponent } from '@web/shared/components/pdf-viewer/pdf-viewer.component';
 import { PDFPageProxy } from 'pdfjs-dist';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, map, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-pdf-extract',
@@ -31,10 +32,24 @@ export class PdfExtractComponent {
 
   previewPage?: PDFPageProxy;
   selectedPages: PDFPageProxy[] = [];
-  
-  onSelectedPagesChange(selectedPages: PDFPageProxy[]) {
-    this.selectedPages = selectedPages;
+
+  download?: {url: string, filename: string};
+
+  selectAll = false;
+
+
+  onClickExtract(extractOptions: {selectAll: boolean, separate: boolean}) {
+    this.pdfHttp.extract(
+      this.pdfFile!, 
+      extractOptions.separate, 
+      this.selectedPages.map(page => page.pageNumber))
+    .pipe(take(1))
+    .pipe(map(response => this.prepareDownload(response)))
+    .subscribe();
+
   }
+  
+  onSelectedPagesChange = (selectedPages: PDFPageProxy[]) => this.selectedPages = selectedPages;
 
   onPreview(page: PDFPageProxy, modal: TemplateRef<ElementRef>) {
     this.previewPage = page;
@@ -49,4 +64,17 @@ export class PdfExtractComponent {
     );
   }
 
+  private prepareDownload(response: HttpResponse<Blob>) {
+    const url = URL.createObjectURL(response.body as Blob);
+
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+?)"/);
+    const originalFilename = filenameMatch ? filenameMatch[1] : 'download';
+
+    this.download = {url: url, filename: originalFilename};
+
+    //const xZipFileInfos = response.headers.get('x-zip-file-infos');
+    //this.zipFileInfos = xZipFileInfos ? JSON.parse(xZipFileInfos) : undefined;
+    
+  }
 }

@@ -53,3 +53,16 @@ li:hover .page-action-buttons {
 li.drag-over {
     border-color: #b3242446;
 }
+
+
+@media screen and (max-width: 900px) {
+    ul {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: 0;
+        width: 100%;
+        padding-left: 23%;
+        padding-right: 23%;
+    }
+}

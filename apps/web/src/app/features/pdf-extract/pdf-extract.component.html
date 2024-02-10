@@ -1,10 +1,15 @@
 
 @if(pdfFile) {
-    <app-pdf-extract-params></app-pdf-extract-params>
+    <app-pdf-extract-params 
+        [selectAll]="selectAll"
+        [selectedPagesCount]="selectedPages.length" 
+        (extract)="onClickExtract($event)"
+        (selectAllChange)="selectAll = $event"></app-pdf-extract-params>
     
     <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
         [pageActionButtons]="['delete', 'duplicate', 'preview']"
         [selection]="true"
+        [selectAll]="selectAll"
         [dragAndDropReorder]="true"
         (preview)="onPreview($event, previewModal)"
         (selectedPagesChange)="onSelectedPagesChange($event)">

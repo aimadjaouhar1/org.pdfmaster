@@ -24,7 +24,7 @@
             </div>
         }
 
-        <canvas appPdfViewer [page]="args.page" [width]="150" [height]="200"></canvas>
+        <canvas appPdfViewer [page]="args.page" [width]="180" [height]="230"></canvas>
         <div>{{ 'LABELS.PAGE' | translate }}: {{ args.page.pageNumber }}</div>
 
         @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![args.index]" (ngModelChange)="onSelectPageChange()"> }
