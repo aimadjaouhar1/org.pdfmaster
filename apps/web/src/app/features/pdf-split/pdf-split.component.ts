@@ -6,8 +6,8 @@ import { FileMimeType } from '@shared-lib/enums';
 import { PdfHttp } from '@web/app/http/pdf.http';
 import { PdfEditorService } from '@web/app/services/pdf-editor.service';
 import { PdfSplitParamsComponent } from '@web/features/pdf-split/pdf-split-params/pdf-split-params.component';
-import { PdfSplitSuccessModalComponent } from '@web/features/pdf-split/pdf-split-success-modal/pdf-split-success-modal.component';
 import { FileUploadDropzoneComponent } from '@web/shared/components/file-upload-dropzone/file-upload-dropzone.component';
+import { PdfDownloadResultModalComponent } from '@web/shared/components/pdf-download-result-modal/pdf-download-result-modal.component';
 import { PdfPageListComponent } from '@web/shared/components/pdf-page-list/pdf-page-list.component';
 import { PdfViewerComponent } from '@web/shared/components/pdf-viewer/pdf-viewer.component';
 import { PDFPageProxy } from 'pdfjs-dist';
@@ -22,7 +22,7 @@ import { Observable, map, switchMap, take } from 'rxjs';
     PdfSplitParamsComponent, 
     PdfPageListComponent, 
     FileUploadDropzoneComponent, 
-    PdfSplitSuccessModalComponent,
+    PdfDownloadResultModalComponent,
     PdfViewerComponent
   ],
   templateUrl: './pdf-split.component.html',
@@ -39,7 +39,7 @@ export class PdfSplitComponent {
   countPages: number = 0;
   loadedPdfPages$?: Observable<PDFPageProxy[]>;
 
-  zipFileInfos: {name: string, pages: number, size: number}[] = [];
+  fileInfos: {name: string, pages: number, size: number}[] = [];
   download?: {url: string, filename: string};
 
   previewPage?: PDFPageProxy;
@@ -71,7 +71,7 @@ export class PdfSplitComponent {
     this.download = {url: url, filename: originalFilename};
 
     const xZipFileInfos = response.headers.get('x-zip-file-infos');
-    this.zipFileInfos = xZipFileInfos ? JSON.parse(xZipFileInfos) : undefined;
+    this.fileInfos = xZipFileInfos ? JSON.parse(xZipFileInfos) : undefined;
   }
 
   async onSelectFiles(files: File[]) {
