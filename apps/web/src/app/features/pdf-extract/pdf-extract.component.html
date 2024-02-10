@@ -7,15 +7,18 @@
         (selectAllChange)="selectAll = $event">
     </app-pdf-extract-params>
     
-    <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
-        [pageActionButtons]="['delete', 'duplicate', 'preview']"
-        [selection]="true"
-        [selectAll]="selectAll"
-        [dragAndDropReorder]="true"
-        (preview)="onPreview($event, previewModal)"
-        (selectPage)="onSelectedPagesChange($event)"
-        (pageCountChanged)="pagesCount = $event">
-    </app-pdf-page-list>
+    <div class="pages-list">
+        <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
+            [pageActionButtons]="['delete', 'duplicate', 'preview']"
+            [selection]="true"
+            [selectAll]="selectAll"
+            [dragAndDropReorder]="true"
+            (preview)="onPreview($event, previewModal)"
+            (selectPage)="onSelectedPagesChange($event)"
+            (pageCountChanged)="pagesCount = $event">
+        </app-pdf-page-list>
+    </div>
+
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }
