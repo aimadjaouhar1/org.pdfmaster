@@ -2,18 +2,23 @@
 @if(pdfFile) {
     <app-pdf-split-params [pdfPages]="countPages" (split)="onSplit($event, splitResultModal)"></app-pdf-split-params>
     <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
-        [pageActionButtons]="['delete', 'preview', 'duplicate']" 
+        [pageActionButtons]="['preview']" 
         [selection]="true"
-        (selectedPagesChange)="onSelectedPagesChange($event)"
+        (selectPage)="onSelectedPagesChange($event)"
         (preview)="onPreview($event, previewModal)"></app-pdf-page-list>
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
 }
 
 <ng-template #splitResultModal let-modal>
-    <app-pdf-download-result-modal [download]="download" [fileInfos]="fileInfos"></app-pdf-download-result-modal>
+    <app-pdf-download-result-modal 
+        [title]="'CONTENT.MODAL_PDF_SPLIT_SUCCESS_TITLE'" 
+        [content]="'CONTENT.MODAL_PDF_SPLIT_SUCCESS_P_1'" 
+        [download]="download" 
+        [fileInfos]="fileInfos">
+    </app-pdf-download-result-modal>
 </ng-template>
 
 <ng-template #previewModal let-modal>
-    <app-pdf-viewer [pages]="selectedPages" [currentPage]="previewPage"></app-pdf-viewer>
+    <app-pdf-viewer [pages]="selectedPages" [currentPage]="previewPage" (dismiss)="modal.dismiss()"></app-pdf-viewer>
 </ng-template>

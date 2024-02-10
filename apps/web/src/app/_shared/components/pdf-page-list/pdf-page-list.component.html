@@ -19,13 +19,13 @@
         @if(showActionBtns) {
             <div class="page-action-buttons">
                 @if(showPreview) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Preview" (click)="onClickPreview(args.page)"><i class="bi bi-arrows-fullscreen"></i></button> } 
-                @if(showDuplicate) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Duplicate" (click)="onClickDuplicate(args.page)"><i class="bi bi-front"></i></button> }
-                @if(showDelete) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Delete" (click)="onClickDelete(args.index)"><i class="bi bi-trash"></i></button> }
+                @if(showDuplicate) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Duplicate" (click)="onClickDuplicate(args.index)"><i class="bi bi-front"></i></button> }
+                @if(showDelete) { <button class="btn btn-light rounded-0" placement="top" ngbTooltip="Delete" (click)="onClickDelete(args.index)" [disabled]="pages?.length === 1"><i class="bi bi-trash"></i></button> }
             </div>
         }
 
         <canvas appPdfViewer [page]="args.page" [width]="180" [height]="230"></canvas>
-        <div>{{ 'LABELS.PAGE' | translate }}: {{ args.page.pageNumber }}</div>
+        <div>{{ 'LABELS.PAGE' | translate }}: {{ args.page?.pageNumber }}</div>
 
         @if(selection) { <input class="form-check-input page-select-check" type="checkbox" [(ngModel)]="pagesSelection![args.index]" (ngModelChange)="onSelectPageChange()"> }
     </li>

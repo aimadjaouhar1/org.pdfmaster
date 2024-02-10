@@ -15,7 +15,7 @@ export class PdfController {
     @UseInterceptors(FileInterceptor('file'))
     extract(@Body() pdfSplitRequestPayload: PdfExtractRequestPayload, @UploadedFile() file: Express.Multer.File, @Res() response: Response) {
       // class-transformer not working with form-data
-      this.pdfService.extract(JSON.parse(pdfSplitRequestPayload.pageIndices as string), file, response);
+      this.pdfService.extract(JSON.parse(pdfSplitRequestPayload.pageIndices as string), `${pdfSplitRequestPayload.separate}` == 'true', file, response);
     }
 
     @Post('/split')

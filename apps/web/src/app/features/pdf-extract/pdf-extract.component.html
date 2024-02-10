@@ -1,10 +1,11 @@
 
 @if(pdfFile) {
     <app-pdf-extract-params 
-        [selectAll]="selectAll"
+        [pagesCount]="pagesCount || (loadedPdfPages$ | async)?.length!"
         [selectedPagesCount]="selectedPages.length" 
-        (extract)="onClickExtract($event)"
-        (selectAllChange)="selectAll = $event"></app-pdf-extract-params>
+        (extract)="onClickExtract($event, extractResultModal)"
+        (selectAllChange)="selectAll = $event">
+    </app-pdf-extract-params>
     
     <app-pdf-page-list [pages]="loadedPdfPages$ | async" 
         [pageActionButtons]="['delete', 'duplicate', 'preview']"
@@ -12,7 +13,8 @@
         [selectAll]="selectAll"
         [dragAndDropReorder]="true"
         (preview)="onPreview($event, previewModal)"
-        (selectedPagesChange)="onSelectedPagesChange($event)">
+        (selectPage)="onSelectedPagesChange($event)"
+        (pageCountChanged)="pagesCount = $event">
     </app-pdf-page-list>
 } @else {
     <app-file-upload-dropzone [accept]="accept" (selectFiles)="onSelectFiles($event)"></app-file-upload-dropzone>
@@ -20,4 +22,13 @@
 
 <ng-template #previewModal let-modal>
     <app-pdf-viewer [pages]="selectedPages" [currentPage]="previewPage" (dismiss)="modal.dismiss()"></app-pdf-viewer>
+</ng-template>
+
+<ng-template #extractResultModal let-modal>
+    <app-pdf-download-result-modal 
+        [download]="download" 
+        [fileInfos]="fileInfos"
+        [title]="'CONTENT.MODAL_PDF_EXTRACT_SUCCESS_TITLE'" 
+        [content]="'CONTENT.MODAL_PDF_EXTRACT_SUCCESS_P_1'">
+    </app-pdf-download-result-modal>
 </ng-template>

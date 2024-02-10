@@ -46,7 +46,10 @@
         "FILE_UPLOAD_DROP_ZONE_DRAG_HERE": "Drag and drop files here",
         "MODAL_LOGIN_TITLE": "Log in to PDF Master",
         "MODAL_USE_THIRD_PARTY": "Or use a third-party",
-        "MODAL_PSD_SPLIT_SUCCESS_TITLE": "PDF Split Successful",
-        "MODAL_PSD_SPLIT_SUCCESS_P_1": "Thank you for using our PDF Split tool. If you have any questions or encounter issues, feel free to contact our support team."
+        "MODAL_PDF_SPLIT_SUCCESS_TITLE": "PDF Split Successful",
+        "MODAL_PDF_SPLIT_SUCCESS_P_1": "Thank you for using our PDF Split tool. If you have any questions or encounter issues, feel free to contact our support team.",
+        "MODAL_PDF_EXTRACT_SUCCESS_TITLE": "PDF Extract Successful",
+        "MODAL_PDF_EXTRACT_SUCCESS_P_1": "Thank you for using our PDF Extract tool. If you have any questions or encounter issues, feel free to contact our support team."
+
     }
 }

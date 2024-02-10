@@ -11,16 +11,21 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class PdfExtractParamsComponent {
 
-  @Input() selectedPagesCount: number = 0;
-  @Input() selectAll = false;
+  @Input({required: true}) pagesCount!: number;
+  @Input({required: true}) selectedPagesCount!: number;
   
   @Output() extract = new EventEmitter<{selectAll: boolean, separate: boolean}>();
   @Output() selectAllChange = new EventEmitter<boolean>();
 
+  selectAll = false;
   separate = false;
 
   onClickExtract = () => this.extract.emit({selectAll: this.selectAll, separate: this.separate})
   
-  onSelectAllChange = () => { this.separate = this.selectAll ? this.separate : false; this.selectAllChange.emit(this.selectAll); }
+  onSelectAllChange = () => { 
+    this.selectedPagesCount = this.selectAll ? this.pagesCount : this.selectedPagesCount;
+    this.separate = this.selectAll ? this.separate : false;
+    this.selectAllChange.emit(this.selectAll); 
+  }
 
 }

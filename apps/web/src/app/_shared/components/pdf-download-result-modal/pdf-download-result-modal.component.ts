@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileSizePipe } from '@web/shared/pipes/file-size.pip';
 
@@ -9,21 +9,18 @@ import { FileSizePipe } from '@web/shared/pipes/file-size.pip';
   templateUrl: './pdf-download-result-modal.component.html',
   styleUrl: './pdf-download-result-modal.component.scss'
 })
-export class PdfDownloadResultModalComponent implements OnChanges {
+export class PdfDownloadResultModalComponent {
 
   @Input() title?: string;
   @Input() content?: string;
   @Input() fileInfos?: {name: string, pages: number, size: number}[]; 
   @Input() download?: {url: string, filename: string};
 
-  @ViewChild('downloadBtnEl') downloadBtnEl!: HTMLAnchorElement;
-  
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['download'].currentValue) {
-      this.downloadBtnEl.href = this.download!.url;
-      this.downloadBtnEl.download = this.download!.filename;
-    }
+  onClickDownload() {
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.href = this.download!.url;
+    link.download = this.download!.filename;
+    link.click();
   }
-  
+
 }

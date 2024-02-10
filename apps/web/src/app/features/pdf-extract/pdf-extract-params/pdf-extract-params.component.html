@@ -1,7 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-top">
     <div class="container-fluid mb-2 d-flex">
 
-
         <div class="d-flex extract-params">
             <div class="form-check select-all">
                 <input class="form-check-input" type="checkbox" id="flexCheckDefault" [(ngModel)]="selectAll" (ngModelChange)="onSelectAllChange()">
@@ -12,14 +11,15 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="separate" [disabled]="!selectAll">
                 <label class="form-check-label" for="flexSwitchCheckChecked"> {{ 'LABELS.SEPARATE_PDF' | translate }} </label>
             </div>
-              
         </div>
 
         <div class="d-flex"></div>
 
         <div class="d-grid extract-btn">
-            <button class="btn btn-outline-dark btn-extract" type="button" (click)="onClickExtract()" [disabled]="!(separate && selectedPagesCount > 0) "><i class="bi bi-stack"></i> {{ 'BUTTONS.EXTRACT' | translate }}</button>
+            <button class="btn btn-outline-dark btn-extract" type="button" (click)="onClickExtract()" 
+                [disabled]="!((selectedPagesCount > 0 && selectedPagesCount < pagesCount) || (selectedPagesCount === pagesCount && separate))">
+                    <i class="bi bi-stack"></i> {{ 'BUTTONS.EXTRACT' | translate }}
+            </button>
         </div>
-
     </div>
-</nav>
+</nav> 

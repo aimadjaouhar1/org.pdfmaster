@@ -46,7 +46,7 @@ export class PdfSplitComponent {
   previewPage?: PDFPageProxy;
   selectedPages: PDFPageProxy[] = [];
 
-  onSelectedPagesChange = (selectedPages: PDFPageProxy[]) => {this.selectedPages = selectedPages; console.log(selectedPages)};
+  onSelectedPagesChange = (selectedPages: PDFPageProxy[]) => {this.selectedPages = selectedPages;};
 
   onPreview(page: PDFPageProxy, modal: TemplateRef<ElementRef>) {
     this.previewPage = page;

@@ -27,7 +27,7 @@ export class PdfHttp extends BaseHttp {
         const formData: FormData = new FormData();
         formData.append('file', file);
         formData.append('separate', `${separate}`);
-        formData.append('pageIndices', `${pageIndices}`);
+        formData.append('pageIndices', JSON.stringify(pageIndices));
 
         return this.http.post(`${this.url}/extract`, formData, {
             observe: 'response',

@@ -29,9 +29,9 @@ export class PdfPageListComponent implements OnChanges {
   @Input() selectAll = false;
 
   @Output() preview = new EventEmitter<PDFPageProxy>();
-  @Output() duplicate = new EventEmitter<PDFPageProxy>();
-  @Output() delete = new EventEmitter<number>();
-  @Output() selectedPagesChange = new EventEmitter<PDFPageProxy[]>();
+  @Output() selectPage = new EventEmitter<PDFPageProxy[]>();
+  @Output() pageCountChanged = new EventEmitter<number>();
+
 
   showDelete = false;
   showDuplicate = false;
@@ -60,13 +60,22 @@ export class PdfPageListComponent implements OnChanges {
 
   onClickPreview = (page: PDFPageProxy) => this.preview.emit(page);
 
-  onClickDuplicate = (page: PDFPageProxy) => this.duplicate.emit(page);
+  onClickDelete = (index: number) => {
+    this.pagesSelection?.splice(index, 1);
+    this.pages?.splice(index, 1);
+    this.onSelectPageChange();
+    this.pageCountChanged.emit(this.pages?.length);
+  }
 
-  onClickDelete = (index: number) => this.delete.emit(index);
+  onClickDuplicate = (index: number) => {
+    this.pages?.splice(index, 0, this.pages[index]);
+    this.pagesSelection?.splice(index, 0, false);
+    this.pageCountChanged.emit(this.pages?.length);
+  }
 
-  onSelectPageChange = () =>  {
+  onSelectPageChange = () => {
     const selectedPages = this.pagesSelection!.map((selected, index) => { return selected ? this.pages![index] : undefined }).filter(page => page) as PDFPageProxy[];
-    this.selectedPagesChange.emit(selectedPages);
+    this.selectPage.emit(selectedPages);
   }
 }
 
