@@ -16,8 +16,20 @@ export class PdfHttp extends BaseHttp {
         const formData: FormData = new FormData();
         formData.append('file', file);
         formData.append('interval', interval.toString());
-
+        
         return this.http.post(`${this.url}/split`, formData, {
+            observe: 'response',
+            responseType: "blob"
+        })
+     }
+
+     extract(file: File, separate: boolean, pageIndices: number[]): Observable<HttpResponse<Blob>> {
+        const formData: FormData = new FormData();
+        formData.append('file', file);
+        formData.append('separate', `${separate}`);
+        formData.append('pageIndices', `${pageIndices}`);
+
+        return this.http.post(`${this.url}/extract`, formData, {
             observe: 'response',
             responseType: "blob"
         })
