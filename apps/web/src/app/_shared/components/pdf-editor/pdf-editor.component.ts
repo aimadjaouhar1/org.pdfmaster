@@ -87,14 +87,14 @@ export class PdfEditorComponent implements OnChanges {
 
   onZoomIn() {
     if(this.viewportParams!.scale < this.maxScale) {
-      this.viewportParams!.scale += 0.1;
+      this.viewportParams = { scale: this.viewportParams!.scale += 0.1};
       this.renderAll();
     }
   }
 
   onZoomOut() {
     if(this.viewportParams!.scale > this.minScale) {
-      this.viewportParams!.scale -= 0.1;
+      this.viewportParams = { scale: this.viewportParams!.scale -= 0.1};
       this.renderAll();
     }
   }
