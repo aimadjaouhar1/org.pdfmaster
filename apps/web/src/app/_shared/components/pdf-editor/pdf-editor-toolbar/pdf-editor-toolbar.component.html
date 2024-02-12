@@ -28,9 +28,14 @@
 
         <div class="d-flex justify-content-center">
 
+            <!-- Edit mode button-->
+            <div class="tool-btn">
+                <button class="btn btn-light" [ngClass]="{'active': isEditMode}" type="button" (click)="clickEditMode()"><i class="bi bi-input-cursor-text"></i></button>
+            </div>
+
             <!-- TextBox button -->
             <div class="tool-btn" ngbDropdown #textboxdp="ngbDropdown">
-                <button class="btn btn-light" type="button" (click)="clickTextBox()"><i class="bi bi-textarea-t"></i></button>
+                <button class="btn btn-light" type="button" (click)="clickTextBox()" [disabled]="isEditMode"><i class="bi bi-textarea-t"></i></button>
                 
                 <app-text-box-options class="tool-options-dropdown" 
                     [defaultTextBoxOptions]="defaultTextBoxOptions" 
@@ -40,7 +45,7 @@
             
             <!-- Pen button -->
             <div class="tool-btn" ngbDropdown #pendp="ngbDropdown">
-                <button class="btn btn btn-light me-md-2" type="button" (click)="clickPen()"><i class="bi bi-pen"></i></button>
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickPen()" [disabled]="isEditMode"><i class="bi bi-pen"></i></button>
 
                 <app-pen-options class="tool-options-dropdown"
                     [defaultPenOptions]="defaultPenOptions"
@@ -49,7 +54,7 @@
 
             <!-- Eraser button -->
             <div class="tool-btn" ngbDropdown #eraserdp="ngbDropdown">
-                <button class="btn btn btn-light me-md-2" type="button" (click)="clickEraser()"><i class="bi bi-eraser-fill"></i></button>
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickEraser()" [disabled]="isEditMode"><i class="bi bi-eraser-fill"></i></button>
 
                 <app-eraser-options class="tool-options-dropdown"
                     [defaultEraserOptions]="defaultEraserOptions"
@@ -58,7 +63,7 @@
 
             <!-- Shape button -->
             <div class="tool-btn" ngbDropdown #shapesdp="ngbDropdown">
-                <button class="btn btn-light" type="button" (click)="clickShapes()"><i class="bi bi-square"></i></button>
+                <button class="btn btn-light" type="button" (click)="clickShapes()" [disabled]="isEditMode"><i class="bi bi-square"></i></button>
 
                 <div class="tool-shapes-dropdown" ngbDropdownMenu>
                     <button (click)="selectShape('rectangle')" ngbDropdownItem><i class="bi bi-square"></i> Rectangle</button>
@@ -78,7 +83,7 @@
 
             <!-- Image button -->
             <div class="tool-btn">
-                <button class="btn btn btn-light me-md-2" type="button" (click)="clickImage(imageUpload)"><i class="bi bi-file-earmark-image"></i></button>
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickImage(imageUpload)" [disabled]="isEditMode"><i class="bi bi-file-earmark-image"></i></button>
                 <input #imageUpload type="file" multiple="false" accept="image/*" (change)="selectImageHandler(imageUpload.files)" style="display:none"/>     
             </div>
 

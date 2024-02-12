@@ -23,6 +23,50 @@ $pdf-navigator-width: 220px;
     top: 0; 
 }
 
+.text-layer {
+    position: absolute;
+    display: block;
+}
+
+.text-layer-deleted {
+    position: absolute;
+    display: block;
+    border: none !important;
+}
+
+.text-layer-deleted {
+    .text-layer-action {
+        display: none !important;
+    }
+}
+
+.text-layer-action {
+    position: absolute;
+    display: none;
+    top: 0;
+    right: 0;
+    background-color: white;
+    width: 94px;
+    height: 30px;
+    z-index: 1;
+
+    button {
+        padding: 2px 8px 2px 8px;
+
+        i {
+            font-size: small;
+        }
+    }
+}
+
+.text-layer:hover .text-layer-action {
+    display: block;
+}
+
+.text-layer:hover{
+    border: 1px red dashed;
+}
+
 .pdf-editor-wrapper {
     position: relative;
     margin-left: $pdf-navigator-width;

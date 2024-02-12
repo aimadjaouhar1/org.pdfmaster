@@ -5,20 +5,21 @@ import { PdfEditorToolbarComponent } from '@web/shared/components/pdf-editor/pdf
 import { PDFPageProxy, PageViewport } from 'pdfjs-dist';
 import { Observable, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { AsyncPipe } from '@angular/common';
-import { GetViewportParameters } from 'pdfjs-dist/types/src/display/api';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { GetViewportParameters, TextItem } from 'pdfjs-dist/types/src/display/api';
 import { PdfViewerDirective } from '@web/shared/directives/pdf-viewer.directive';
 import { fabric } from 'fabric';
 
 
-import { EraserOptions, FabriCanvasState, Pagination, PenOptions, ShapeOptions, TextBoxOptions, ToolData } from '@web/app/types/pdf-editor.types';
+import { EraserOptions, FabriCanvasState, PageState, Pagination, PenOptions, ShapeOptions, TextBoxOptions, TextLayerState, ToolData } from '@web/app/types/pdf-editor.types';
 import { CircularArray } from '@web/shared/utils/circular-array.util';
+import { PdfTextEditDirective } from '@web/shared/directives/pdf-text-edit.directive';
 
 
 @Component({
   selector: 'app-pdf-editor',
   standalone: true,
-  imports: [PdfEditorToolbarComponent, PdfEditorNavigatorComponent, AsyncPipe, PdfViewerDirective],
+  imports: [NgClass, PdfEditorToolbarComponent, PdfEditorNavigatorComponent, AsyncPipe, PdfViewerDirective, PdfTextEditDirective],
   templateUrl: './pdf-editor.component.html',
   styleUrl: './pdf-editor.component.scss',
 })
@@ -28,6 +29,8 @@ export class PdfEditorComponent implements OnChanges {
 
   @ViewChild('pdfEditor') pdfEditor!: ElementRef;
   @ViewChild('pdfEditCanvas') pdfEditCanvas!: ElementRef;
+  @ViewChild('textLayer') textLayer!: HTMLElement;
+
 
   fabriCanvas!: fabric.Canvas;
 
@@ -35,7 +38,7 @@ export class PdfEditorComponent implements OnChanges {
   pdfEditorService = inject(PdfEditorService);
 
   currentPage?: PDFPageProxy;  
-  viewportParams?: GetViewportParameters = { scale: 1 };
+  viewportParams: GetViewportParameters = { scale: 1 };
   maxScale = 2.6;
   minScale = 0.6;
   
@@ -61,10 +64,15 @@ export class PdfEditorComponent implements OnChanges {
 
 
   maxUndoSteps = 40;
-  fabriCanvasStateHistory = new Map<number, CircularArray<FabriCanvasState>>();
+  pageStateHistory = new Map<number, CircularArray<PageState>>();
+
+  currentTextLayerState: TextLayerState = { deleted: undefined };
 
   isPanActive = false;
+  editMode = false;
 
+  textItems?: TextItem[];
+  selectedTextLayer?: HTMLElement;
 
   constructor() {}
 
@@ -79,6 +87,10 @@ export class PdfEditorComponent implements OnChanges {
     }
   }
 
+  async onEditMode(editMode: boolean) {
+    this.editMode = editMode;
+    if(this.editMode) this.prepareTextLayer(this.currentPage!);
+  }
 
   onSelectPage(page: PDFPageProxy) {
     this.currentPage = page;
@@ -104,14 +116,14 @@ export class PdfEditorComponent implements OnChanges {
   }
 
   onUndo() {
-    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
+    const pageStateHistory = this.pageStateHistory.get(this.currentPage!.pageNumber);
     pageStateHistory?.pop();
 
     this.renderAll();
   }
 
   onRedo() {
-    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
+    const pageStateHistory = this.pageStateHistory.get(this.currentPage!.pageNumber);
     pageStateHistory?.restore();
 
     this.renderAll();
@@ -157,7 +169,10 @@ export class PdfEditorComponent implements OnChanges {
       this.fabriCanvas.centerObject(img);
       this.fabriCanvas.add(img).renderAll().setActiveObject(img);
 
-      this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber)?.push(this.fabriCanvas.toJSON());
+      this.pageStateHistory.get(this.currentPage!.pageNumber)?.push({
+        fabricCanvasState: this.fabriCanvas.toJSON(),
+        textLayerState: this.currentTextLayerState
+      });
     });
   }
 
@@ -175,7 +190,10 @@ export class PdfEditorComponent implements OnChanges {
       this.fabriCanvas.renderAll();
     }
     
-    this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber)?.push(this.fabriCanvas.toJSON());
+    this.pageStateHistory.get(this.currentPage!.pageNumber)?.push({
+      fabricCanvasState: this.fabriCanvas.toJSON(),
+      textLayerState: this.currentTextLayerState
+    });
   }
 
   onChangeEraserOptions(eraserOptions: EraserOptions) {
@@ -205,10 +223,39 @@ export class PdfEditorComponent implements OnChanges {
 
       object?.set(updatedObjectOption);
     }
-    this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber)?.push(this.fabriCanvas.toJSON());
+    this.pageStateHistory.get(this.currentPage!.pageNumber)?.push({
+      fabricCanvasState: this.fabriCanvas.toJSON(),
+      textLayerState: this.currentTextLayerState
+    });
 
     this.fabriCanvas.renderAll();
 
+  }
+
+  onClickRemoveText(item: TextItem, index: number) {
+    //textLayer.classList.add('text-layer-deleted');
+    this.currentTextLayerState.deleted![index] = true;
+
+    const width = (item.width + 1) * this.viewportParams.scale;
+    const height = (item.height + 3.40) * this.viewportParams.scale;
+    const y = (this.fabriCanvas.height! - item.transform[5] - height + 3.40) * this.viewportParams.scale;
+    const x = (item.transform[4] - 1) * this.viewportParams.scale;
+
+    this.drawRectangle(
+      this.fabriCanvas,
+      {
+        color: 'white',
+        shape: 'rectangle',
+        stroke: 'white',
+        strokeWidth: 1
+      },
+      x,
+      y,
+      width,
+      height,
+      false,
+      false
+    );
   }
 
   private changeArrowGroupOptions(group: fabric.Group, shapeOptions: ShapeOptions) {
@@ -227,12 +274,15 @@ export class PdfEditorComponent implements OnChanges {
       });
   }
 
-  private renderAll() {
+  private async renderAll() {
     const viewport = this.currentPage!.getViewport(this.viewportParams);
+    const pageStateHistory = this.pageStateHistory.get(this.currentPage!.pageNumber);
+    const currentState: PageState | undefined = pageStateHistory?.lastItem;
 
     this.initPdfEditor(this.pdfEditor.nativeElement, this.pdfEditCanvas.nativeElement, viewport);
-    this.initFabriCanvas(viewport);
+    this.initFabriCanvas(viewport, currentState?.fabricCanvasState);
 
+    this.updateTextLayerState(currentState?.textLayerState);
   }
 
   private initPdfEditor(pdfEditor: HTMLCanvasElement, pdfEditCanvas: HTMLCanvasElement, viewport: PageViewport) {
@@ -243,7 +293,7 @@ export class PdfEditorComponent implements OnChanges {
     pdfEditCanvas.height = viewport.height;
   }
 
-  private initFabriCanvas(viewport: PageViewport) {
+  private initFabriCanvas(viewport: PageViewport, fabricCanvasState?: FabriCanvasState) {
     
     if(this.fabriCanvas) {
       this.fabriCanvas.dispose();
@@ -254,8 +304,7 @@ export class PdfEditorComponent implements OnChanges {
     this.fabriCanvas.width = viewport.width;
     this.fabriCanvas.height = viewport.height;
 
-    const pageStateHistory = this.fabriCanvasStateHistory.get(this.currentPage!.pageNumber);
-    this.updateFabriCanvasState(this.fabriCanvas, pageStateHistory?.lastItem);
+    this.updateFabriCanvasState(this.fabriCanvas, fabricCanvasState);
 
     this.fabriCanvas.on('mouse:down', (evt: fabric.IEvent) => this.canvasMouseDownHandler(evt));
     this.fabriCanvas.on('object:added', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
@@ -315,23 +364,30 @@ export class PdfEditorComponent implements OnChanges {
 
   private canvasObjectUpdatedHandler(evt: fabric.IEvent) {
     const index = this.currentPage!.pageNumber;
-    const pageStateHistory: CircularArray<FabriCanvasState> = this.fabriCanvasStateHistory.get(index) || new CircularArray<FabriCanvasState>(this.maxUndoSteps);
+    const pageStateHistory = this.pageStateHistory.get(index) || new CircularArray<PageState>(this.maxUndoSteps);
     
-    pageStateHistory.push(this.fabriCanvas.toJSON());
+    pageStateHistory.push({fabricCanvasState: this.fabriCanvas.toJSON(), textLayerState: this.currentTextLayerState});
 
-    this.fabriCanvasStateHistory.set(index, pageStateHistory);
+    this.pageStateHistory.set(index, pageStateHistory);
   }
 
   private updateFabriCanvasState(fabriCanvas: fabric.Canvas, state?: FabriCanvasState) {
-    fabriCanvas.loadFromJSON(
-      state, 
-      () => {
-        fabriCanvas.renderAll();
-        fabriCanvas.calcOffset();
-      }, 
-      (o: unknown, object: fabric.Object) => {
-      fabriCanvas.setActiveObject(object);
-    });
+    if(state) {
+      fabriCanvas.loadFromJSON(
+        state, 
+        () => {
+          fabriCanvas.renderAll();
+          fabriCanvas.calcOffset();
+        }, 
+        (o: unknown, object: fabric.Object) => {
+        fabriCanvas.setActiveObject(object);
+      });
+    }
+
+  }
+
+  private updateTextLayerState(textLayerState?: TextLayerState) {
+    if(textLayerState) this.currentTextLayerState.deleted = [...textLayerState.deleted!];
   }
 
   private selectTextBoxHandler(object: fabric.Textbox) {
@@ -417,18 +473,22 @@ export class PdfEditorComponent implements OnChanges {
       canvas.add(text);
   }
 
-  private drawRectangle(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number) {
-    const text = new fabric.Rect({
-      width: 100,
-      height: 50,
+  private drawRectangle(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, width?: number, height?: number, selectable = true, evented = true) {
+    const rectangle = new fabric.Rect({
+      width: width || 100,
+      height: height || 50,
       fill: shapeOptions.color,
       stroke : shapeOptions.stroke,
       strokeWidth : shapeOptions.strokeWidth,
       left: x ?? 0,
       top: y ?? 0,
       centeredRotation: true
-      });
-      canvas.add(text);
+      }
+    );
+    rectangle.selectable = selectable;
+    rectangle.evented = evented;
+    
+    canvas.add(rectangle);
   }
 
   private drawEllipse(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number) {
@@ -502,4 +562,19 @@ export class PdfEditorComponent implements OnChanges {
     canvas.freeDrawingBrush.width = this.selectedPenOptions?.size;
   }
 
+  private async prepareTextLayer(page: PDFPageProxy) {
+
+    const textContent = await page.getTextContent();
+    this.textItems = textContent.items as TextItem[];
+
+    const pageStateHistory = this.pageStateHistory.get(this.currentPage!.pageNumber) || new CircularArray<PageState>(this.maxUndoSteps);
+    if(!pageStateHistory.lastItem) pageStateHistory.push({fabricCanvasState: this.fabriCanvas.toJSON(), textLayerState: {...this.currentTextLayerState}}); 
+
+    const deleted = pageStateHistory.lastItem.textLayerState.deleted || new Array(this.textItems.length).fill(false);
+    pageStateHistory.lastItem.textLayerState.deleted = deleted;
+
+    this.currentTextLayerState.deleted = [...deleted];
+
+    this.pageStateHistory.set(this.currentPage!.pageNumber, pageStateHistory!);
+  }
 }

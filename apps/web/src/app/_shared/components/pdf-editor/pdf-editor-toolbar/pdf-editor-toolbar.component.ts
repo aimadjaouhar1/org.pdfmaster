@@ -7,7 +7,7 @@ import { EraserOptionsComponent } from '@web/shared/components/pdf-editor/pdf-ed
 import { PenOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/pen-options/pen-options.component';
 import { ShapeOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/shape-options/shape-options.component';
 import { TextBoxOptionsComponent } from '@web/shared/components/pdf-editor/pdf-editor-toolbar/text-box-options/text-box-options.component';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 
 
 @Component({
@@ -20,46 +20,27 @@ import { Observable, Subject } from 'rxjs';
 export class PdfEditorToolbarComponent implements AfterViewInit {
 
   @Input({required: true}) defaultTextBoxOptions!: TextBoxOptions;
-
   @Input({required: true}) defaultEraserOptions!: EraserOptions;
-
   @Input({required: true}) defaultPenOptions!: PenOptions;
-
   @Input({required: true}) defaultShapeOptions!: ShapeOptions;
-
   @Input() numPage?: number;
-
   @Input() countPages?: number;
-  
   @Input() showTextBoxOptions$?: Observable<TextBoxOptions>;
-
   @Input() showShapeOptions$?: Observable<ShapeOptions>;
-
   @Input() hideAllOptions$?: Observable<void>;
 
+  @Output() editMode = new EventEmitter<boolean>();
   @Output() undo = new EventEmitter();
-
   @Output() redo = new EventEmitter();
-
   @Output() zoomIn = new EventEmitter();
-
   @Output() zoomOut = new EventEmitter();
-
   @Output() activatePan = new EventEmitter();
-
   @Output() selectedTool = new EventEmitter<ToolData | undefined>();
-
   @Output() changeTextBoxOptions = new EventEmitter<TextBoxOptions>();
-
   @Output() changeEraserOptions = new EventEmitter<EraserOptions>();
-
   @Output() changePenOptions = new EventEmitter<PenOptions>();
-
   @Output() chageShapeOptions = new EventEmitter<ShapeOptions>();
-
   @Output() drawImage = new EventEmitter<File>();
-
-
 
   @ViewChild('textboxdp') public textboxdp!: NgbDropdown;
   @ViewChild('eraserdp') public eraserdp!: NgbDropdown;
@@ -69,12 +50,11 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
   selectedTextBoxOptions$ = new Subject<TextBoxOptions>;
   selectedShapeOptions$ = new Subject<ShapeOptions>;
-
   dropdownState$ = new Subject<{dp: NgbDropdown, action: 'toggle' | 'open'}>();
 
   selectedShape?: string;
-
   isPanActive = false;
+  isEditMode = false;
 
   constructor(config: NgbDropdownConfig) {
     config.placement = 'bottom';
@@ -83,14 +63,8 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
     this.dropdownState$
       .pipe(takeUntilDestroyed())
-      .subscribe(state => {
-        [this.textboxdp, this.eraserdp, this.pendp, this.shapesdp, this.shapesOptionsdp].filter(dp => dp != state.dp).forEach(dp => dp.close());
-        if(state.action == 'open') {
-          state.dp.open();
-        } else if(state.action == 'toggle') {
-          state.dp.toggle();
-        }
-      })
+      .pipe(map(state => this.dropDownStateHandler(state)))
+      .subscribe()
   }
   
   ngAfterViewInit(): void {
@@ -108,6 +82,8 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
 
     this.hideAllOptions$?.subscribe(() => [this.textboxdp, this.eraserdp, this.pendp, this.shapesdp, this.shapesOptionsdp].forEach(dp => dp.close()));
   }
+
+  clickEditMode = () => { this.isEditMode = !this.isEditMode; this.editMode.emit(this.isEditMode); }
 
   clickUndo = () => this.undo.emit();
 
@@ -181,5 +157,15 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   private deactivatePan() {
     this.isPanActive = false;
     this.activatePan.emit(this.isPanActive);
+  }
+
+  private dropDownStateHandler(state: {dp: NgbDropdown, action: 'toggle' | 'open'}) {
+    [this.textboxdp, this.eraserdp, this.pendp, this.shapesdp, this.shapesOptionsdp].filter(dp => dp != state.dp).forEach(dp => dp.close());
+
+    if(state.action == 'open') {
+      state.dp.open();
+    } else if(state.action == 'toggle') {
+      state.dp.toggle();
+    }
   }
 }
