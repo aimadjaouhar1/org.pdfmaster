@@ -2,7 +2,7 @@
 
 PDF Master is a comprehensive project that showcases my coding abilities and skills. It leverages modern technologies and follows best practices in software development. This project is built using Nx, Nest JS, Typescript, Angular, Docker, Terraform, and Ansible. The entire development and deployment process is automated with GitHub Actions, demonstrating Continuous Integration and Continuous Deployment practices.
 
-## Features
+## Technical Stack
 
 - **Nx Monorepo:** The project is organized as an Nx monorepo, allowing for efficient code sharing and reusability across different applications and libraries.
 
