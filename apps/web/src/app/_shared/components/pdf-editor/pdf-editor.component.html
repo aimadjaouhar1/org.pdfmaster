@@ -30,18 +30,16 @@
         <canvas id="pdf-display" appPdfViewer [page]="currentPage" [viewportParameters]="viewportParams"></canvas>
         <canvas id="pdf-edit" #pdfEditCanvas></canvas>
 
-
-            @for(item of textItems; track $index) {
-                <div [ngClass]="{'text-layer': editMode, 'text-layer-deleted': currentTextLayerState.deleted![$index]}" #textLayer appPdfTextEdit [textItem]="item" [scale]="viewportParams.scale">
-                    <div class="text-layer-action">
-                        <button class="btn btn-light rounded-0"><i class="bi bi-cursor-text"></i></button>
-                        <button class="btn btn-light rounded-0"><i class="bi bi-copy"></i></button> 
-                        <button class="btn btn-light rounded-0" (click)="onClickRemoveText(item, $index)"><i class="bi bi-trash"></i></button> 
-                    </div>
+        @for(item of textItems; track $index) {
+            <div [ngClass]="{'text-layer': editMode, 'text-layer-deleted': currentTextLayerState.deleted![$index]}" #textLayer appPdfTextEdit [textItem]="item" [scale]="viewportParams.scale">
+                <div class="text-layer-action">
+                    <button class="btn btn-light rounded-0"><i class="bi bi-cursor-text"></i></button>
+                    <button class="btn btn-light rounded-0"><i class="bi bi-copy"></i></button> 
+                    <button class="btn btn-light rounded-0" (click)="onClickRemoveText(item, $index)"><i class="bi bi-trash"></i></button> 
                 </div>
-            }
-        
-
+            </div>
+        }
+      
         @if(isPanActive) {
             <div class="mobile-scroll-space"></div>
         }

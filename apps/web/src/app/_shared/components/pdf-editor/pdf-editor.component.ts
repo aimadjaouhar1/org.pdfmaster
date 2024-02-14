@@ -305,6 +305,9 @@ export class PdfEditorComponent implements OnChanges {
     this.fabriCanvas.height = viewport.height;
 
     this.updateFabriCanvasState(this.fabriCanvas, fabricCanvasState);
+    this.updateObjectScale(this.fabriCanvas, this.currentPage!);
+
+    this.fabriCanvas.renderAll();
 
     this.fabriCanvas.on('mouse:down', (evt: fabric.IEvent) => this.canvasMouseDownHandler(evt));
     this.fabriCanvas.on('object:added', (evt: fabric.IEvent) => this.canvasObjectUpdatedHandler(evt));
@@ -383,7 +386,17 @@ export class PdfEditorComponent implements OnChanges {
         fabriCanvas.setActiveObject(object);
       });
     }
+  }
 
+  private updateObjectScale(fabriCanvas: fabric.Canvas, page: PDFPageProxy) {
+    const _scale = fabriCanvas.width! / page.getViewport({scale: 1}).width;
+    fabriCanvas.getObjects()
+      .forEach(object => object.set({ 
+        scaleY: _scale, 
+        scaleX: _scale,
+        left: object.left! * _scale,
+        top: object.top! * _scale
+      }));
   }
 
   private updateTextLayerState(textLayerState?: TextLayerState) {
