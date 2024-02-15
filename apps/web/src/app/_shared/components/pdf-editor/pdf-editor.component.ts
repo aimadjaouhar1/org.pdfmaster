@@ -74,6 +74,7 @@ export class PdfEditorComponent implements OnChanges {
   textItems?: TextItem[];
   selectedTextLayer?: HTMLElement;
 
+
   constructor() {}
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -232,27 +233,30 @@ export class PdfEditorComponent implements OnChanges {
 
   }
 
-  onClickRemoveText(item: TextItem, index: number) {
+  onClickRemoveText(item: TextItem, textLayer: HTMLElement, index: number) {
     //textLayer.classList.add('text-layer-deleted');
     this.currentTextLayerState.deleted![index] = true;
 
-    const width = (item.width + 1) * this.viewportParams.scale;
-    const height = (item.height + 3.40) * this.viewportParams.scale;
-    const y = (this.fabriCanvas.height! - item.transform[5] - height + 3.40) * this.viewportParams.scale;
-    const x = (item.transform[4] - 1) * this.viewportParams.scale;
+    const bottom = parseFloat(textLayer.style.bottom.replace('px', ''));
+    const dy = 0;// (3.4 * this.viewportParams.scale);
+    const width = parseFloat(textLayer.style.width.replace('px', ''));
+    const height = parseFloat(textLayer.style.height.replace('px', '')) + dy;
+    const y = this.fabriCanvas.height! - bottom - height + dy;
+    const x = parseFloat(textLayer.style.left.replace('px', ''));
 
     this.drawRectangle(
       this.fabriCanvas,
       {
-        color: 'white',
+        color: 'red',
         shape: 'rectangle',
-        stroke: 'white',
+        stroke: 'red',
         strokeWidth: 1
       },
       x,
       y,
       width,
       height,
+      this.fabriCanvas.getZoom(),
       false,
       false
     );
@@ -304,8 +308,9 @@ export class PdfEditorComponent implements OnChanges {
     this.fabriCanvas.width = viewport.width;
     this.fabriCanvas.height = viewport.height;
 
+    this.fabriCanvas.setZoom(this.viewportParams.scale);
+
     this.updateFabriCanvasState(this.fabriCanvas, fabricCanvasState);
-    this.updateObjectScale(this.fabriCanvas, this.currentPage!);
 
     this.fabriCanvas.renderAll();
 
@@ -342,24 +347,24 @@ export class PdfEditorComponent implements OnChanges {
     } 
 
     if(this.selectedTool?.type == 'text' && !evt.target) {
-      this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y);
+      this.drawTextBox(this.fabriCanvas, this.selectedTextBoxOptions, evt.pointer?.x, evt.pointer?.y, this.fabriCanvas.getZoom());
     }
 
     if(this.selectedTool?.type == 'rectangle' && !evt.target) {
-      this.drawRectangle(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y);
+      this.drawRectangle(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y, undefined, undefined, this.fabriCanvas.getZoom());
     }
 
     if(this.selectedTool?.type == 'ellipse' && !evt.target) {
-      this.drawEllipse(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y);
+      this.drawEllipse(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y, this.fabriCanvas.getZoom());
     }
 
     if(this.selectedTool?.type == 'line' && !evt.target) {
-      this.drawLine(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y);
+      this.drawLine(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y, this.fabriCanvas.getZoom());
       this.selectedTool = undefined;
     }
 
     if(this.selectedTool?.type == 'arrow' && !evt.target) {
-      this.drawArrow(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y);
+      this.drawArrow(this.fabriCanvas, this.selectedShapeOptions, evt.pointer?.x, evt.pointer?.y, this.fabriCanvas.getZoom());
       this.selectedTool = undefined;
     }
 
@@ -388,19 +393,8 @@ export class PdfEditorComponent implements OnChanges {
     }
   }
 
-  private updateObjectScale(fabriCanvas: fabric.Canvas, page: PDFPageProxy) {
-    const _scale = fabriCanvas.width! / page.getViewport({scale: 1}).width;
-    fabriCanvas.getObjects()
-      .forEach(object => object.set({ 
-        scaleY: _scale, 
-        scaleX: _scale,
-        left: object.left! * _scale,
-        top: object.top! * _scale
-      }));
-  }
-
   private updateTextLayerState(textLayerState?: TextLayerState) {
-    if(textLayerState) this.currentTextLayerState.deleted = [...textLayerState.deleted!];
+    if(textLayerState) this.currentTextLayerState.deleted = [...textLayerState!.deleted || []];
   }
 
   private selectTextBoxHandler(object: fabric.Textbox) {
@@ -472,7 +466,7 @@ export class PdfEditorComponent implements OnChanges {
     this.showShapeOptionsSubj$.next(this.selectedShapeOptions);
   }
 
-  private drawTextBox(canvas: fabric.Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number) {
+  private drawTextBox(canvas: fabric.Canvas, textBoxOptions: TextBoxOptions, x?: number, y?: number, zoom = 1) {
     const text = new fabric.Textbox('Text', {
       width: 100,
       height: 50,
@@ -480,31 +474,32 @@ export class PdfEditorComponent implements OnChanges {
       fontSize: textBoxOptions.size,
       fontFamily: textBoxOptions.font,
       cursorColor: 'red',
-      left: x ?? 0,
-      top: y ?? 0
+      left: (x ?? 0) / zoom,
+      top: (y ?? 0) / zoom
       });
       canvas.add(text);
   }
 
-  private drawRectangle(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, width?: number, height?: number, selectable = true, evented = true) {
+  private drawRectangle(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, width?: number, height?: number, zoom = 1, selectable = true, evented = true) {
     const rectangle = new fabric.Rect({
-      width: width || 100,
-      height: height || 50,
+      width: (width || 100) / zoom,
+      height: (height || 50) / zoom,
       fill: shapeOptions.color,
       stroke : shapeOptions.stroke,
       strokeWidth : shapeOptions.strokeWidth,
-      left: x ?? 0,
-      top: y ?? 0,
+      left:( x ?? 0) / zoom,
+      top: (y ?? 0) / zoom,
       centeredRotation: true
       }
     );
     rectangle.selectable = selectable;
     rectangle.evented = evented;
-    
+
+
     canvas.add(rectangle);
   }
 
-  private drawEllipse(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number) {
+  private drawEllipse(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, zoom = 1) {
     const text = new fabric.Ellipse({
       selectable: true,
       originX: 'center', 
@@ -515,25 +510,25 @@ export class PdfEditorComponent implements OnChanges {
       stroke : shapeOptions.stroke,
       strokeWidth : shapeOptions.strokeWidth,
       angle: 0,
-      left: x ?? 0,
-      top: y ?? 0,
+      left: (x ?? 0) / zoom,
+      top: (y ?? 0) / zoom,
       centeredRotation: true
       });
       canvas.add(text);
   }
 
-  private drawLine(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number) {
+  private drawLine(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, zoom = 1) {
     const text = new fabric.Line([0, 0, 50, 0], {
       stroke: shapeOptions.stroke,
       strokeWidth: shapeOptions.strokeWidth,
-      left: x ?? 0,
-      top: y ?? 0,
+      left: (x ?? 0) / zoom,
+      top: (y ?? 0) / zoom,
       centeredRotation: true
       });
       canvas.add(text);
   }
 
-  private drawArrow(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number) {
+  private drawArrow(canvas: fabric.Canvas, shapeOptions: ShapeOptions, x?: number, y?: number, zoom = 1) {
     const triangle = new fabric.Triangle({
       width: 10, 
       height: 15, 
@@ -555,8 +550,8 @@ export class PdfEditorComponent implements OnChanges {
     const group = new fabric.Group([line, triangle]);
 
     group.set({
-      left: x ?? 0,
-      top: y ?? 0,
+      left: (x ?? 0) / zoom,
+      top: (y ?? 0) / zoom,
       centeredRotation: true,
       stroke: shapeOptions.stroke,
       strokeWidth: shapeOptions.strokeWidth,

@@ -31,11 +31,11 @@
         <canvas id="pdf-edit" #pdfEditCanvas></canvas>
 
         @for(item of textItems; track $index) {
-            <div [ngClass]="{'text-layer': editMode, 'text-layer-deleted': currentTextLayerState.deleted![$index]}" #textLayer appPdfTextEdit [textItem]="item" [scale]="viewportParams.scale">
+            <div #textLayer [ngClass]="{'text-layer': editMode, 'text-layer-deleted': currentTextLayerState.deleted![$index]}" appPdfTextEdit [textItem]="item" [scale]="viewportParams.scale">
                 <div class="text-layer-action">
                     <button class="btn btn-light rounded-0"><i class="bi bi-cursor-text"></i></button>
                     <button class="btn btn-light rounded-0"><i class="bi bi-copy"></i></button> 
-                    <button class="btn btn-light rounded-0" (click)="onClickRemoveText(item, $index)"><i class="bi bi-trash"></i></button> 
+                    <button class="btn btn-light rounded-0" (click)="onClickRemoveText(item, textLayer, $index)"><i class="bi bi-trash"></i></button> 
                 </div>
             </div>
         }
