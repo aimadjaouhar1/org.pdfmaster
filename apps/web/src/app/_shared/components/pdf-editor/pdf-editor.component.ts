@@ -247,9 +247,9 @@ export class PdfEditorComponent implements OnChanges {
     this.drawRectangle(
       this.fabriCanvas,
       {
-        color: 'red',
+        color: 'white',
         shape: 'rectangle',
-        stroke: 'red',
+        stroke: 'white',
         strokeWidth: 1
       },
       x,
