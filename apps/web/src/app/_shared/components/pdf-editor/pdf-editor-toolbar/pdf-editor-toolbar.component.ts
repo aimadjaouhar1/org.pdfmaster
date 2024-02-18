@@ -28,6 +28,7 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   @Input() showTextBoxOptions$?: Observable<TextBoxOptions>;
   @Input() showShapeOptions$?: Observable<ShapeOptions>;
   @Input() hideAllOptions$?: Observable<void>;
+  @Input() selectedObject?: fabric.Object = undefined;
 
   @Output() editMode = new EventEmitter<boolean>();
   @Output() undo = new EventEmitter();
@@ -41,6 +42,7 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
   @Output() changePenOptions = new EventEmitter<PenOptions>();
   @Output() chageShapeOptions = new EventEmitter<ShapeOptions>();
   @Output() drawImage = new EventEmitter<File>();
+  @Output() deleteObject = new EventEmitter();
 
   @ViewChild('textboxdp') public textboxdp!: NgbDropdown;
   @ViewChild('eraserdp') public eraserdp!: NgbDropdown;
@@ -145,6 +147,8 @@ export class PdfEditorToolbarComponent implements AfterViewInit {
       this.drawImage.emit(file);
     }
   }
+
+  clickDeleteObject = () => this.deleteObject.emit();
 
   onChangeTextBoxOptions = (textBoxOptions: TextBoxOptions) => this.changeTextBoxOptions.emit(textBoxOptions);
 

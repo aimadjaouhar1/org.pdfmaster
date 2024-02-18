@@ -87,6 +87,11 @@
                 <input #imageUpload type="file" multiple="false" accept="image/*" (change)="selectImageHandler(imageUpload.files)" style="display:none"/>     
             </div>
 
+            <!-- Delete button -->
+            <div class="tool-btn">
+                <button class="btn btn btn-light me-md-2" type="button" (click)="clickDeleteObject()" [disabled]="!selectedObject"><i class="bi bi-trash"></i></button>
+            </div>
+
         </div>
 
         <div class="d-flex d-md-flex justify-content-md-end">

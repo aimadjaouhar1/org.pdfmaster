@@ -74,6 +74,7 @@ export class PdfEditorComponent implements OnChanges {
   textItems?: TextItem[];
   selectedTextLayer?: HTMLElement;
 
+  selectedObject: fabric.Object | undefined = undefined;
 
   constructor() {}
 
@@ -233,6 +234,11 @@ export class PdfEditorComponent implements OnChanges {
 
   }
 
+  onDeleteObject() {
+    this.fabriCanvas.remove(this.selectedObject!);
+    this.selectedObject = undefined;
+  }
+
   onClickRemoveText(item: TextItem, textLayer: HTMLElement, index: number) {
     //textLayer.classList.add('text-layer-deleted');
     this.currentTextLayerState.deleted![index] = true;
@@ -368,6 +374,9 @@ export class PdfEditorComponent implements OnChanges {
       this.selectedTool = undefined;
     }
 
+    if(evt.target) {
+      this.selectedObject = evt.target;
+    }
   }
 
   private canvasObjectUpdatedHandler(evt: fabric.IEvent) {
